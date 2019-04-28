@@ -1,0 +1,76 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+*** Test Cases ***
+smoke
+    [Tags]    smoke
+    ${respLogin}=    手机号码登录    &{user}[user1]    &{password}[password1]
+    log    ${respLogin.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${respLogin.status_code}    200
+    #开始断言返回结果
+    log    ${respLogin.json()['message']['message']}
+    Should Be Equal As Strings    ${respLogin.json()['status']}    ok
+    Should Be Equal As Strings    ${respLogin.json()['message']['message']}    操作成功
+
+校验返回的user_id
+    ${respLogin}=    手机号码登录    &{user}[user1]    &{password}[password1]
+    log    ${respLogin.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${respLogin.status_code}    200
+    #开始断言返回结果
+    log    ${respLogin.json()['message']['message']}
+    Should Be Equal As Strings    ${respLogin.json()['status']}    ok
+    Should Be Equal As Strings    ${respLogin.json()['message']['message']}    操作成功
+    Should Be Equal As Strings    ${response.json()['data']['profile']['user_id']}    36530
+
+校验返回的user_id
+    ${respLogin}=    手机号码登录    &{user}[user1]    &{password}[password1]
+    log    ${respLogin.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${respLogin.status_code}    200
+    #开始断言返回结果
+    log    ${respLogin.json()['message']['message']}
+    Should Be Equal As Strings    ${respLogin.json()['status']}    ok
+    Should Be Equal As Strings    ${respLogin.json()['message']['message']}    操作成功
+    Should Be Equal As Strings    ${response.json()['data']['profile']['user_id']}    36530
+
+校验返回的nickname
+    ${respLogin}=    手机号码登录    &{user}[user1]    &{password}[password1]
+    log    ${respLogin.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${respLogin.status_code}    200
+    #开始断言返回结果
+    log    ${respLogin.json()['message']['message']}
+    Should Be Equal As Strings    ${respLogin.json()['status']}    ok
+    Should Be Equal As Strings    ${respLogin.json()['message']['message']}    操作成功
+    Should Be Equal As Strings    ${response.json()['data']['profile']['校验返回的nickname']}    希洛莉
+
+手机号码正确，密码错误的情况
+    [Tags]    smoke
+    ${password}    set variable     10000000
+    ${respLogin}=    手机号码登录    &{user}[user1]    ${password}
+    log    ${respLogin.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${respLogin.status_code}    200
+    #开始断言返回结果
+    log    ${respLogin.json()['message']['message']}
+    Should Be Equal As Strings    ${respLogin.json()['status']}    error
+    Should Be Equal As Strings    ${respLogin.json()['message']['message']}    请求验证不通过,权限不足
+
+
+手机号码不存在
+    [Tags]    smoke
+    ${user}    set variable     15699999999
+    ${password}    set variable     123456
+    ${respLogin}=    手机号码登录    ${user}    ${password}
+    log    ${respLogin.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${respLogin.status_code}    200
+    #开始断言返回结果
+    log    ${respLogin.json()['message']['message']}
+    Should Be Equal As Strings    ${respLogin.json()['status']}    error
+    Should Be Equal As Strings    ${respLogin.json()['message']['message']}    请求验证不通过,权限不足

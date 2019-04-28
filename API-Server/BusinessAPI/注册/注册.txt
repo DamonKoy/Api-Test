@@ -1,0 +1,241 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${name}           RegisterTest
+
+*** Test Cases ***
+smoke
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${type}    set variable    105
+    ${random_num}    生成随机11位数字
+    ${phoneNo}    set variable    ${random_num}
+    ${random_num}    生成随机8位数字
+    ${account}    set variable    account${random_num}
+    ${response2}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    log    ${response2.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response2.status_code}    200
+    #开始断言返回结果
+    log    ${response2.json()['error_msg']}
+    Should Be Equal As Strings    ${response2.json()['error_code']}    0
+    Should Be Equal As Strings    ${response2.json()['error_msg']}    SUCCESS
+
+账号已存在
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${type}    set variable    105
+    ${random_num}    生成随机11位数字
+    ${phoneNo}    set variable    ${random_num}
+    ${random_num}    生成随机8位数字
+    ${account}    set variable    account${random_num}
+    ${response}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    log    ${response.content}
+    ${random_num2}    生成随机11位数字
+    ${phoneNo}    set variable    ${random_num2}
+    ${response2}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    log    ${response2.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    log    ${response2.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Be Equal As Strings    ${response2.json()['error_code']}    20011
+    Should Be Equal As Strings    ${response2.json()['error_msg']}    账号已经存在
+
+手机号已存在
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${type}    set variable    105
+    ${random_num}    生成随机11位数字
+    ${phoneNo}    set variable    ${random_num}
+    ${random_num}    生成随机8位数字
+    ${account}    set variable    account${random_num}
+    ${response}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    log    ${response.content}
+    ${random_num2}    生成随机8位数字
+    ${account}    set variable    account${random_num2}
+    ${response2}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    log    ${response2.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    log    ${response2.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Be Equal As Strings    ${response2.json()['error_code']}    20012
+    Should Be Equal As Strings    ${response2.json()['error_msg']}    手机号码已经存在
+
+注册成功，校验数据库添加表内容
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${type}    set variable    105
+    ${random_num}    生成随机11位数字
+    ${phoneNo}    set variable    ${random_num}
+    ${random_num}    生成随机8位数字
+    ${account}    set variable    account${random_num}
+    ${response2}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    log    ${response2.content}
+    连接mysql数据库-humanac
+#查询数据库是否加入hc_identify表
+    ${a_id}    query    select a_id from hc_identify where identity = '${account}';
+    ${p_id}    query    select p_id from hc_account where id = ${a_id[0][0]};
+    ${value_db1}    query    select count(*) from hc_identify where identity = '${account}';
+    ${value_db2}    query    select count(*) from hc_identify where identity = '${phoneNo}';
+#查询数据库是否加入hc_account表
+    ${value_db3}    query    select count(*) from hc_account where id = ${a_id[0][0]};
+    连接mysql数据库-human
+#查询数据库是否加入hc_person表
+    ${value_db4}    query    select count(*) from hc_person where id = ${p_id[0][0]};
+#查询数据库是否加入hc_person_org表
+    ${value_db5}    query    select count(*) from hc_person_org where p_id = ${p_id[0][0]};
+    ${o_id}    query    select o_id from hc_person_org where p_id = ${p_id[0][0]};
+#查询数据库是否加入hc_org表
+    ${value_db6}    query    select count(*) from hc_org where id = ${o_id[0][0]};
+#查询数据库是否加入hc_acl表
+    连接mysql数据库-humanauz
+    ${value_db7}    query    select count(*) from hc_acl where access_id = ${a_id[0][0]};
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response2.status_code}    200
+    #开始断言返回结果
+    log    ${response2.json()['error_msg']}
+    Should Be Equal As Strings    ${response2.json()['error_code']}    0
+    Should Be Equal As Strings    ${response2.json()['error_msg']}    SUCCESS
+    Should Be Equal As Strings    ${value_db1[0][0]}    1
+    Should Be Equal As Strings    ${value_db2[0][0]}    1
+    Should Be Equal As Strings    ${value_db3[0][0]}    1
+    Should Be Equal As Strings    ${value_db4[0][0]}    1
+    Should Be Equal As Strings    ${value_db5[0][0]}    1
+    Should Be Equal As Strings    ${value_db6[0][0]}    1
+    Should Be Equal As Strings    ${value_db7[0][0]}    0
+
+account格式不符合规范
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${type}    set variable    105
+    ${random_num}    生成随机11位数字
+    ${phoneNo}    set variable    ${random_num}
+    :for    ${account}    in        123456789    @yxisndqo    @12103910    $kdkldlq    ajdiqwojdowjqdojqwodjqwdjqwoajdiqwojdowjqdojqwodjqwdjqwoajdiqwojdowjqdojqwodjqwdjqwo
+    \    ${response2}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    \    log    ${response2.content}
+    #开始断言接口返回响应
+    \    Should Be Equal As Strings    ${response2.status_code}    200
+    #开始断言返回结果
+    \    log    ${response2.json()['error_msg']}
+    \    Should Be Equal As Strings    ${response2.json()['error_code']}    20001
+    \    Should contain    ${response2.json()['error_msg']}    account
+
+name不符合规范（超长与格式）
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${type}    set variable    105
+    ${random_num}    生成随机11位数字
+    ${phoneNo}    set variable    ${random_num}
+    ${verifycode}=    集成-发送验证码并获取验证码    ${type}    ${phoneNo}
+    :for    ${name}    in    我     一二三四五六七八九十一二三四五六七八九十一    12345    @迄今的    ¥你就能打开
+    \    ${random_num}    生成随机8位数字
+    \    ${account}    set variable    account${random_num}
+    \    ${response2}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    \    log    ${response2.content}
+    #开始断言接口返回响应
+    \    Should Be Equal As Strings    ${response2.status_code}    200
+    #开始断言返回结果
+    \    log    ${response2.json()['error_msg']}
+    \    Should Be Equal As Strings    ${response2.json()['error_code']}    20001
+    \    Should contain    ${response2.json()['error_msg']}    name
+
+手机号长度校验
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${type}    set variable    105
+    ${random_num}    生成随机12位数字
+    ${phoneNo}    set variable    ${random_num}
+    ${random_num}    生成随机8位数字
+    ${account}    set variable    account${random_num}
+    ${response2}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    log    ${response2.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response2.status_code}    200
+    #开始断言返回结果
+    log    ${response2.json()['error_msg']}
+    Should Be Equal As Strings    ${response2.json()['error_code']}    20001
+    Should contain    ${response2.json()['error_msg']}    mobile
+
+#password长度校验
+
+
+account不能为空
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${type}    set variable    105
+    ${random_num}    生成随机11位数字
+    ${phoneNo}    set variable    ${random_num}
+    ${random_num}    生成随机8位数字
+    ${account}    set variable    ${EMPTY}
+    ${response2}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    log    ${response2.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response2.status_code}    200
+    #开始断言返回结果
+    log    ${response2.json()['error_msg']}
+    Should Be Equal As Strings    ${response2.json()['error_code']}    20001
+    Should contain    ${response2.json()['error_msg']}    not be empty
+
+name不能为空
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${type}    set variable    105
+    ${random_num}    生成随机11位数字
+    ${phoneNo}    set variable    ${random_num}
+    ${random_num}    生成随机8位数字
+    ${account}    set variable    account${random_num}
+    ${name}    set variable    ${EMPTY}
+    ${response2}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    log    ${response2.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response2.status_code}    200
+    #开始断言返回结果
+    log    ${response2.json()['error_msg']}
+    Should Be Equal As Strings    ${response2.json()['error_code']}    20001
+    Should contain    ${response2.json()['error_msg']}    not be empty
+
+phone不能为空
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${type}    set variable    105
+    ${random_num}    生成随机11位数字
+    ${phoneNo}    set variable    ${random_num}
+    ${random_num}    生成随机8位数字
+    ${account}    set variable    account${random_num}
+    ${phoneNo}    set variable    ${EMPTY}
+    ${response2}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    &{password}[新密码]
+    log    ${response2.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response2.status_code}    200
+    #开始断言返回结果
+    log    ${response2.json()['error_msg']}
+    Should Be Equal As Strings    ${response2.json()['error_code']}    20001
+    Should contain    ${response2.json()['error_msg']}    not be empty
+
+password不能为空
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${type}    set variable    105
+    ${random_num}    生成随机11位数字
+    ${phoneNo}    set variable    ${random_num}
+    ${random_num}    生成随机8位数字
+    ${account}    set variable    account${random_num}
+    ${password}    set variable    ${EMPTY}
+    ${response2}=    用户注册_发送post请求    ${account}    ${name}    ${phoneNo}    ${password}
+    log    ${response2.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response2.status_code}    200
+    #开始断言返回结果
+    log    ${response2.json()['error_msg']}
+    Should Be Equal As Strings    ${response2.json()['error_code']}    20001
+    Should contain    ${response2.json()['error_msg']}    not be empty

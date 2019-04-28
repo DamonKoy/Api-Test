@@ -1,0 +1,32 @@
+*** Variables ***
+&{host}    登录对外=https://api-stage.yingzi.com/yingzi-app-humanidentify    其他对外=https://api-stage.yingzi.com/yingzi-app-human    中台=https://172.19.101.7:8080    全局=http://172.18.80.125:8080    租户=http://172.18.80.124:8080
+
+${human_db_ip}      drdsj7j30o2yt5g1.drds.aliyun.boc
+${human_db_port}    3306
+${human_db_database}    yz_stage_humancore
+${human_db_user}    yz_stage_humancore
+${human_db_password}    kPeiLGI39cOMSk1m
+
+${humanac_db_ip}    drdsj7j30o2yt5g1.drds.aliyun.boc
+${humanac_db_port}    3306
+${humanac_db_database}    yz_stage_humanac
+${humanac_db_user}    yz_stage_humanac
+${humanac_db_password}    bWeSExmRie2iLf9k
+
+${humantag_db_ip}    drdsj7j30o2yt5g1.drds.aliyun.boc
+${humantag_db_port}    3306
+${humantag_db_database}    yz_stage_humantag
+${humantag_db_user}    yz_stage_humantag
+${humantag_db_password}    MlUsWMoiNZYk3EEf
+
+${humanres_db_ip}    drdsj7j30o2yt5g1.drds.aliyun.boc
+${humanres_db_port}    3306
+${humanres_db_database}    yz_stage_humanres
+${humanres_db_user}    yz_stage_humanres
+${humanres_db_password}    wZSdS7Crkl6FCmQ5
+
+${humanauz_db_ip}    drdsj7j30o2yt5g1.drds.aliyun.boc
+${humanauz_db_port}    3306
+${humanauz_db_database}    yz_stage_humanauz
+${humanauz_db_user}    yz_stage_humanauz
+${humanauz_db_password}    1s2VS6TeU8WKpMeO

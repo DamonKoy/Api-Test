@@ -1,0 +1,53 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+smoke
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_register}=   集成-注册
+    ${account}    Set Variable    ${response_register['account']}
+    ${response_login}=    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${personId}    set variable    ${response_login['personId']}
+    ${response}=    查询用户详情_发送post请求    ${personId}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+
+校验已在租户中的用户可以查询到用户详情（兼容旧数据）
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_login}=    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${personId}    set variable    ${response_login['personId']}
+    ${response}=    查询用户详情_发送post请求    ${personId}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+
+personId不可为空
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_register}=   集成-注册
+    ${account}    Set Variable    ${response_register['account']}
+    ${response_login}=    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${personId}    set variable    ${EMPTY}
+    ${response}=    查询用户详情_发送post请求    ${personId}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    10400
+    Should Be Equal As Strings    ${response.json()['error_msg']}    id can not be null

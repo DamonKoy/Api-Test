@@ -1,0 +1,49 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+*** Test Cases ***
+smoke
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${response}=    租户查询用户申请列表_发送post请求
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+
+申请加入的数据，会出现在申请列表中
+    ${response_apply}=    集成-申请加入租户
+    ${personId}    Set Variable    ${response_apply['personId']}
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${response}=    租户查询用户申请列表_发送post请求
+    log    ${response.content}
+    #开始断言接口返回响应
+    ${length}=    Get Length    ${response.json()['data']}
+    log    ${length}
+    ${length}    Evaluate    ${length}-1
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Be Equal As Strings    ${response.json()['data'][${length}]['personId']}    ${personId}
+
+拒绝的申请，会删除记录
+    ${response}=    租户查询用户申请列表_发送post请求
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+
+#根据token查询对应租户的申请列表

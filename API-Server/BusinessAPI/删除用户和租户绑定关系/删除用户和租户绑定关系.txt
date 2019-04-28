@@ -1,0 +1,229 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+*** Test Cases ***
+    #根据当前租户后台登录token进行查询tenantId传给后端
+    #基本描述：人员离职情况，从指定租户解绑，挂到影子平台，成为平台帐号（不能删除与影子平台的关系）
+    #
+    #详细规则：
+    #- 1、删除个人组织与租户的关系hc_tenant_org
+    #- 2、删除个人组织hc_org //个人组织id暂时不删除
+    #- 3、删除个人组织与人的关系hc_person_org
+    #- 4、删除个人组织与组织的关系hc_org_ref
+    #- 5、判断人与影子平台是否有关联，若没有关联，执行以下操作：
+    #-    1）、创建个人组织hc_org
+    #-    2）、增加个人组织与人关联hc_person_org
+    #-    3）、增加个人组织与影子平台租户关联hc_tenant_org
+smoke
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_update}=    集成-编辑用户
+    ${personId}    Set Variable    ${response_update['personId']}
+    ${personOrgId_data}=    query    select o_id from hc_person_org where p_id=${personId} and type=11;   # 查询个人组织为职员的数据
+    ${personOrgId}    Set Variable    ${personOrgId_data[0][0]}
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${response}=    删除用户和租户绑定关系_发送post请求    ${personId}    ${personOrgId}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Be Equal As Strings    ${response.json()['data']}    True
+
+删除注册用户，校验数据库是否已删除绑定关系
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_update}=    集成-编辑用户
+    ${personId}    Set Variable    ${response_update['personId']}
+    ${personOrgId_data}=    query    select o_id from hc_person_org where p_id=${personId} and type=11;   # 查询个人组织为职员的数据
+    ${personOrgId}    Set Variable    ${personOrgId_data[0][0]}
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    连接mysql数据库-human
+    # 查询个人与租户的关联条数
+    ${count1}=    query    select count(*) from hc_tenant_org a, hc_person_org b where (a.o_id=b.o_id and b.p_id=${personId} and a.t_id=${tenantId});
+    ${count2}=    query    select count(*) from hc_tenant_org a, hc_person_org b where (a.o_id=b.o_id and b.p_id=${personId});
+    ${response}=    删除用户和租户绑定关系_发送post请求    ${personId}    ${personOrgId}
+    log    ${response.content}
+    sleep    1
+    ${count3}=    query    select count(*) from hc_tenant_org a, hc_person_org b where (a.o_id=b.o_id and b.p_id=${personId} and a.t_id=${tenantId});
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Be Equal As Strings    ${count1[0][0]}    1
+    Should Be True    ${count2[0][0]}>1
+    Should Be Equal As Strings    ${count3[0][0]}    0
+
+删除后台新增用户，从指定租户解绑，挂到影子平台，成为平台帐号
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_update}=    集成-编辑用户
+    ${personId}    Set Variable    ${response_update['personId']}
+    ${personOrgId_data}=    query    select o_id from hc_person_org where p_id=${personId} and type=11;   # 查询个人组织为职员的数据
+    ${personOrgId}    Set Variable    ${personOrgId_data[0][0]}
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    连接mysql数据库-human
+    # 查询个人与租户的关联条数
+    ${count1}=    query    select count(*) from hc_tenant_org a, hc_person_org b where (a.o_id=b.o_id and b.p_id=${personId} and a.t_id=${tenantId});
+    ${count2}=    query    select count(*) from hc_tenant_org a, hc_person_org b where (a.o_id=b.o_id and b.p_id=${personId});
+    ${response}=    删除用户和租户绑定关系_发送post请求    ${personId}    ${personOrgId}
+    log    ${response.content}
+    sleep    1
+    ${count3}=    query    select count(*) from hc_tenant_org a, hc_person_org b where (a.o_id=b.o_id and b.p_id=${personId} and a.t_id=${tenantId});
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Be Equal As Strings    ${count1[0][0]}    1
+    Should Be True    ${count2[0][0]}>1
+    Should Be Equal As Strings    ${count3[0][0]}    0
+
+不能删除与影子平台的关系
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_update}=    集成-编辑用户
+    ${personId}    Set Variable    ${response_update['personId']}
+    ${personOrgId_data}=    query    select o_id from hc_person_org where p_id=${personId} and type=11;   # 查询个人组织为职员的数据
+    ${personOrgId}    Set Variable    ${personOrgId_data[0][0]}
+    集成-登录获取验证信息    &{identity}[影子平台租户]    &{password}[租户]
+    ${response}=    删除用户和租户绑定关系_发送post请求    ${personId}    ${personOrgId}
+    log    ${response.content}
+    sleep    1
+    连接mysql数据库-human
+    # 查询个人与租户的关联条数
+    ${count1}=    query    select count(*) from hc_tenant_org a, hc_person_org b where (a.o_id=b.o_id and b.p_id=${personId} and a.t_id=&{tenantId}[影子平台]);
+    ${count2}=    query    select count(*) from hc_tenant_org a, hc_person_org b where (a.o_id=b.o_id and b.p_id=${personId});
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    20064
+    Should Be Equal As Strings    ${response.json()['error_msg']}    暂不支持从影子平台解绑！
+    Should Be Equal As Strings    ${count1[0][0]}    1
+    Should Be True    ${count2[0][0]}>1
+
+    #加入多个租户，职位展示
+    #删除关系时，如果租户id与用户本来就没有关系，则提示
+    #删除关系时，如果租户id不存在，则提示
+
+校验删除租户关系后，数据库acl表该用户与租户的权限是否已全部删除
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_update}=    集成-编辑用户
+    ${personId}    Set Variable    ${response_update['personId']}
+    ${personOrgId_data}=    query    select o_id from hc_person_org where p_id=${personId} and type=11;   # 查询个人组织为职员的数据
+    ${personOrgId}    Set Variable    ${personOrgId_data[0][0]}
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    连接mysql数据库-humanac
+    ${accountId_data}=    query    select id from hc_account where p_id=${personId};
+    ${accountId}    Set Variable    ${accountId_data[0][0]}
+    连接mysql数据库-humanauz
+    ${count1}=    query    select count(*) from hc_acl where access_id=${accountId} and t_id=${tenantId};
+    ${response}=    删除用户和租户绑定关系_发送post请求    ${personId}    ${personOrgId}
+    log    ${response.content}
+    sleep    1
+    ${count2}=    query    select count(*) from hc_acl where access_id=${accountId} and t_id=${tenantId};
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Not Be Equal    ${count1[0][0]}    0
+    Should Be Equal As Strings    ${count2[0][0]}    0
+
+校验删除租户关系后，数据库hc_org_ref表该用户关联的组织是否已全部删除
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_update}=    集成-编辑用户
+    ${personId}    Set Variable    ${response_update['personId']}
+    ${personOrgId_data}=    query    select o_id from hc_person_org where p_id=${personId} and type=11;   # 查询个人组织为职员的数据
+    ${personOrgId}    Set Variable    ${personOrgId_data[0][0]}
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    连接mysql数据库-human
+    ${personOrgId_data}=    query    select o_id from hc_person_org where p_id=${personId} and type=11;   # 查询个人组织为职员的数据
+    ${personOrgId}    Set Variable    ${personOrgId_data[0][0]}
+    ${count1}=    query    select count(*) from hc_org_ref where org_id=${personOrgId};
+    ${response}=    删除用户和租户绑定关系_发送post请求    ${personId}    ${personOrgId}
+    log    ${response.content}
+    sleep    1
+    ${count2}=    query    select count(*) from hc_org_ref where org_id=${personOrgId};
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Be Equal As Strings    ${count1[0][0]}    1
+    Should Be Equal As Strings    ${count2[0][0]}    0
+
+校验删除租户关系后，数据库hc_person_tag表该用户在该租户关联的标签是否已全部删除
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_update}=    集成-编辑用户
+    ${personId}    Set Variable    ${response_update['personId']}
+    ${personOrgId_data}=    query    select o_id from hc_person_org where p_id=${personId} and type=11;   # 查询个人组织为职员的数据
+    ${personOrgId}    Set Variable    ${personOrgId_data[0][0]}
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    连接mysql数据库-human
+    # 查询个人与租户的关联条数
+    ${personOrgId_data}=    query    select o_id from hc_person_org where p_id=${personId} and type=11;   # 查询个人组织为职员的数据
+    ${personOrgId}    Set Variable    ${personOrgId_data[0][0]}
+    连接mysql数据库-humantag
+    ${count1}=    query    select count(*) from hc_org_tag where org_id=${personOrgId} and tenant_id=${tenantId};    # 个人标签存在个人组织上
+    ${response}=    删除用户和租户绑定关系_发送post请求    ${personId}    ${personOrgId}
+    log    ${response.content}
+    sleep    1
+    ${count2}=    query    select count(*) from hc_org_tag where org_id=${personOrgId} and tenant_id=${tenantId};
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Not Be Equal    ${count1[0][0]}    0
+    Should Be Equal As Strings    ${count2[0][0]}    0
+
+校验必填字段personId不能为空
+    ${case_name}    set variable    smoke
+    ${response_update}=    集成-编辑用户
+    ${personId}    Set Variable
+    ${personOrgId}    Set Variable
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${response}=    删除用户和租户绑定关系_发送post请求    ${personId}    ${personOrgId}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    10400
+    Should Be Equal As Strings    ${response.json()['error_msg']}    personId can not be null
+
+校验必填字段personOrgId不能为空
+    ${case_name}    set variable    smoke
+    ${response_update}=    集成-编辑用户
+    ${personId}    Set Variable    ${response_update['personId']}
+    ${personOrgId}    Set Variable
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${response}=    删除用户和租户绑定关系_发送post请求    ${personId}    ${personOrgId}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    10400
+    Should Be Equal As Strings    ${response.json()['error_msg']}    id can not be null

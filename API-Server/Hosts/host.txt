@@ -1,0 +1,33 @@
+*** Variables ***
+&{host}    API=http://staging.chumanapp.com/secure/
+
+
+${human_db_ip}      drds2219q71k0f46.drds.aliyun.boc
+${human_db_port}    3306
+${human_db_database}    yz_dev_human
+${human_db_user}    yz_dev_human
+${human_db_password}    y0N3rCoGZCHy7vBH
+
+${humanac_db_ip}    drds2219q71k0f46.drds.aliyun.boc
+${humanac_db_port}    3306
+${humanac_db_database}    yz_dev_humanac
+${humanac_db_user}    yz_dev_humanac
+${humanac_db_password}    XccM01Dhqv6KK3bf
+
+${humantag_db_ip}    drds2219q71k0f46.drds.aliyun.boc
+${humantag_db_port}    3306
+${humantag_db_database}    yz_dev_humantag
+${humantag_db_user}    yz_dev_humantag
+${humantag_db_password}    ukDObm1vibSKouPo
+
+${humanres_db_ip}    drds2219q71k0f46.drds.aliyun.boc
+${humanres_db_port}    3306
+${humanres_db_database}    yz_dev_humanres
+${humanres_db_user}    yz_dev_humanres
+${humanres_db_password}    LfRJo48hbeR1btOn
+
+${humanauz_db_ip}    drds2219q71k0f46.drds.aliyun.boc
+${humanauz_db_port}    3306
+${humanauz_db_database}    yz_dev_humanauz
+${humanauz_db_user}    yz_dev_humanauz
+${humanauz_db_password}    LfRJo48hbeR1btOn

@@ -1,0 +1,263 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+smoke
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_register}=   集成-注册
+    ${account}    Set Variable    ${response_register['account']}
+    ${response_login}=    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${personId}    set variable    ${response_login['personId']}
+    ${response_detail}    查询用户详情_发送post请求    ${personId}
+    ${name}    set variable    ${response_detail.json()['data']['name']}
+    ${mobile}    set variable    ${response_detail.json()['data']['mobile']}
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    ${applyReason}    set variable    申请加入租户
+    ${response}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+
+重复申请
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_register}=   集成-注册
+    ${account}    Set Variable    ${response_register['account']}
+    ${response_login}=    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${personId}    set variable    ${response_login['personId']}
+    ${response_detail}    查询用户详情_发送post请求    ${personId}
+    ${name}    set variable    ${response_detail.json()['data']['name']}
+    ${mobile}    set variable    ${response_detail.json()['data']['mobile']}
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    ${applyReason}    set variable    申请加入租户
+    ${response}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response.content}
+    ${response2}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response2.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    log    ${response2.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Be Equal As Strings    ${response2.json()['error_code']}    20022
+    Should contain    ${response2.json()['error_msg']}    申请已提交，无需再次申请!
+
+校验默认开启只能添加一个租户的限制
+    [Tags]    smoke
+    ${response}=    集成-编辑用户
+    # 申请加入另一个租户
+    ${account}    Set Variable    ${response['account']}
+    ${personId}    Set Variable    ${response['personId']}
+    ${response_detail}=    查询用户详情_发送post请求    ${personId}
+    ${name}    set variable    ${response_detail.json()['data']['name']}
+    ${mobile}    set variable    ${response_detail.json()['data']['mobile']}
+    ${tenantId}    集成-获取租户id    &{identity}[租户测试001]
+    ${applyReason}    set variable    申请加入租户
+    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${response}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    20022
+    Should Be Equal As Strings    ${response.json()['error_msg']}    已加入其他租户，暂不支持加入多个租户!
+
+校验默认开启只能添加一个租户的限制,删除关系后再加入租户
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_update}=    集成-编辑用户
+    ${personId}    Set Variable    ${response_update['personId']}
+    ${personOrgId_data}=    query    select o_id from hc_person_org where p_id=${personId} and type=11;   # 查询个人组织为职员的数据
+    ${personOrgId}    Set Variable    ${personOrgId_data[0][0]}
+    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${response}=    删除用户和租户绑定关系_发送post请求    ${personId}    ${personOrgId}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Be Equal As Strings    ${response.json()['data']}    True
+    # 重新加入另一个租户
+    ${account}    Set Variable    ${response_update['account']}
+    ${response_detail}=    查询用户详情_发送post请求    ${personId}
+    ${name}    set variable    ${response_detail.json()['data']['name']}
+    ${mobile}    set variable    ${response_detail.json()['data']['mobile']}
+    ${tenantId}    集成-获取租户id    &{identity}[租户测试001]
+    ${applyReason}    set variable    申请加入租户
+    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${response}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+
+已在租户内，扫码申请
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${account}    set variable    zuhuall0001
+    ${response_login}=    集成-登录获取验证信息    ${account}    &{password}[租户]
+    ${personId}    set variable    ${response_login['personId']}
+    ${response_detail}    查询用户详情_发送post请求    ${personId}
+    ${name}    set variable    ${response_detail.json()['data']['name']}
+    ${mobile}    set variable    ${response_detail.json()['data']['mobile']}
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    ${applyReason}    set variable    申请加入租户
+    ${response}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Not Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Not Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+
+申请加入租户成功，校验查询列表中显示数据
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_register}=   集成-注册
+    ${account}    Set Variable    ${response_register['account']}
+    ${response_login}=    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${personId}    set variable    ${response_login['personId']}
+    ${response_detail}    查询用户详情_发送post请求    ${personId}
+    ${name}    set variable    ${response_detail.json()['data']['name']}
+    ${mobile}    set variable    ${response_detail.json()['data']['mobile']}
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    ${applyReason}    set variable    申请加入租户
+    ${response}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response.content}
+    ${response_query_login}=    集成-登录获取验证信息    &{identity}[租户]    &{password}[租户]
+    ${response_query}=    租户查询用户申请列表_发送post请求
+    log    ${response_query.content}
+    ${len}    Get Length    ${response_query.json()['data']}
+    ${length}    set variable    ${len}-1
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
+    Should Be Equal As Strings    ${response_query.json()['data'][${length}]['mobile']}    ${mobile}
+
+personId不可为空
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_register}=   集成-注册
+    ${account}    Set Variable    ${response_register['account']}
+    ${response_login}=    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${personId}    set variable    ${response_login['personId']}
+    ${response_detail}    查询用户详情_发送post请求    ${personId}
+    ${name}    set variable    ${response_detail.json()['data']['name']}
+    ${mobile}    set variable    ${response_detail.json()['data']['mobile']}
+    ${personId}    set variable    ${EMPTY}
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    ${applyReason}    set variable    申请加入租户
+    ${response}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    20001
+    Should contain    ${response.json()['error_msg']}    personId
+
+tenantId不可为空
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_register}=   集成-注册
+    ${account}    Set Variable    ${response_register['account']}
+    ${name}    set variable    ${account}
+    ${response_login}=    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${personId}    set variable    ${response_login['personId']}
+    ${response_detail}    查询用户详情_发送post请求    ${personId}
+    ${name}    set variable    ${response_detail.json()['data']['name']}
+    ${mobile}    set variable    ${response_detail.json()['data']['mobile']}
+    ${tenantId}    set variable    ${EMPTY}
+    ${applyReason}    set variable    申请加入租户
+    ${response}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    20001
+    Should contain    ${response.json()['error_msg']}    tenantId
+
+name不可为空
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_register}=   集成-注册
+    ${account}    Set Variable    ${response_register['account']}
+    ${response_login}=    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${personId}    set variable    ${response_login['personId']}
+    ${response_detail}    查询用户详情_发送post请求    ${personId}
+    ${name}    set variable    ${EMPTY}
+    ${mobile}    set variable    ${response_detail.json()['data']['mobile']}
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    ${applyReason}    set variable    申请加入租户
+    ${response}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    20001
+    Should contain    ${response.json()['error_msg']}    name
+
+mobile不可为空
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_register}=   集成-注册
+    ${account}    Set Variable    ${response_register['account']}
+    ${response_login}=    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${personId}    set variable    ${response_login['personId']}
+    ${response_detail}    查询用户详情_发送post请求    ${personId}
+    ${name}    set variable    ${response_detail.json()['data']['name']}
+    ${mobile}    set variable    ${EMPTY}
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    ${applyReason}    set variable    申请加入租户
+    ${response}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    20001
+    Should contain    ${response.json()['error_msg']}    mobile
+
+applyReason可为空
+    [Tags]    smoke
+    ${case_name}    set variable    smoke
+    ${response_register}=   集成-注册
+    ${account}    Set Variable    ${response_register['account']}
+    ${response_login}=    集成-登录获取验证信息    ${account}    &{password}[新密码]
+    ${personId}    set variable    ${response_login['personId']}
+    ${response_detail}    查询用户详情_发送post请求    ${personId}
+    ${name}    set variable    ${response_detail.json()['data']['name']}
+    ${mobile}    set variable    ${response_detail.json()['data']['mobile']}
+    ${tenantId}    集成-获取租户id    &{identity}[租户]
+    ${applyReason}    set variable    ${EMPTY}
+    ${response}=    申请加入租户_发送post请求    ${personId}    ${tenantId}    ${name}    ${mobile}    ${applyReason}
+    log    ${response.content}
+    #开始断言接口返回响应
+    Should Be Equal As Strings    ${response.status_code}    200
+    #开始断言返回结果
+    log    ${response.json()['error_msg']}
+    Should Be Equal As Strings    ${response.json()['error_code']}    0
+    Should Be Equal As Strings    ${response.json()['error_msg']}    SUCCESS
