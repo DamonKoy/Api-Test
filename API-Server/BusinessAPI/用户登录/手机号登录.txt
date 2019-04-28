@@ -61,7 +61,6 @@ smoke
     Should Be Equal As Strings    ${respLogin.json()['status']}    error
     Should Be Equal As Strings    ${respLogin.json()['message']['message']}    请求验证不通过,权限不足
 
-
 手机号码不存在
     [Tags]    smoke
     ${user}    set variable     15699999999
