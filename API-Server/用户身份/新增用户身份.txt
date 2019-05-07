@@ -3,7 +3,7 @@ Default Tags
 Resource          ../Config/config.txt
 
 *** variable ***
-
+${user_id}     36530
 
 *** Test Cases ***
 测试服获取install_token
@@ -11,7 +11,7 @@ Resource          ../Config/config.txt
 
 smoke
     [Tags]    smoke
-    ${respLogin}=    手机号码登录    &{user}[user1]    &{password}[password1]
+    ${respLogin}=    新增用户身份    ${user_id}
     log    ${respLogin.content}
     #开始断言接口返回响应
     Should Be Equal As Strings    ${respLogin.status_code}    200
@@ -29,9 +29,9 @@ smoke
     log    ${respLogin.json()['message']['message']}
     Should Be Equal As Strings    ${respLogin.json()['status']}    ok
     Should Be Equal As Strings    ${respLogin.json()['message']['message']}    操作成功
-    Should Be Equal As Strings    ${response.json()['data']['profile']['user_id']}    ${user_id}
+    Should Be Equal As Strings    ${response.json()['data']['profile']['user_id']}    36530
 
-校验数据库的user_id
+校验返回的user_id
     ${respLogin}=    手机号码登录    &{user}[user1]    &{password}[password1]
     log    ${respLogin.content}
     #开始断言接口返回响应
@@ -40,7 +40,7 @@ smoke
     log    ${respLogin.json()['message']['message']}
     Should Be Equal As Strings    ${respLogin.json()['status']}    ok
     Should Be Equal As Strings    ${respLogin.json()['message']['message']}    操作成功
-    Should Be Equal As Strings    ${response.json()['data']['profile']['user_id']}    ${user_id}
+    Should Be Equal As Strings    ${response.json()['data']['profile']['user_id']}    36530
 
 校验返回的nickname
     ${respLogin}=    手机号码登录    &{user}[user1]    &{password}[password1]

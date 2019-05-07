@@ -7,11 +7,15 @@ Library           Collections
 Library           OperatingSystem
 Library           DateTime
 Library           NewLibrary
-Resource          ../../Hosts/host.txt
-Resource          ../../Common/constant.txt
-Resource          ../../Common/sql.txt
+Resource          ../Hosts/host.txt
+Resource          ../Common/constant.txt
+Resource          ../Common/sql.txt
 
 *** Variables ***
+${install_token_api}    ?m=Api&c=User&a=token     # 测试服获取install_token
+# AdmUserIdentity模块
+${get_identity_info_api}    index.php?m=Api&c=AdmUserIdentity&a=get_identity_info    # 新增用户身份
+${get_all_identity_admin_name_api}     index.php?m=Api&c=AdmUserIdentity&a=get_all_identity_admin_name     # 获取所有身份认证名称
 # 对外登录接口
 ${login_api}    ?m=Api&c=User&a=login    # 集成-登录获取验证信息
 #验证码相关接口
@@ -31,27 +35,47 @@ ${tenant_switch_api}    /api/v1/human/account/tenant/switch    # 切换租户
 ${identify_exists_api}    /api/v1/human/account/identify/exists    # 判断身份信息是否存在
 ${create_api}     /member/v1/create	# 创建用户
 ${tenant_create_api}     /tenant/v1/create	# 创建租户
-${MAuthorization}       0b379ed3f4f361a68859dece9ee632fe:610e4772190ffda6a59607c650cc23d6:ECZ5TI0MbItyU6VNK8oT0yp5Z90=
 
 *** Keywords ***
+测试服获取install_token
+    [Arguments]    ${user_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    id=${user_id}
+    ${headers}    Create Dictionary    Content-Type=application/json
+    ${response}    GET Request    new_request    ${install_token_api}    params=${loginData}    headers=${headers}
+    log    ${response.content}
+    log    ${response.json()['message']['message']}
+    log    ${response.json()['status']}
+    log    ${response.json()['data']}
+    ${data}    Create Dictionary    install_token=${response.json()['data']['install_token']}
+    Set Suite Variable    ${install_token}    ${response.json()['data']['install_token']}
+    [Return]    ${data}
+
+新增用户身份
+    [Arguments]    ${user_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    id=${user_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=${MAuthorization1}:${install_token}
+    ${response}    GET Request    new_request    ${get_identity_info_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+获取所有身份认证名称
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    id=${user_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=${MAuthorization1}:${install_token}
+    ${response}    GET Request    new_request    ${get_all_identity_admin_name_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
 获取当前时间戳
     ${date}    get current Date
     ${date}    convert Date    ${date}    epoch
     [Return]    ${date}
 
-用户注册_发送post请求
-    [Arguments]    ${account}    ${name}    ${phoneNo}    ${password}
-    Create Session    new_request    &{host}[其他对外]    debug=3
-    ${loginData}    Create Dictionary    account=${account}    name=${name}    phoneNo=${phoneNo}    password=${password}
-    ${headers}    Create Dictionary    Content-Type=application/json
-    ${response}    Post Request    new_request    ${register_add_api}    data=${loginData}    headers=${headers}
-    [Return]    ${response}
-
 手机号码登录
     [Arguments]    ${user}    ${password}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    user=${user}    password=${password}
-    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=${MAuthorization}
+    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=${MAuthorization1}:${install_token}
     ${response}    Post Request    new_request    ${login_api}    data=${loginData}    headers=${headers}
     [Return]    ${response}
 

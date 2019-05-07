@@ -1,3 +1,0 @@
-*** Settings ***
-#Test Setup        初始化基础数据
-#Test Teardown     删除初始化数据
