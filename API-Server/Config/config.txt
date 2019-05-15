@@ -12,7 +12,9 @@ Resource          ../Common/constant.txt
 Resource          ../Common/sql.txt
 
 *** Variables ***
+# 获取token模块
 ${install_token_api}    ?m=Api&c=User&a=token     # 测试服获取install_token
+${install_api}    ?m=Api&c=App&a=install    # 通过设备获取token
 # AdmUserIdentity模块
 ${get_identity_info_api}    index.php?m=Api&c=AdmUserIdentity&a=get_identity_info    # 新增用户身份
 ${get_all_identity_admin_name_api}     index.php?m=Api&c=AdmUserIdentity&a=get_all_identity_admin_name     # 获取所有身份认证名称
@@ -43,6 +45,19 @@ ${tenant_create_api}     /tenant/v1/create	# 创建租户
     ${loginData}    Create Dictionary    id=${user_id}
     ${headers}    Create Dictionary    Content-Type=application/json
     ${response}    GET Request    new_request    ${install_token_api}    params=${loginData}    headers=${headers}
+    log    ${response.content}
+    log    ${response.json()['message']['message']}
+    log    ${response.json()['status']}
+    log    ${response.json()['data']}
+    ${data}    Create Dictionary    install_token=${response.json()['data']['install_token']}
+    Set Suite Variable    ${install_token}    ${response.json()['data']['install_token']}
+    [Return]    ${data}
+
+获取install_token
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    device_model=LYA-AL00    device_brand=HUAWEI    device_token=7c169643-0d5b-471d-935e-82fd4cf896de    device_type=0    language=zh-hans    marketing_channel=chuman
+    ${headers}    Create Dictionary    Content-Type=application/json
+    ${response}    GET Request    new_request    ${install_api}    params=${loginData}    headers=${headers}
     log    ${response.content}
     log    ${response.json()['message']['message']}
     log    ${response.json()['status']}

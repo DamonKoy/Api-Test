@@ -1,5 +1,5 @@
 *** Variable ***
 ${user_id}     36530
-&{user}    user1=13710468400
+&{user}    user1=13710400002
 &{password}    password1=123456
 ${MAuthorization1}    946c573c9e2ad8f49ee4608e6da0b359
