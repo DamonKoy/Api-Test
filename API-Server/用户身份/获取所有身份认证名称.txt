@@ -3,71 +3,71 @@ Default Tags
 Resource          ../Config/config.txt
 
 *** variable ***
-${user_id}     36530
+
 
 *** Test Cases ***
 测试服获取install_token
-    ${respLogin}=    测试服获取install_token    ${user_id}
+    ${response}=    测试服获取install_token    &{user_id}[user2]
 
 smoke
     [Tags]    smoke
-    ${respLogin}=    获取所有身份认证名称
-    log    ${respLogin.content}
+    ${response}=    获取所有身份认证名称
+    log    ${response.content}
     #开始断言接口返回响应
-    Should Be Equal As Strings    ${respLogin.status_code}    200
+    Should Be Equal As Strings    ${response.status_code}    200
     #开始断言返回结果
-    log    ${respLogin.json()['message']['message']}
-    Should Be Equal As Strings    ${respLogin.json()['status']}    ok
-    Should Be Equal As Strings    ${respLogin.json()['message']['message']}    操作成功
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    操作成功
 
 检验返回的第一个数据
     [Tags]    smoke
-    ${respLogin}=    获取所有身份认证名称
-    log    ${respLogin.content}
+    ${response}=    获取所有身份认证名称
+    log    ${response.content}
     #开始断言接口返回响应
-    Should Be Equal As Strings    ${respLogin.status_code}    200
+    Should Be Equal As Strings    ${response.status_code}    200
     #开始断言返回结果
-    log    ${respLogin.json()['message']['message']}
-    Should Be Equal As Strings    ${respLogin.json()['status']}    ok
-    Should Be Equal As Strings    ${respLogin.json()['message']['message']}    操作成功
-    Should Be Equal As Strings    ${respLogin.json()['data']['list'][0]['id']}    1
-    Should Be Equal As Strings    ${respLogin.json()['data']['list'][0]['name']}    首页作者
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    操作成功
+    Should Be Equal As Strings    ${response.json()['data']['list'][0]['id']}    1
+    Should Be Equal As Strings    ${response.json()['data']['list'][0]['name']}    首页作者
 
 检验返回的第二个数据
     [Tags]    smoke
-    ${respLogin}=    获取所有身份认证名称
-    log    ${respLogin.content}
+    ${response}=    获取所有身份认证名称
+    log    ${response.content}
     #开始断言接口返回响应
-    Should Be Equal As Strings    ${respLogin.status_code}    200
+    Should Be Equal As Strings    ${response.status_code}    200
     #开始断言返回结果
-    log    ${respLogin.json()['message']['message']}
-    Should Be Equal As Strings    ${respLogin.json()['status']}    ok
-    Should Be Equal As Strings    ${respLogin.json()['message']['message']}    操作成功
-    Should Be Equal As Strings    ${respLogin.json()['data']['list'][1]['id']}    2
-    Should Be Equal As Strings    ${respLogin.json()['data']['list'][1]['name']}    素材店主
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    操作成功
+    Should Be Equal As Strings    ${response.json()['data']['list'][1]['id']}    2
+    Should Be Equal As Strings    ${response.json()['data']['list'][1]['name']}    素材店主
 
 检验返回的第三个数据
     [Tags]    smoke
-    ${respLogin}=    获取所有身份认证名称
-    log    ${respLogin.content}
+    ${response}=    获取所有身份认证名称
+    log    ${response.content}
     #开始断言接口返回响应
-    Should Be Equal As Strings    ${respLogin.status_code}    200
+    Should Be Equal As Strings    ${response.status_code}    200
     #开始断言返回结果
-    log    ${respLogin.json()['message']['message']}
-    Should Be Equal As Strings    ${respLogin.json()['status']}    ok
-    Should Be Equal As Strings    ${respLogin.json()['message']['message']}    操作成功
-    Should Be Equal As Strings    ${respLogin.json()['data']['list'][2]['id']}    3
-    Should Be Equal As Strings    ${respLogin.json()['data']['list'][2]['name']}    解忧者
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    操作成功
+    Should Be Equal As Strings    ${response.json()['data']['list'][2]['id']}    3
+    Should Be Equal As Strings    ${response.json()['data']['list'][2]['name']}    解忧者
 
 检验返回的第四个数据
     [Tags]    smoke
-    ${respLogin}=    获取所有身份认证名称
-    log    ${respLogin.content}
+    ${response}=    获取所有身份认证名称
+    log    ${response.content}
     #开始断言接口返回响应
-    Should Be Equal As Strings    ${respLogin.status_code}    200
+    Should Be Equal As Strings    ${response.status_code}    200
     #开始断言返回结果
-    log    ${respLogin.json()['message']['message']}
-    Should Be Equal As Strings    ${respLogin.json()['status']}    ok
-    Should Be Equal As Strings    ${respLogin.json()['message']['message']}    操作成功
-    Should Be Equal As Strings    ${respLogin.json()['data']['list'][3]['id']}    4
-    Should Be Equal As Strings    ${respLogin.json()['data']['list'][3]['name']}    触漫主播
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    操作成功
+    Should Be Equal As Strings    ${response.json()['data']['list'][3]['id']}    4
+    Should Be Equal As Strings    ${response.json()['data']['list'][3]['name']}    触漫主播

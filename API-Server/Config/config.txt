@@ -12,6 +12,8 @@ Resource          ../Common/constant.txt
 Resource          ../Common/sql.txt
 
 *** Variables ***
+# 版本变量
+${versioncode}    android_4.8.6
 # 获取token模块
 ${install_token_api}    ?m=Api&c=User&a=token     # 测试服获取install_token
 ${install_api}    ?m=Api&c=App&a=install    # 通过设备获取token
@@ -42,13 +44,15 @@ ${tenant_create_api}     /tenant/v1/create	# 创建租户
 测试服获取install_token
     [Arguments]    ${user_id}
     Create Session    new_request    &{host}[API]    debug=3
-    ${loginData}    Create Dictionary    id=${user_id}
+    ${loginData}    Create Dictionary    id=${user_id}    versioncode=${versioncode}
     ${headers}    Create Dictionary    Content-Type=application/json
     ${response}    GET Request    new_request    ${install_token_api}    params=${loginData}    headers=${headers}
     log    ${response.content}
     log    ${response.json()['message']['message']}
     log    ${response.json()['status']}
     log    ${response.json()['data']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    操作成功
     ${data}    Create Dictionary    install_token=${response.json()['data']['install_token']}
     Set Suite Variable    ${install_token}    ${response.json()['data']['install_token']}
     [Return]    ${data}
@@ -56,12 +60,14 @@ ${tenant_create_api}     /tenant/v1/create	# 创建租户
 获取install_token
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    device_model=LYA-AL00    device_brand=HUAWEI    device_token=7c169643-0d5b-471d-935e-82fd4cf896de    device_type=0    language=zh-hans    marketing_channel=chuman
-    ${headers}    Create Dictionary    Content-Type=application/json
-    ${response}    GET Request    new_request    ${install_api}    params=${loginData}    headers=${headers}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[android_4.8.6]
+    ${response}    Post Request    new_request    ${install_api}    data=${loginData}    headers=${headers}
     log    ${response.content}
     log    ${response.json()['message']['message']}
     log    ${response.json()['status']}
     log    ${response.json()['data']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    操作成功
     ${data}    Create Dictionary    install_token=${response.json()['data']['install_token']}
     Set Suite Variable    ${install_token}    ${response.json()['data']['install_token']}
     [Return]    ${data}
@@ -70,14 +76,14 @@ ${tenant_create_api}     /tenant/v1/create	# 创建租户
     [Arguments]    ${user_id}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    id=${user_id}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=${MAuthorization1}:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[android_4.8.6]:${install_token}
     ${response}    GET Request    new_request    ${get_identity_info_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 获取所有身份认证名称
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    id=${user_id}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=${MAuthorization1}:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[android_4.8.6]:${install_token}
     ${response}    GET Request    new_request    ${get_all_identity_admin_name_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
@@ -90,7 +96,7 @@ ${tenant_create_api}     /tenant/v1/create	# 创建租户
     [Arguments]    ${user}    ${password}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    user=${user}    password=${password}
-    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=${MAuthorization1}:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=&{MAuthorization1}[android_4.8.6]:${install_token}
     ${response}    Post Request    new_request    ${login_api}    data=${loginData}    headers=${headers}
     [Return]    ${response}
 
