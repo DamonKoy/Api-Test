@@ -1,0 +1,208 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${font_face}    standard.ttf
+${group_id}    0
+
+*** Test Cases ***
+测试服获取install_token
+    ${response}=    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+
+校验返回值title
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['data']['title']}    ${title}
+
+校验返回值block_count
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['data']['block_count']}    ${block_count}
+
+校验返回值data_json
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['data']['data_json']}    ${data_json}
+
+校验返回值font_face
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['data']['font_face']}    ${font_face}
+
+校验返回值title_image
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['data']['title_image']}    ${title_image}
+
+校验返回值intro
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0    ,1为加入连载
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['data']['intro']}    ${intro}
+
+不加入连载，校验返回值group_id=0
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['data']['group_id']}   0
+
+加入连载，校验返回值group_id
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0
+    ${group_id}    set variable    2867
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['data']['group_id']}   ${group_id}
+
+校验返回值comic_id不能为0
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['data']['comic_id']} > 0
+
+校验返回值author_id
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['data']['author_id']}    &{user_id}[user2]
+
+校验返回值state=0，存为草稿
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0    ,1为加入连载
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['data']['state']}    ${state}
+
+校验返回值state=1，正式发布
+    ${string}=    生成随机字符串    5
+    ${id}    set variable    0   # 0为创建
+    ${title}    set variable    mi漫画大作${string}
+    ${data_json}    set variable    app/comics/jsons/json_36536_92c3d64bb1334243a183e7d225bd7094.json
+    ${title_image}    set variable    app/comics/titles/title_36536_1_91d1020cb6e34736b247869684c1c3a1.jpg
+    ${version}    set variable    1
+    ${state}    set variable    0    # 1为发布，0为草稿
+    ${block_count}    set variable    2
+    ${intro}    set variable    这是我mi的大漫画制作${string}~
+    ${comic_type}    set variable    0
+    ${response}=    创建/编辑漫画单篇    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['data']['title']}    ${title}
+

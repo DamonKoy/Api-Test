@@ -20,27 +20,22 @@ ${install_api}    ?m=Api&c=App&a=install    # 通过设备获取token
 # AdmUserIdentity模块
 ${get_identity_info_api}    index.php?m=Api&c=AdmUserIdentity&a=get_identity_info    # 新增用户身份
 ${get_all_identity_admin_name_api}     index.php?m=Api&c=AdmUserIdentity&a=get_all_identity_admin_name     # 获取所有身份认证名称
-# 对外登录接口
-${login_api}    ?m=Api&c=User&a=login    # 集成-登录获取验证信息
-#验证码相关接口
-${mobile_verifycode_api}    /code-for-qa/v1/mobile    # 获取手机验证码
-${email_verifycode_api}    /code-for-qa/v1/email    # 获取邮箱验证码
-${account_sendverifycode_api}    /api/v1/human/account/verifycode/send    # 发送验证码_发送post请求
-# 注册相关接口
-${register_add_api}    /api/v1/human/userInfo/register    # 用户注册_发送post请求
-${apply_add_api}    /api/v1/human/apply/add    # 申请加入租户_发送post请求
-${apply_list_api}    /apply/v1/list    # 租户查询用户申请列表_发送post请求
-${apply_confirm_api}    /apply/v1/confirm    # 申请拒绝_发送post请求
-${apply_update_api}    /apply/v1/update    # 编辑用户_发送post请求
-${member_delete_api}    /member/v1/delete    # 删除用户和租户绑定关系
-${apply_info_api}    /apply/v1/info    # 查询申请用户详细信息
-${human_unbind_api}    /api/v1/human/apply/unbind    # 用户解除租户绑定
-${tenant_switch_api}    /api/v1/human/account/tenant/switch    # 切换租户
-${identify_exists_api}    /api/v1/human/account/identify/exists    # 判断身份信息是否存在
-${create_api}     /member/v1/create	# 创建用户
-${tenant_create_api}     /tenant/v1/create	# 创建租户
+# 服装店相关
+${get_automated_keyword_api}    ?m=Api&c=SpdiySearch&a=get_automated_keyword    # 获取搜索联想词
+# NewyearActivity
+${get_newyear_activity_list_api}    ?m=Api&c=NewyearActivity&a=get_newyear_activity_list    # 获取寒假福利活动列表
+${get_recharge_active_reward_api}    ?m=Api&c=NewyearActivity&a=get_recharge_active_reward    # 获取充值满赠
+# ChumanDrama
+${muti_edit_role_api}    ?m=Api&c=ChumanDrama&a=muti_edit_role    # 新建（修改）漫剧角色
+${muti_copy_role_api}    ?m=Api&c=ChumanDrama&a=muti_copy_role    # 复制漫剧角色(导入角色时使用)
+# Comic
+${comic_edit_api}    ?m=Api&c=Comic&a=comic_edit    # 创建/编辑漫画单篇
+${comic_create_comic_list_api}    ?m=Api&c=Comic&a=comic_create_comic_list    # 4.5.2-获取创作页单篇列表
+${comic_del_api}    ?m=Api&c=Comic&a=comic_del    # 删除漫画单篇
+
 
 *** Keywords ***
+# 获取token模块
 测试服获取install_token
     [Arguments]    ${user_id}
     Create Session    new_request    &{host}[API]    debug=3
@@ -60,7 +55,7 @@ ${tenant_create_api}     /tenant/v1/create	# 创建租户
 获取install_token
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    device_model=LYA-AL00    device_brand=HUAWEI    device_token=7c169643-0d5b-471d-935e-82fd4cf896de    device_type=0    language=zh-hans    marketing_channel=chuman
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[android_4.8.6]
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]
     ${response}    Post Request    new_request    ${install_api}    data=${loginData}    headers=${headers}
     log    ${response.content}
     log    ${response.json()['message']['message']}
@@ -72,19 +67,79 @@ ${tenant_create_api}     /tenant/v1/create	# 创建租户
     Set Suite Variable    ${install_token}    ${response.json()['data']['install_token']}
     [Return]    ${data}
 
+# AdmUserIdentity模块
 新增用户身份
     [Arguments]    ${user_id}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    id=${user_id}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[android_4.8.6]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
     ${response}    GET Request    new_request    ${get_identity_info_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 获取所有身份认证名称
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    id=${user_id}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[android_4.8.6]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
     ${response}    GET Request    new_request    ${get_all_identity_admin_name_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+# 服装店相关
+获取搜索联想词
+    [Arguments]    ${keyword}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    keyword=${keyword}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    GET Request    new_request    ${get_automated_keyword_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+# NewyearActivity
+获取寒假福利活动列表
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    GET Request    new_request    ${get_newyear_activity_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+获取充值满赠
+    [Arguments]    ${reward_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    reward_id=${reward_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Post Request    new_request    ${get_recharge_active_reward_api}    data=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+# ChumanDrama
+新建（修改）漫剧角色
+    [Arguments]    ${reward_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    reward_id=${reward_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Post Request    new_request    ${get_recharge_active_reward_api}    data=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+# Comic
+创建/编辑漫画单篇
+    [Arguments]    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    id=${id}    title=${title}    data_json=${data_json}    font_face=${font_face}    title_image=${title_image}    version=${version}    state=${state}    block_count=${block_count}    intro=${intro}    comic_type=${comic_type}    group_id=${group_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Post Request    new_request    ${comic_edit_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+获取创作页单篇列表
+    [Arguments]    ${pize}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    pize=${pize}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    GET Request    new_request    ${comic_create_comic_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+删除漫画单篇
+    [Arguments]    ${id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    id=${id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Post Request    new_request    ${comic_del_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 获取当前时间戳
@@ -96,7 +151,7 @@ ${tenant_create_api}     /tenant/v1/create	# 创建租户
     [Arguments]    ${user}    ${password}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    user=${user}    password=${password}
-    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=&{MAuthorization1}[android_4.8.6]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=&{MAuthorization1}[通用]:${install_token}
     ${response}    Post Request    new_request    ${login_api}    data=${loginData}    headers=${headers}
     [Return]    ${response}
 
@@ -104,7 +159,7 @@ ${tenant_create_api}     /tenant/v1/create	# 创建租户
     [Arguments]    ${user}    ${password}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    user=${user}    password=${password}
-    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=${MAuthorization}
+    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=&{MAuthorization1}[通用]:${install_token}
     ${response}    Post Request    new_request    ${login_api}    data=${loginData}    headers=${headers}
     log    ${response.content}
     log    ${response.json()['message']['message']}
@@ -114,6 +169,13 @@ ${tenant_create_api}     /tenant/v1/create	# 创建租户
     ${data}    Create Dictionary    user_id=${response.json()['data']['profile']['user_id']}    nickname=${response.json()['data']['profile']['nickname']}
     [Return]    ${data}
 
+校验接口返回状态正常
+    [Arguments]    ${response}    # 接口返回数据
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.status_code}    200
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    操作成功
 
 根据类型查询已存在的身份信息
     [Arguments]    ${type}
