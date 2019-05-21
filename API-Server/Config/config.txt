@@ -14,28 +14,46 @@ Resource          ../Common/sql.txt
 *** Variables ***
 # 版本变量
 ${versioncode}    android_4.8.6
-# 获取token模块
+
+# 获取token
 ${install_token_api}    ?m=Api&c=User&a=token     # 测试服获取install_token
 ${install_api}    ?m=Api&c=App&a=install    # 通过设备获取token
-# AdmUserIdentity模块
-${get_identity_info_api}    index.php?m=Api&c=AdmUserIdentity&a=get_identity_info    # 新增用户身份
-${get_all_identity_admin_name_api}     index.php?m=Api&c=AdmUserIdentity&a=get_all_identity_admin_name     # 获取所有身份认证名称
-# 服装店相关
-${get_automated_keyword_api}    ?m=Api&c=SpdiySearch&a=get_automated_keyword    # 获取搜索联想词
+
+# AdmUserIdentity
+${AdmUserIdentity_get_identity_info_api}    index.php?m=Api&c=AdmUserIdentity&a=get_identity_info    # 新增用户身份
+${AdmUserIdentity_get_all_identity_admin_name_api}     index.php?m=Api&c=AdmUserIdentity&a=get_all_identity_admin_name     # 获取所有身份认证名称
+
+# SpdiySearch
+${SpdiySearch_get_automated_keyword_api}    ?m=Api&c=SpdiySearch&a=get_automated_keyword    # 获取搜索联想词
+
 # NewyearActivity
-${get_newyear_activity_list_api}    ?m=Api&c=NewyearActivity&a=get_newyear_activity_list    # 获取寒假福利活动列表
-${get_recharge_active_reward_api}    ?m=Api&c=NewyearActivity&a=get_recharge_active_reward    # 获取充值满赠
+${NewyearActivity_get_newyear_activity_list_api}    ?m=Api&c=NewyearActivity&a=get_newyear_activity_list    # 获取寒假福利活动列表
+${NewyearActivity_get_recharge_active_reward_api}    ?m=Api&c=NewyearActivity&a=get_recharge_active_reward    # 获取充值满赠
+
 # ChumanDrama
-${muti_edit_role_api}    ?m=Api&c=ChumanDrama&a=muti_edit_role    # 新建（修改）漫剧角色
-${muti_copy_role_api}    ?m=Api&c=ChumanDrama&a=muti_copy_role    # 复制漫剧角色(导入角色时使用)
+${ChumanDrama_muti_edit_role_api}    ?m=Api&c=ChumanDrama&a=muti_edit_role    # 新建（修改）漫剧角色
+${ChumanDrama_muti_copy_role_api}    ?m=Api&c=ChumanDrama&a=muti_copy_role    # 复制漫剧角色(导入角色时使用)
+
 # Comic
 ${comic_edit_api}    ?m=Api&c=Comic&a=comic_edit    # 创建/编辑漫画单篇
 ${comic_create_comic_list_api}    ?m=Api&c=Comic&a=comic_create_comic_list    # 4.5.2-获取创作页单篇列表
 ${comic_del_api}    ?m=Api&c=Comic&a=comic_del    # 删除漫画单篇
 
+# UserRes
+${UserRes_get_idcard_info_api}    m=Api&c=UserRes&a=get_idcard_info    # 4.8.7-获取身份详情
+${UserRes_get_idcard_binding_status_api}    ?m=Api&c=UserRes&a=get_idcard_binding_status    # 4.8.7-获取绑定信息
+${UserRes_binding_card_info_api}    ?m=Api&c=UserRes&a=binding_card_info    # 4.8.7-绑定身份证信息
+${UserRes_edit_card_info_api}    ?m=Api&c=UserRes&a=edit_card_info    # 4.8.7-修改身份证信息
+
+# ChumanShop
+${ChumanShop_edit_card_info_api}    ?m=Api&c=ChumanShop&a=edit_card_info    # 4.8.7-触漫修改身份证信息
+${ChumanShop_binding_card_info}    ?m=Api&c=ChumanShop&a=binding_card_info    # 4.8.7-触漫绑定身份证信息
+${ChumanShop_get_verification_code_new}    ?m=Api&c=ChumanShop&a=get_verification_code_new    # 4.8.7-触漫修改、添加身份认证验证码
+${ChumanShop_get_calculate_withdrawals_info}    ?m=Api&c=ChumanShop&a=get_calculate_withdrawals_info    # 4.8.7-触漫获取提现税前/后及扣税信息
+${ChumanShop_get_idcard_binding_status}    ?m=Api&c=ChumanShop&a=get_idcard_binding_status    # 4.8.7-触漫获取绑定信息
 
 *** Keywords ***
-# 获取token模块
+# 获取token
 测试服获取install_token
     [Arguments]    ${user_id}
     Create Session    new_request    &{host}[API]    debug=3
@@ -67,37 +85,40 @@ ${comic_del_api}    ?m=Api&c=Comic&a=comic_del    # 删除漫画单篇
     Set Suite Variable    ${install_token}    ${response.json()['data']['install_token']}
     [Return]    ${data}
 
-# AdmUserIdentity模块
+
+# AdmUserIdentity
 新增用户身份
     [Arguments]    ${user_id}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    id=${user_id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    GET Request    new_request    ${get_identity_info_api}    params=${loginData}    headers=${headers}
+    ${response}    GET Request    new_request    ${AdmUserIdentity_get_identity_info_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 获取所有身份认证名称
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    id=${user_id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    GET Request    new_request    ${get_all_identity_admin_name_api}    params=${loginData}    headers=${headers}
+    ${response}    GET Request    new_request    ${AdmUserIdentity_get_all_identity_admin_name_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
-# 服装店相关
+
+# SpdiySearch
 获取搜索联想词
     [Arguments]    ${keyword}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    keyword=${keyword}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    GET Request    new_request    ${get_automated_keyword_api}    params=${loginData}    headers=${headers}
+    ${response}    GET Request    new_request    ${SpdiySearch_get_automated_keyword_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
+
 
 # NewyearActivity
 获取寒假福利活动列表
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    GET Request    new_request    ${get_newyear_activity_list_api}    params=${loginData}    headers=${headers}
+    ${response}    GET Request    new_request    ${NewyearActivity_get_newyear_activity_list_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 获取充值满赠
@@ -105,8 +126,9 @@ ${comic_del_api}    ?m=Api&c=Comic&a=comic_del    # 删除漫画单篇
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    reward_id=${reward_id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    Post Request    new_request    ${get_recharge_active_reward_api}    data=${loginData}    headers=${headers}
+    ${response}    Post Request    new_request    ${NewyearActivity_get_recharge_active_reward_api}    data=${loginData}    headers=${headers}
     [Return]    ${response}
+
 
 # ChumanDrama
 新建（修改）漫剧角色
@@ -114,8 +136,9 @@ ${comic_del_api}    ?m=Api&c=Comic&a=comic_del    # 删除漫画单篇
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    reward_id=${reward_id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    Post Request    new_request    ${get_recharge_active_reward_api}    data=${loginData}    headers=${headers}
+    ${response}    Post Request    new_request    ${ChumanDrama_muti_edit_role_api}    data=${loginData}    headers=${headers}
     [Return]    ${response}
+
 
 # Comic
 创建/编辑漫画单篇
@@ -142,6 +165,85 @@ ${comic_del_api}    ?m=Api&c=Comic&a=comic_del    # 删除漫画单篇
     ${response}    Post Request    new_request    ${comic_del_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
+
+# UserRes
+获取身份详情
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    GET Request    new_request    ${UserRes_get_idcard_info_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+获取绑定信息
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    GET Request    new_request    ${UserRes_get_idcard_binding_status_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+绑定身份证信息
+    [Arguments]    ${type}    ${name}    ${card_num}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    type=${type}    name=${name}    card_num=${card_num}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Post Request    new_request    ${UserRes_binding_card_info_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+修改身份证信息
+    [Arguments]    ${name}    ${number}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    name=${name}    number=${number}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Post Request    new_request    ${UserRes_edit_card_info_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+# ChumanShop
+触漫绑定身份证信息
+    [Arguments]    ${type}    ${name}    ${card_num}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    type=${type}    name=${name}    card_num=${card_num}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Post Request    new_request    ${ChumanShop_binding_card_info}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+触漫修改身份证信息
+    [Arguments]    ${name}    ${card_num}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    name=${name}    card_num=${card_num}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Post Request    new_request    ${ChumanShop_edit_card_info_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+触漫修改、添加身份认证验证码
+    [Arguments]    ${phone_number}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    phone_number=${phone_number}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Post Request    new_request    ${ChumanShop_get_verification_code_new}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+触漫获取提现税前/后及扣税信息
+    [Arguments]    ${gems}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    gems=${gems}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Get Request    new_request    ${ChumanShop_get_calculate_withdrawals_info}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+触漫获取绑定信息
+    [Arguments]    ${phone_number}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    phone_number=${phone_number}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Getget Request    new_request    ${ChumanShop_get_idcard_binding_status}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+
+
+
+# ------
 获取当前时间戳
     ${date}    get current Date
     ${date}    convert Date    ${date}    epoch
