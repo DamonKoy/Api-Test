@@ -1,5 +1,5 @@
 *** Variable ***
-&{user_id}    user1=36530     user2=36536
+&{user_id}    user1=36535     user2=36536
 &{user}    user1=13710400001    user2=13710400002
 &{password}    password1=123456
 &{MAuthorization1}    通用=946c573c9e2ad8f49ee4608e6da0b359    android_4.8.6=0b379ed3f4f361a68859dece9ee632fe

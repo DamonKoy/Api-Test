@@ -1,0 +1,43 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    触漫获取绑定信息
+    校验接口返回状态正常    ${response}
+
+校验返回值name
+    ${type}    set variable    1    # 1新增绑定，2有其他模块已绑定身份证认证
+    ${name}    set variable    狸子酱
+    ${card_num}    set variable    11010119900307424X
+    ${response}=    触漫绑定身份证信息    ${type}    ${name}    ${card_num}
+    校验接口返回状态正常    ${response}
+    ${response}=    触漫获取绑定信息
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['info']['card_info']['name']}    ${name}
+
+校验返回值card_num
+    ${response}=    触漫获取绑定信息
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['info']['card_info']['card_num']}    ${card_num}
+
+校验返回值toast
+    ${response}=    触漫获取绑定信息
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Integers    ${response.json()['data']['info']['card_status']}    1
+
+已绑定身份证验证，再次绑定
+    ${response}=    触漫获取绑定信息
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['info']['card_info']['name']}    ${name}
+    Should Be Equal As Strings    ${response.json()['data']['info']['card_info']['card_num']}    ${card_num}
+    Should Be Equal As Integers    ${response.json()['data']['info']['card_status']}    1

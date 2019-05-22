@@ -7,7 +7,8 @@ Resource          ../Config/config.txt
 
 *** Test Cases ***
 测试服获取install_token
-    ${response}=    测试服获取install_token    &{user_id}[user2]
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
 
 smoke
     [Tags]    smoke

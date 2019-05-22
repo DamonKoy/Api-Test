@@ -1,0 +1,87 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+
+校验非会员的返回值is_vip
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['is_vip']}    0    # 0为非会员，1为会员
+
+校验会员的返回值is_vip
+    测试服获取install_token    &{user_id}[user1]
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['is_vip']}    1    # 0为非会员，1为会员
+
+校验userLevel返回值total_level
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['userLevel']['total_level']} >= 0
+
+校验userLevel返回值phase
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['userLevel']['phase']} >= 0
+
+校验userLevel返回值exp
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['userLevel']['exp']} > 0
+
+校验start返回值total_level
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['start']['total_level']} >= 0
+
+校验start返回值phase
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['start']['phase']} >= 0
+
+校验start返回值exp
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['start']['exp']} >= 0
+
+校验end返回值total_level
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['end']['total_level']} >= 1
+
+校验end返回值phase
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['end']['phase']} >= 0
+
+校验end返回值exp
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['end']['exp']} >= 1
+
+校验end比start的total_level值大
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['end']['total_level']} > ${response.json()['data']['start']['total_level']}
+
+校验end比start的exp值大
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be true    ${response.json()['data']['end']['exp']} > ${response.json()['data']['start']['exp']}
+
+校验返回值level_desc
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['level_desc']}    app/users/member_image/pic_level_big.png

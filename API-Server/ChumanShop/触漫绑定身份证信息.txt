@@ -7,7 +7,8 @@ Resource          ../Config/config.txt
 
 *** Test Cases ***
 测试服获取install_token
-    ${response}=    测试服获取install_token    &{user_id}[user2]
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
 
 smoke
     [Tags]    smoke
@@ -18,7 +19,6 @@ smoke
     校验接口返回状态正常    ${response}
 
 校验返回值name
-    [Tags]    smoke
     ${type}    set variable    1    # 1新增绑定，2有其他模块已绑定身份证认证
     ${name}    set variable    米娅
     ${card_num}    set variable    11010119900307424X
@@ -27,7 +27,6 @@ smoke
     Should Be Equal As Strings    ${response.json()['data']['card_info']['name']}    ${name}
 
 校验返回值card_num
-    [Tags]    smoke
     ${type}    set variable    1    # 1新增绑定，2有其他模块已绑定身份证认证
     ${name}    set variable    米娅
     ${card_num}    set variable    11010119900307424X
@@ -36,7 +35,6 @@ smoke
     Should Be Equal As Strings    ${response.json()['data']['card_info']['card_num']}    ${card_num}
 
 校验返回值toast
-    [Tags]    smoke
     ${type}    set variable    1    # 1新增绑定，2有其他模块已绑定身份证认证
     ${name}    set variable    米娅
     ${card_num}    set variable    11010119900307424X
@@ -45,7 +43,6 @@ smoke
     Should Be Equal As Strings    ${response.json()['data']['card_info']['toast']}    待修改
 
 已绑定身份证验证，再次绑定
-    [Tags]    smoke
     ${type}    set variable    2    # 1新增绑定，2有其他模块已绑定身份证认证
     ${name}    set variable    米娅
     ${card_num}    set variable    440112199003077593

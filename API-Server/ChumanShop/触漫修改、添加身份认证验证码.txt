@@ -4,7 +4,6 @@ Resource          ../Config/config.txt
 
 *** variable ***
 
-
 *** Test Cases ***
 测试服获取install_token
     [Tags]    smoke
@@ -12,6 +11,6 @@ Resource          ../Config/config.txt
 
 smoke
     [Tags]    smoke
-    ${response}=    获取身份详情
+    ${${phone_number}}    set variable    13710468400
+    ${response}=    触漫绑定身份证信息    ${phone_number}
     校验接口返回状态正常    ${response}
-

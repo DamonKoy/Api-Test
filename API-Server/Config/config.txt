@@ -52,6 +52,10 @@ ${ChumanShop_get_verification_code_new}    ?m=Api&c=ChumanShop&a=get_verificatio
 ${ChumanShop_get_calculate_withdrawals_info}    ?m=Api&c=ChumanShop&a=get_calculate_withdrawals_info    # 4.8.7-触漫获取提现税前/后及扣税信息
 ${ChumanShop_get_idcard_binding_status}    ?m=Api&c=ChumanShop&a=get_idcard_binding_status    # 4.8.7-触漫获取绑定信息
 
+# UserExtend
+${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的等级
+
+
 *** Keywords ***
 # 获取token
 测试服获取install_token
@@ -232,15 +236,20 @@ ${ChumanShop_get_idcard_binding_status}    ?m=Api&c=ChumanShop&a=get_idcard_bind
     [Return]    ${response}
 
 触漫获取绑定信息
-    [Arguments]    ${phone_number}
     Create Session    new_request    &{host}[API]    debug=3
-    ${loginData}    Create Dictionary    phone_number=${phone_number}
+    ${loginData}    Create Dictionary
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    Getget Request    new_request    ${ChumanShop_get_idcard_binding_status}    params=${loginData}    headers=${headers}
+    ${response}    Get Request    new_request    ${ChumanShop_get_idcard_binding_status}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 
-
+# UserExtend
+获取我的等级
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${response}    Get Request    new_request    ${UserExtend_my_grade}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
 
 
 # ------

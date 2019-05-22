@@ -1,0 +1,35 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${gems}    set variable    1000
+    ${response}=    触漫获取提现税前/后及扣税信息    ${gems}
+    校验接口返回状态正常    ${response}
+
+校验返回值total(提现金额-税前)
+    ${gems}    set variable    1000
+    ${response}=    触漫获取提现税前/后及扣税信息    ${gems}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['withdrawals_info']['total']}    待修改
+
+校验返回值tax_num(扣税)
+    ${gems}    set variable    1000
+    ${response}=    触漫获取提现税前/后及扣税信息    ${gems}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['withdrawals_info']['tax_num']}    待修改
+
+校验返回值money(到账金额)
+    ${gems}    set variable    1000
+    ${response}=    触漫获取提现税前/后及扣税信息    ${gems}
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['withdrawals_info']['money']} < ${gems}
