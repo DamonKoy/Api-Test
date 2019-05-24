@@ -1,0 +1,67 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    我的钻石    ${app_version}
+    校验接口返回状态正常    ${response}
+
+校验返回值当前钻石数量gems
+    ${response}=    我的钻石    ${app_version}
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['gems']} >= 0
+
+校验返回值有新变动has_new
+    ${response}=    我的钻石    ${app_version}
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['has_new']} > 0
+
+校验返回值金钻数量gold_gems
+    ${response}=    我的钻石    ${app_version}
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['gold_gems']} >= 0
+
+校验返回值金钻小红点has_gold_new
+    ${response}=    我的钻石    ${app_version}
+    校验接口返回状态正常    ${response}
+    ${flag}=    Run Keyword If    ${response.json()['data']['has_gold_new']} = '0'    or    ${response.json()['data']['has_gold_new']} = '1'    Set Variable    true    # 1为开启，0为关闭
+    Should Be Equal As Strings    ${flag}    true
+
+校验返回值稿费收入contribution_fee_income
+    ${response}=    我的钻石    ${app_version}
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['contribution_fee_income']} >= 0
+
+校验返回值稿费收入小红点has_income_new
+    ${response}=    我的钻石    ${app_version}
+    校验接口返回状态正常    ${response}
+    ${flag}=    Run Keyword If    ${response.json()['data']['has_income_new']} = '0'    or    ${response.json()['data']['has_income_new']} = '1'    Set Variable    true    # 1为开启，0为关闭
+    Should Be Equal As Strings    ${flag}    true
+
+校验返回值公告notice
+    ${response}=    我的钻石    ${app_version}
+    校验接口返回状态正常    ${response}
+    Should Not Be Equal As Strings    ${response.json()['data']['notice']}    ${empty}
+
+校验返回值提现Web入口jump_url
+    ${response}=    我的钻石    ${app_version}
+    校验接口返回状态正常    ${response}
+    Should Not Be Equal As Strings    ${response.json()['data']['jump_url']}    ${empty}
+
+校验返回值是否开启提现display_withdraw_cash
+    ${response}=    我的钻石    ${app_version}
+    校验接口返回状态正常    ${response}
+    ${flag}=    Run Keyword If    ${response.json()['data']['allow_gold_gem']} = '0'    or    ${response.json()['data']['allow_gold_gem']} = '1'    Set Variable    true    # 1为开启，0为关闭
+    Should Be Equal As Strings    ${flag}    true
+
+
+

@@ -12,9 +12,6 @@ Resource          ../Common/constant.txt
 Resource          ../Common/sql.txt
 
 *** Variables ***
-# 版本变量
-${versioncode}    android_4.8.6
-
 # 获取token
 ${install_token_api}    ?m=Api&c=User&a=token     # 测试服获取install_token
 ${install_api}    ?m=Api&c=App&a=install    # 通过设备获取token
@@ -39,21 +36,29 @@ ${comic_edit_api}    ?m=Api&c=Comic&a=comic_edit    # 创建/编辑漫画单篇
 ${comic_create_comic_list_api}    ?m=Api&c=Comic&a=comic_create_comic_list    # 4.5.2-获取创作页单篇列表
 ${comic_del_api}    ?m=Api&c=Comic&a=comic_del    # 删除漫画单篇
 
-# UserRes
-${UserRes_get_idcard_info_api}    m=Api&c=UserRes&a=get_idcard_info    # 4.8.7-获取身份详情
-${UserRes_get_idcard_binding_status_api}    ?m=Api&c=UserRes&a=get_idcard_binding_status    # 4.8.7-获取绑定信息
-${UserRes_binding_card_info_api}    ?m=Api&c=UserRes&a=binding_card_info    # 4.8.7-绑定身份证信息
-${UserRes_edit_card_info_api}    ?m=Api&c=UserRes&a=edit_card_info    # 4.8.7-修改身份证信息
+# WebUserRes
+${WebUserRes_get_idcard_info_api}    m=Api&c=WebUserRes&a=get_idcard_info    # 4.8.7-获取身份详情
+${WebUserRes_get_idcard_binding_status_api}    ?m=Api&c=WebUserRes&a=get_idcard_binding_status    # 4.8.7-获取绑定信息
+${WebUserRes_binding_card_info_api}    ?m=Api&c=WebUserRes&a=binding_card_info    # 4.8.7-绑定身份证信息
+${WebUserRes_edit_card_info_api}    ?m=Api&c=WebUserRes&a=edit_card_info    # 4.8.7-修改身份证信息
 
 # ChumanShop
 ${ChumanShop_edit_card_info_api}    ?m=Api&c=ChumanShop&a=edit_card_info    # 4.8.7-触漫修改身份证信息
-${ChumanShop_binding_card_info}    ?m=Api&c=ChumanShop&a=binding_card_info    # 4.8.7-触漫绑定身份证信息
-${ChumanShop_get_verification_code_new}    ?m=Api&c=ChumanShop&a=get_verification_code_new    # 4.8.7-触漫修改、添加身份认证验证码
-${ChumanShop_get_calculate_withdrawals_info}    ?m=Api&c=ChumanShop&a=get_calculate_withdrawals_info    # 4.8.7-触漫获取提现税前/后及扣税信息
-${ChumanShop_get_idcard_binding_status}    ?m=Api&c=ChumanShop&a=get_idcard_binding_status    # 4.8.7-触漫获取绑定信息
+${ChumanShop_binding_card_info_api}    ?m=Api&c=ChumanShop&a=binding_card_info    # 4.8.7-触漫绑定身份证信息
+${ChumanShop_get_verification_code_new_api}    ?m=Api&c=ChumanShop&a=get_verification_code_new    # 4.8.7-触漫修改、添加身份认证验证码
+${ChumanShop_get_calculate_withdrawals_info_api}    ?m=Api&c=ChumanShop&a=get_calculate_withdrawals_info    # 4.8.7-触漫获取提现税前/后及扣税信息
+${ChumanShop_get_idcard_binding_status_api}    ?m=Api&c=ChumanShop&a=get_idcard_binding_status    # 4.8.7-触漫获取绑定信息
 
 # UserExtend
 ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的等级
+
+# UserRes
+${UserRes_get_charge_scales_api}    ?m=Api&c=UserRes&a=get_charge_scales    # 4.8.7-充值比例列表
+${UserRes_get_coins_info_api}    ?m=Api&c=UserRes&a=get_coins_info    # 4.8.7-兑换金币界面信息
+${UserRes_get_my_gems_api}    ?m=Api&c=UserRes&a=get_my_gems    # 4.8.7-我的钻石
+
+
+
 
 
 *** Keywords ***
@@ -61,8 +66,8 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
 测试服获取install_token
     [Arguments]    ${user_id}
     Create Session    new_request    &{host}[API]    debug=3
-    ${loginData}    Create Dictionary    id=${user_id}    versioncode=${versioncode}
-    ${headers}    Create Dictionary    Content-Type=application/json
+    ${loginData}    Create Dictionary    id=${user_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    versioncode=${versioncode}
     ${response}    GET Request    new_request    ${install_token_api}    params=${loginData}    headers=${headers}
     log    ${response.content}
     log    ${response.json()['message']['message']}
@@ -77,7 +82,7 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
 获取install_token
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    device_model=LYA-AL00    device_brand=HUAWEI    device_token=7c169643-0d5b-471d-935e-82fd4cf896de    device_type=0    language=zh-hans    marketing_channel=chuman
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${install_api}    data=${loginData}    headers=${headers}
     log    ${response.content}
     log    ${response.json()['message']['message']}
@@ -95,14 +100,14 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
     [Arguments]    ${user_id}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    id=${user_id}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    GET Request    new_request    ${AdmUserIdentity_get_identity_info_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 获取所有身份认证名称
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    id=${user_id}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    GET Request    new_request    ${AdmUserIdentity_get_all_identity_admin_name_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
@@ -112,7 +117,7 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
     [Arguments]    ${keyword}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    keyword=${keyword}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    GET Request    new_request    ${SpdiySearch_get_automated_keyword_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
@@ -121,7 +126,7 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
 获取寒假福利活动列表
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    GET Request    new_request    ${NewyearActivity_get_newyear_activity_list_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
@@ -129,7 +134,7 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
     [Arguments]    ${reward_id}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    reward_id=${reward_id}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${NewyearActivity_get_recharge_active_reward_api}    data=${loginData}    headers=${headers}
     [Return]    ${response}
 
@@ -139,7 +144,7 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
     [Arguments]    ${reward_id}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    reward_id=${reward_id}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${ChumanDrama_muti_edit_role_api}    data=${loginData}    headers=${headers}
     [Return]    ${response}
 
@@ -149,7 +154,7 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
     [Arguments]    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    id=${id}    title=${title}    data_json=${data_json}    font_face=${font_face}    title_image=${title_image}    version=${version}    state=${state}    block_count=${block_count}    intro=${intro}    comic_type=${comic_type}    group_id=${group_id}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${comic_edit_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
@@ -157,7 +162,7 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
     [Arguments]    ${pize}    ${pagesize}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    pize=${pize}    pagesize=${pagesize}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    GET Request    new_request    ${comic_create_comic_list_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
@@ -165,40 +170,40 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
     [Arguments]    ${id}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    id=${id}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${comic_del_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 
-# UserRes
+# WebUserRes
 获取身份详情
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    GET Request    new_request    ${UserRes_get_idcard_info_api}    params=${loginData}    headers=${headers}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    GET Request    new_request    ${WebUserRes_get_idcard_info_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 获取绑定信息
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    GET Request    new_request    ${UserRes_get_idcard_binding_status_api}    params=${loginData}    headers=${headers}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    GET Request    new_request    ${WebUserRes_get_idcard_binding_status_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 绑定身份证信息
     [Arguments]    ${type}    ${name}    ${card_num}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    type=${type}    name=${name}    card_num=${card_num}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    Post Request    new_request    ${UserRes_binding_card_info_api}    params=${loginData}    headers=${headers}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${WebUserRes_binding_card_info_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 修改身份证信息
     [Arguments]    ${name}    ${number}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    name=${name}    number=${number}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    Post Request    new_request    ${UserRes_edit_card_info_api}    params=${loginData}    headers=${headers}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${WebUserRes_edit_card_info_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 
@@ -207,15 +212,15 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
     [Arguments]    ${type}    ${name}    ${card_num}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    type=${type}    name=${name}    card_num=${card_num}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    Post Request    new_request    ${ChumanShop_binding_card_info}    params=${loginData}    headers=${headers}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${ChumanShop_binding_card_info_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 触漫修改身份证信息
     [Arguments]    ${name}    ${card_num}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    name=${name}    card_num=${card_num}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${ChumanShop_edit_card_info_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
@@ -223,23 +228,23 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
     [Arguments]    ${phone_number}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    phone_number=${phone_number}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    Post Request    new_request    ${ChumanShop_get_verification_code_new}    params=${loginData}    headers=${headers}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${ChumanShop_get_verification_code_new_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 触漫获取提现税前/后及扣税信息
     [Arguments]    ${gems}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    gems=${gems}
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    Get Request    new_request    ${ChumanShop_get_calculate_withdrawals_info}    params=${loginData}    headers=${headers}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${ChumanShop_get_calculate_withdrawals_info_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 触漫获取绑定信息
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
-    ${response}    Get Request    new_request    ${ChumanShop_get_idcard_binding_status}    params=${loginData}    headers=${headers}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${ChumanShop_get_idcard_binding_status_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 
@@ -247,8 +252,32 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
 获取我的等级
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
-    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Get Request    new_request    ${UserExtend_my_grade}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+# UserRes
+充值比例列表
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${UserRes_get_charge_scales_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+兑换金币界面信息
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${UserRes_get_coins_info_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+我的钻石
+    [Arguments]    ${version}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    version=${version}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${UserRes_get_my_gems_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 
@@ -262,7 +291,7 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
     [Arguments]    ${user}    ${password}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    user=${user}    password=${password}
-    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${login_api}    data=${loginData}    headers=${headers}
     [Return]    ${response}
 
@@ -270,7 +299,7 @@ ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的
     [Arguments]    ${user}    ${password}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    user=${user}    password=${password}
-    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=&{MAuthorization1}[通用]:${install_token}
+    ${headers}    Create Dictionary    Content-Type=application/x-www-form-urlencoded    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${login_api}    data=${loginData}    headers=${headers}
     log    ${response.content}
     log    ${response.json()['message']['message']}

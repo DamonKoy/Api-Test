@@ -16,11 +16,6 @@ ${title_image}    app/comics/titles/title_36536_1_d00261a9976d47bfb5eef0731b4c3b
     [Tags]    smoke
     测试服获取install_token    &{user_id}[user2]
 
-
-#    ${length} =    Get Length    ${response.json()['data']['list']}
-#    ${length}    Evaluate    ${length}-1
-#    ${id}    set variable    ${response.json()['data']['list'][0]['comic_id']}
-
 smoke
     [Tags]    smoke
     ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
