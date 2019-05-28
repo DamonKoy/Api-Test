@@ -57,20 +57,20 @@ smoke
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][5]['newurl']}    ${empty}
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][6]['android_item']}    ${empty}
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][6]['ios_item']}    ${empty}
-    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][6]['coins']}    5760
-    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][6]['money']}    9
+    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][6]['coins']}    7700
+    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][6]['money']}    12
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][6]['url']}    ${empty}
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][6]['newurl']}    ${empty}
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][7]['android_item']}    ${empty}
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][7]['ios_item']}    ${empty}
-    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][7]['coins']}    7700
-    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][7]['money']}    12
+    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][7]['coins']}    19250
+    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][7]['money']}    30
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][7]['url']}    ${empty}
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][7]['newurl']}    ${empty}
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][8]['android_item']}    ${empty}
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][8]['ios_item']}    ${empty}
-    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][8]['coins']}    19280
-    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][8]['money']}    30
+    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][8]['coins']}    32000
+    Should Be Equal As Strings    ${response.json()['data']['exg_scale'][8]['money']}    50
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][8]['url']}    ${empty}
     Should Not Be Equal As Strings    ${response.json()['data']['exg_scale'][8]['newurl']}    ${empty}
 

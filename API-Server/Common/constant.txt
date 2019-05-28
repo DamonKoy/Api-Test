@@ -1,5 +1,5 @@
 *** Variable ***
 # 版本变量
 ${channel}    android
-${app_version}    4.8.6
+${app_version}    4.8.7
 ${versioncode}    ${channel}_${app_version}
