@@ -20,16 +20,16 @@ smoke
     ${response}=    删除漫画单篇    ${comic_id}
     校验接口返回状态正常    ${response}
 
-循环删除漫画单篇
-    ${page}    set variable    1
-    ${pagesize}    set variable    30
-    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
-    校验接口返回状态正常    ${response}
-    ${length}=    Get Length    ${response.json()['data']['list']}
-    : FOR    ${i}    IN RANGE    ${length}
-    \    Log    ${i}
-    \    Log    ${response.json()['data']['list'][${i}]['comic_id']}
-    \    ${comic_id}    set variable    ${response.json()['data']['list'][${i}]['comic_id']}
-    \    ${response1}=    删除漫画单篇    ${comic_id}
-    \    校验接口返回状态正常    ${response1}
-    log    outside loop
+#循环删除漫画单篇
+#    ${page}    set variable    1
+#    ${pagesize}    set variable    30
+#    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+#    校验接口返回状态正常    ${response}
+#    ${length}=    Get Length    ${response.json()['data']['list']}
+#    : FOR    ${i}    IN RANGE    ${length}
+#    \    Log    ${i}
+#    \    Log    ${response.json()['data']['list'][${i}]['comic_id']}
+#    \    ${comic_id}    set variable    ${response.json()['data']['list'][${i}]['comic_id']}
+#    \    ${response1}=    删除漫画单篇    ${comic_id}
+#    \    校验接口返回状态正常    ${response1}
+#    log    outside loop
