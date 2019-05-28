@@ -1,0 +1,36 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    获取上一篇角色列表    ${group_id}
+    校验接口返回状态正常    ${response}
+
+校验返回值role_id
+    ${response}=    获取上一篇角色列表    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Numbers    ${response.json()['data']['role_ids'][0]['role_id']}    0
+
+校验返回值avatar
+    ${response}=    获取上一篇角色列表    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Numbers    ${response.json()['data']['role_ids'][0]['avatar']}    0
+
+校验返回值avatar
+    ${response}=    获取上一篇角色列表    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Numbers    ${response.json()['data']['role_ids'][0]['name']}    0
+
+校验返回值avatar
+    ${response}=    获取上一篇角色列表    ${group_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Numbers    ${response.json()['data']['role_ids'][0]['sex']}    0    # 角色性别，1为男，2为女

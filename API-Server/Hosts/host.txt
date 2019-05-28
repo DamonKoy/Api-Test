@@ -1,5 +1,6 @@
 *** Variables ***
 &{host}    API=http://staging.chumanapp.com/secure/
+&{MAuthorization1}    通用=946c573c9e2ad8f49ee4608e6da0b359    android_4.8.6=0b379ed3f4f361a68859dece9ee632fe
 
 
 ${human_db_ip}      drds2219q71k0f46.drds.aliyun.boc

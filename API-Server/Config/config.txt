@@ -30,6 +30,7 @@ ${NewyearActivity_get_recharge_active_reward_api}    ?m=Api&c=NewyearActivity&a=
 # ChumanDrama
 ${ChumanDrama_muti_edit_role_api}    ?m=Api&c=ChumanDrama&a=muti_edit_role    # 新建（修改）漫剧角色
 ${ChumanDrama_muti_copy_role_api}    ?m=Api&c=ChumanDrama&a=muti_copy_role    # 复制漫剧角色(导入角色时使用)
+${ChumanDrama_get_last_role_list_api}    ?m=Api&c=ChumanDrama&a=get_last_role_list    # 4.8.7-获取上一篇角色列表
 
 # Comic
 ${comic_edit_api}    ?m=Api&c=Comic&a=comic_edit    # 创建/编辑漫画单篇
@@ -47,7 +48,7 @@ ${ChumanShop_edit_card_info_api}    ?m=Api&c=ChumanShop&a=edit_card_info    # 4.
 ${ChumanShop_binding_card_info_api}    ?m=Api&c=ChumanShop&a=binding_card_info    # 4.8.7-触漫绑定身份证信息
 ${ChumanShop_get_verification_code_new_api}    ?m=Api&c=ChumanShop&a=get_verification_code_new    # 4.8.7-触漫修改、添加身份认证验证码
 ${ChumanShop_get_calculate_withdrawals_info_api}    ?m=Api&c=ChumanShop&a=get_calculate_withdrawals_info    # 4.8.7-触漫获取提现税前/后及扣税信息
-${ChumanShop_get_idcard_binding_status_api}    ?m=Api&c=ChumanShop&a=get_idcard_binding_status    # 4.8.7-触漫获取绑定信息
+${ChumanShop_get_shop_idcard_binding_info_api}    ?m=Api&c=ChumanShop&a=get_shop_idcard_binding_info   # 4.8.7-触漫获取绑定信息
 
 # UserExtend
 ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的等级
@@ -141,11 +142,27 @@ ${UserRes_get_my_gems_api}    ?m=Api&c=UserRes&a=get_my_gems    # 4.8.7-我的�
 
 # ChumanDrama
 新建（修改）漫剧角色
-    [Arguments]    ${reward_id}
+    [Arguments]    ${role_id}    ${drama_id}    ${avatar}    ${name}    ${sex}    ${image}    ${desc}    ${is_copy}
     Create Session    new_request    &{host}[API]    debug=3
-    ${loginData}    Create Dictionary    reward_id=${reward_id}
+    ${loginData}    Create Dictionary    role_id=${role_id}    drama_id=${drama_id}    avatar=${avatar}    name=${name}    sex=${sex}    image=${image}    desc=${desc}    is_copy=${is_copy}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${ChumanDrama_muti_edit_role_api}    data=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+复制漫剧角色(导入角色时使用)
+    [Arguments]    ${role_id}    ${drama_id}    ${avatar}    ${name}    ${sex}    ${image}    ${desc}    ${is_copy}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    role_id=${role_id}    drama_id=${drama_id}    avatar=${avatar}    name=${name}    sex=${sex}    image=${image}    desc=${desc}    is_copy=${is_copy}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${ChumanDrama_muti_copy_role_api}    data=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+获取上一篇角色列表
+    [Arguments]    ${group_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    group_id=${group_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    get Request    new_request    ${ChumanDrama_get_last_role_list_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 
@@ -241,10 +258,11 @@ ${UserRes_get_my_gems_api}    ?m=Api&c=UserRes&a=get_my_gems    # 4.8.7-我的�
     [Return]    ${response}
 
 触漫获取绑定信息
+    [Arguments]    ${shop_id}
     Create Session    new_request    &{host}[API]    debug=3
-    ${loginData}    Create Dictionary
+    ${loginData}    Create Dictionary    shop_id=${shop_id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
-    ${response}    Get Request    new_request    ${ChumanShop_get_idcard_binding_status_api}    params=${loginData}    headers=${headers}
+    ${response}    Get Request    new_request    ${ChumanShop_get_shop_idcard_binding_info_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 

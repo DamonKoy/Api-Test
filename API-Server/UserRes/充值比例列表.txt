@@ -15,45 +15,64 @@ smoke
     ${response}=    充值比例列表
     校验接口返回状态正常    ${response}
 
-校验返回值充值所得钻石gems
+校验返回值兑换列表数组charge_scale
     ${response}=    充值比例列表
     校验接口返回状态正常    ${response}
-    Should Be True    ${response.json()['data']['charge_scale']['gems']} > 0
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][0]['android_item']}    gem_001
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][0]['ios_item']}    diamond_charge_1
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][0]['gems']}    10
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][0]['money']}    1
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][1]['gems']}    60
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][1]['money']}    6
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][2]['gems']}    120
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][2]['money']}    12
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][3]['gems']}    300
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][3]['money']}    30
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][4]['gems']}    680
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][4]['money']}    68
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][5]['gems']}    1080
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][5]['money']}    108
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][6]['gems']}    1980
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][6]['money']}    198
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][7]['gems']}    4880
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][7]['money']}    488
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][8]['gems']}    9980
+    Should Be Equal As Strings    ${response.json()['data']['charge_scale'][8]['money']}    998
 
-校验返回值充值金额money
+校验返回值图片素材url
     ${response}=    充值比例列表
     校验接口返回状态正常    ${response}
-    Should Be True    ${response.json()['data']['charge_scale']['money']} > 0
+    Should Not Be Equal As Strings    ${response.json()['data']['charge_scale'][0]['url']}    ${empty}
 
-校验返回值图片素材URL
+校验返回值图片素材newurl
     ${response}=    充值比例列表
     校验接口返回状态正常    ${response}
-    Should Not Be Equal As Strings    ${response.json()['data']['charge_scale']['url']}    ${empty}
+    Should Not Be Equal As Strings    ${response.json()['data']['charge_scale'][0]['newurl']}    ${empty}
 
 校验返回值活动描述activity_desc
     ${response}=    充值比例列表
     校验接口返回状态正常    ${response}
-    Should Not Be Equal As Strings    ${response.json()['data']['activity_desc']}    ${empty}
+    Should Contain  ${response.json()['data']}    activity_desc
 
 校验返回值提示框文案提示desc
     ${response}=    充值比例列表
     校验接口返回状态正常    ${response}
-    Should Not Be Equal As Strings    ${response.json()['data']['charge_scale']['source']['desc']}    ${empty}
+    Should Contain    ${response.json()['data']['source']}    desc
 
 校验返回值提示跳转地址jump_url
     ${response}=    充值比例列表
     校验接口返回状态正常    ${response}
-    Should Not Be Equal As Strings    ${response.json()['data']['charge_scale']['jump_url']}    ${empty}
+    Should Contain    ${response.json()['data']['source']}    jump_url
 
 校验返回值充值说明desc
     ${response}=    充值比例列表
     校验接口返回状态正常    ${response}
-    Should Not Be Equal As Strings    ${response.json()['data']['desc']}    ${empty}
+    Should Contain    ${response.json()['data']['desc']}    充值后若长时间未到账，请通过设置-向漫娘反馈与我们联系，我们将第一时间为你解决。
 
 校验返回值是否允许使用金钻抵消allow_gold_gem
     ${response}=    充值比例列表
     校验接口返回状态正常    ${response}
-    ${flag}=    Run Keyword If    ${response.json()['data']['allow_gold_gem']} = '0'    or    ${response.json()['data']['allow_gold_gem']} = '1'    Set Variable    true
+    ${flag}    Run Keyword If    '${response.json()['data']['allow_gold_gem']}' == '0' or '${response.json()['data']['allow_gold_gem']}' == '1'    Set Variable    true
     Should Be Equal As Strings    ${flag}    true
 
 

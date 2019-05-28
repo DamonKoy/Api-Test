@@ -3,7 +3,7 @@ Default Tags
 Resource          ../Config/config.txt
 
 *** variable ***
-
+${shop_id}    1
 
 *** Test Cases ***
 测试服获取install_token
@@ -12,32 +12,33 @@ Resource          ../Config/config.txt
 
 smoke
     [Tags]    smoke
-    ${response}=    触漫获取绑定信息
+    ${response}=    触漫获取绑定信息    ${shop_id}
     校验接口返回状态正常    ${response}
 
 校验返回值name
-    ${type}    set variable    1    # 1新增绑定，2有其他模块已绑定身份证认证
-    ${name}    set variable    狸子酱
-    ${card_num}    set variable    11010119900307424X
-    ${response}=    触漫绑定身份证信息    ${type}    ${name}    ${card_num}
+    ${response}=    触漫获取绑定信息    ${shop_id}
     校验接口返回状态正常    ${response}
-    ${response}=    触漫获取绑定信息
-    校验接口返回状态正常    ${response}
-    Should Be Equal As Strings    ${response.json()['data']['info']['card_info']['name']}    ${name}
+    Should Be Equal As Strings    ${response.json()['data']['card_info']['name']}    待修改
 
 校验返回值card_num
-    ${response}=    触漫获取绑定信息
+    ${response}=    触漫获取绑定信息    ${shop_id}
     校验接口返回状态正常    ${response}
-    Should Be Equal As Strings    ${response.json()['data']['info']['card_info']['card_num']}    ${card_num}
+    Should Be Equal As Strings    ${response.json()['data']['card_info']['card_num']}    待修改
 
-校验返回值toast
-    ${response}=    触漫获取绑定信息
+校验返回值card_status，未绑定身份证
+    ${response}=    触漫获取绑定信息    ${shop_id}
     校验接口返回状态正常    ${response}
-    Should Be Equal As Integers    ${response.json()['data']['info']['card_status']}    1
+    Should Be Equal As Integers    ${response.json()['data']['card_status']}    3    # 是否绑定身份证，1绑定，2提现已绑定，3未绑定
+    Should Be Equal As Integers    ${response.json()['data']['card_info']}    []
 
-已绑定身份证验证，再次绑定
-    ${response}=    触漫获取绑定信息
+校验返回值card_status，已绑定身份证
+    ${response}=    触漫获取绑定信息    ${shop_id}
     校验接口返回状态正常    ${response}
-    Should Be Equal As Strings    ${response.json()['data']['info']['card_info']['name']}    ${name}
-    Should Be Equal As Strings    ${response.json()['data']['info']['card_info']['card_num']}    ${card_num}
-    Should Be Equal As Integers    ${response.json()['data']['info']['card_status']}    1
+    Should Be Equal As Integers    ${response.json()['data']['card_status']}    1    # 是否绑定身份证，1绑定，2提现已绑定，3未绑定
+    Should Be Equal As Integers    ${response.json()['data']['card_info']}    []
+
+校验返回值card_status，提现已绑定
+    ${response}=    触漫获取绑定信息    ${shop_id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Integers    ${response.json()['data']['card_status']}    2    # 是否绑定身份证，1绑定，2提现已绑定，3未绑定
+    Should Be Equal As Integers    ${response.json()['data']['card_info']}    []

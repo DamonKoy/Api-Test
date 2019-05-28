@@ -26,31 +26,38 @@ smoke
     校验接口返回状态正常    ${response}
     Should Be Equal As Numbers    ${response.json()['data']['is_vip']}    1    # 0为非会员，1为会员
 
-校验非最高级的返回值is_top、top_level_desc
+校验非最高级的返回值is_top
     ${app_version}    Remove String    ${app_version}    .    # 将版本号去掉“.”字符，用于版本比较
     ${flag}=    Run Keyword If    ${app_version} >= 487    Set Variable    true
     Run Keyword If    '${flag}' != 'true'    Exit for loop
     ${response}=    获取我的等级
     校验接口返回状态正常    ${response}
     Should Be Equal As Numbers    ${response.json()['data']['userLevel']['is_top']}    0    # 是否是最高级（1.是，0.否）(4.8.7及之后版本才有返回)
-    Should Be Equal As Strings    ${response.json()['data']['userLevel']['top_level_desc']}    ${empty}    # 最高级等级说明（不是最高等级返回空）(4.8.7及之后版本才有返回)
 
-校验最高级的返回值is_top、top_level_desc
+校验最高级的返回值is_top
     ${app_version}    Remove String    ${app_version}    .    # 将版本号去掉“.”字符，用于版本比较
     ${flag}=    Run Keyword If    ${app_version} >= 487    Set Variable    true
     Run Keyword If    '${flag}' != 'true'    Exit for loop
     ${response}=    获取我的等级
     校验接口返回状态正常    ${response}
     Should Be Equal As Numbers   ${response.json()['data']['userLevel']['is_top']}    1    # 是否是最高级（1.是，0.否）(4.8.7及之后版本才有返回)
-    Should Be Equal As Strings    ${response.json()['data']['userLevel']['top_level_desc']}    0    # 最高级等级说明（不是最高等级返回空）(4.8.7及之后版本才有返回)
 
-校验最高级说明的返回值top_level_desc
+校验非最高级说明的返回值top_level_desc
     ${app_version}    Remove String    ${app_version}    .    # 将版本号去掉“.”字符，用于版本比较
     ${flag}=    Run Keyword If    ${app_version} >= 487    Set Variable    true
     Run Keyword If    '${flag}' != 'true'    Exit for loop
     ${response}=    获取我的等级
     校验接口返回状态正常    ${response}
-    Should Be Equal As Strings    ${response.json()['data']['userLevel']['top_level_desc']}    0    # 最高级等级说明（不是最高等级返回空）(4.8.7及之后版本才有返回)
+    Should Be Equal As Numbers    ${response.json()['data']['userLevel']['is_top']}    0    # 最高级等级说明（不是最高等级返回空）(4.8.7及之后版本才有返回)
+
+校验最高级说明的返回值top_level_desc
+    ${app_version}    Remove String    ${app_version}    .    # 将版本号去掉“.”字符，用于版本比较
+    ${flag}=    Run Keyword If    ${app_version} >= 487    Set Variable    true
+    Run Keyword If    '${flag}' == 'true'    Exit for loop
+    测试服获取install_token    &{user_id}[user1]
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Numbers    ${response.json()['data']['userLevel']['is_top']}    1    # 最高级等级说明（不是最高等级返回空）(4.8.7及之后版本才有返回)
 
 校验userLevel返回值total_level
     ${response}=    获取我的等级
@@ -116,25 +123,16 @@ smoke
     Should Be Equal As Strings    ${response.json()['data']['level_desc']}    app/users/member_image/pic_level_big.png   # 等级加速说明（4.8.7及之后版本不返回）
 
 校验返回值nickname
-    ${app_version}    Remove String    ${app_version}    .    # 将版本号去掉“.”字符，用于版本比较
-    ${flag}=    Run Keyword If    ${app_version} >= 487    Set Variable    true
-    Run Keyword If    '${flag}' != 'true'    Exit for loop
     ${response}=    获取我的等级
     校验接口返回状态正常    ${response}
     Should Be Equal As Strings    ${response.json()['data']['nickname']}    待修改
 
 校验返回值avatar
-    ${app_version}    Remove String    ${app_version}    .    # 将版本号去掉“.”字符，用于版本比较
-    ${flag}=    Run Keyword If    ${app_version} >= 487    Set Variable    true
-    Run Keyword If    '${flag}' != 'true'    Exit for loop
     ${response}=    获取我的等级
     校验接口返回状态正常    ${response}
-    Should Contain    ${response.json()['data']}    avatar
+    Should Be Equal As Strings    ${response.json()['data']['avatar']}    待修改
 
 校验返回值chuman_day
-    ${app_version}    Remove String    ${app_version}    .    # 将版本号去掉“.”字符，用于版本比较
-    ${flag}=    Run Keyword If    ${app_version} >= 487    Set Variable    true
-    Run Keyword If    '${flag}' != 'true'    Exit for loop
     ${response}=    获取我的等级
     校验接口返回状态正常    ${response}
     Should Be true    ${response.json()['data']['chuman_day']} >= 0
@@ -145,12 +143,23 @@ smoke
     Run Keyword If    '${flag}' != 'true'    Exit for loop
     ${response}=    获取我的等级
     校验接口返回状态正常    ${response}
-    Should Not Be Equal As Strings    ${response.json()['data']['tips_list'][0]['icon']}    ${empty}    # 升级提示icon(4.8.7及之后版本才有返回)
-    Should Be Equal As Strings    ${response.json()['data']['tips_list'][0]['message']}    完成日常任务，既领金币又攒经验    # 升级提示文案(4.8.7及之后版本才有返回)
-    Should Be Equal As Numbers    ${response.json()['data']['tips_list'][0]['type']}    1    # 升级提示文类型(4.8.7及之后版本才有返回，type为3时显示开通会员入口)
-    Should Not Be Equal As Strings    ${response.json()['data']['tips_list'][1]['icon']}    ${empty}    # 升级提示icon(4.8.7及之后版本才有返回)
-    Should Be Equal As Strings    ${response.json()['data']['tips_list'][1]['message']}    广场积极发帖、评论互动，累计经验    # 升级提示文案(4.8.7及之后版本才有返回)
-    Should Be Equal As Numbers    ${response.json()['data']['tips_list'][1]['type']}    2    # 升级提示文类型(4.8.7及之后版本才有返回，type为3时显示开通会员入口)
-    Should Not Be Equal As Strings    ${response.json()['data']['tips_list'][2]['icon']}    ${empty}    # 升级提示icon(4.8.7及之后版本才有返回)
-    Should Be Equal As Strings    ${response.json()['data']['tips_list'][2]['message']}    你是会员，等级倍速升级中    # 升级提示文案(4.8.7及之后版本才有返回)
-    Should Be Equal As Numbers    ${response.json()['data']['tips_list'][2]['type']}    3    # 升级提示文类型(4.8.7及之后版本才有返回，type为3时显示开通会员入口)
+    Should Be Equal As Strings    ${response.json()['data']['icon']}    待修改    # 升级提示icon(4.8.7及之后版本才有返回)
+
+校验tips_list的返回值message
+    ${app_version}    Remove String    ${app_version}    .    # 将版本号去掉“.”字符，用于版本比较
+    ${flag}=    Run Keyword If    ${app_version} >= 487    Set Variable    true
+    Run Keyword If    '${flag}' != 'true'    Exit for loop
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['message']}    待修改    # 升级提示文案(4.8.7及之后版本才有返回)
+
+校验tips_list的返回值type
+    ${app_version}    Remove String    ${app_version}    .    # 将版本号去掉“.”字符，用于版本比较
+    ${flag}=    Run Keyword If    ${app_version} >= 487    Set Variable    true
+    Run Keyword If    '${flag}' != 'true'    Exit for loop
+    ${response}=    获取我的等级
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Numbers    ${response.json()['data']['type']}    1    # 升级提示文类型(4.8.7及之后版本才有返回，type为3时显示开通会员入口)
+
+
+

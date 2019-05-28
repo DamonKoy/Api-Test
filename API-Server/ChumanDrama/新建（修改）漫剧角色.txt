@@ -1,0 +1,36 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${rold_id}    set variable    ${empty}    # rold_id为空则新增漫剧角色
+    ${drama_id}    set variable    0
+    ${avatar}    set variable    0
+    ${name}    set variable    0
+    ${sex}    set variable    0    # 角色性别：1.男、2.女
+    ${image}    set variable    0
+    ${desc}    set variable    0
+    ${is_copy}set variable    2    # 1为从上篇拷贝的角色，2为不是
+    ${response}=    新建（修改）漫剧角色    ${role_id}    ${drama_id}    ${avatar}    ${name}    ${sex}    ${image}    ${desc}    ${is_copy}
+    校验接口返回状态正常    ${response}
+
+rold_id传参不能为空
+    ${rold_id}    set variable    ${empty}    # rold_id为空则新增漫剧角色
+    ${drama_id}    set variable    0
+    ${avatar}    set variable    0
+    ${name}    set variable    0
+    ${sex}    set variable    0    # 角色性别：1.男、2.女
+    ${image}    set variable    0
+    ${desc}    set variable    0
+    ${is_copy}set variable    2    # 1为从上篇拷贝的角色，2为不是
+    ${response}=    新建（修改）漫剧角色    ${role_id}    ${drama_id}    ${avatar}    ${name}    ${sex}    ${image}    ${desc}    ${is_copy}
+    校验接口返回状态正常    ${response}
