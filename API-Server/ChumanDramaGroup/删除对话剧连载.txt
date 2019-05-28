@@ -1,0 +1,34 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${string}=    生成随机字符串    4
+    ${group_id}    set variable    ${empty}
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_d4f3f4b36e294615a51ffe130f6c0241.jpg
+    ${title}    set variable    来对话吧${string}
+    ${category}    set variable    cure
+    ${desc}    set variable    美好的对话从现在开始${string}
+    ${response}=    创建对话剧连载    ${group_id}    ${title_image}    ${title}    ${category}    ${desc}
+    校验接口返回状态正常    ${response}
+    ${group_id}    set variable    ${response.json()['data']['group_id']}
+    ${response}=    删除对话剧连载    ${group_id}
+    校验接口返回状态正常    ${response}
+
+不传group_iod，提示请选择漫剧连载
+    ${group_id}    set variable    ${empty}
+    ${response}=    删除对话剧连载    ${group_id}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.status_code}    200
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    error
+    Should Be Equal As Strings    ${response.json()['message']['message']}    请选择漫剧连载

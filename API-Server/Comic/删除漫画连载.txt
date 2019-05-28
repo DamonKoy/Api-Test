@@ -1,0 +1,61 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${string}=    生成随机字符串    4
+    ${name}    set variable    我的漫画小连载${string}
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_ec2937a336114142b7bbc8fb187332b0.jpg
+    ${summary}    set variable    漫画连载简介描述，欢天喜地${string}
+    ${tags}    set variable    campus,supernatural,
+    ${response}=    创建漫画连载    ${name}    ${title_image}    ${summary}    ${tags}
+    校验接口返回状态正常    ${response}
+    ${id}    set variable    ${response.json()['data']['group_id']}
+    ${response}=    删除漫画连载    ${id}
+    校验接口返回状态正常    ${response}
+
+校验返回值id
+    [Tags]    smoke
+    ${string}=    生成随机字符串    4
+    ${name}    set variable    我的漫画小连载${string}
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_ec2937a336114142b7bbc8fb187332b0.jpg
+    ${summary}    set variable    漫画连载简介描述，欢天喜地${string}
+    ${tags}    set variable    campus,supernatural,
+    ${response}=    创建漫画连载    ${name}    ${title_image}    ${summary}    ${tags}
+    校验接口返回状态正常    ${response}
+    ${id}    set variable    ${response.json()['data']['group_id']}
+    ${response}=    删除漫画连载    ${id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['id']}    ${id}
+
+校验返回值user_id
+    [Tags]    smoke
+    ${string}=    生成随机字符串    4
+    ${name}    set variable    我的漫画小连载${string}
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_ec2937a336114142b7bbc8fb187332b0.jpg
+    ${summary}    set variable    漫画连载简介描述，欢天喜地${string}
+    ${tags}    set variable    campus,supernatural,
+    ${response}=    创建漫画连载    ${name}    ${title_image}    ${summary}    ${tags}
+    校验接口返回状态正常    ${response}
+    ${id}    set variable    ${response.json()['data']['group_id']}
+    ${response}=    删除漫画连载    ${id}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['user_id']}    &{user_id}[user2]
+
+不传group_iod，提示请选择漫剧连载
+    ${id}    set variable    ${empty}
+    ${response}=    删除漫画连载    ${id}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.status_code}    200
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    error
+    Should Be Equal As Strings    ${response.json()['message']['message']}    组id不能为空

@@ -53,7 +53,7 @@ smoke
 校验最高级说明的返回值top_level_desc
     ${app_version}    Remove String    ${app_version}    .    # 将版本号去掉“.”字符，用于版本比较
     ${flag}=    Run Keyword If    ${app_version} >= 487    Set Variable    true
-    Run Keyword If    '${flag}' == 'true'    Exit for loop
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
     测试服获取install_token    &{user_id}[user1]
     ${response}=    获取我的等级
     校验接口返回状态正常    ${response}

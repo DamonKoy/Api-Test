@@ -1,0 +1,32 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${string}=    生成随机字符串    4
+    ${name}    set variable    我的漫画小连载${string}
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_ec2937a336114142b7bbc8fb187332b0.jpg
+    ${summary}    set variable    漫画连载简介描述，欢天喜地${string}
+    ${tags}    set variable    campus,supernatural,
+    ${response}=    创建漫画连载    ${name}    ${title_image}    ${summary}    ${tags}
+    校验接口返回状态正常    ${response}
+
+校验返回值group_id，自动生成不为0
+    [Tags]    smoke
+    ${string}=    生成随机字符串    4
+    ${name}    set variable    我的漫画小连载${string}
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_ec2937a336114142b7bbc8fb187332b0.jpg
+    ${summary}    set variable    漫画连载简介描述，欢天喜地${string}
+    ${tags}    set variable    campus,supernatural,
+    ${response}=    创建漫画连载    ${name}    ${title_image}    ${summary}    ${tags}
+    校验接口返回状态正常    ${response}
+    Should Not Be Equal As Numbers     ${response.json()['data']['group_id']}    0

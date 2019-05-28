@@ -1,0 +1,51 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${string}=    生成随机字符串    4
+    ${name}    set variable    我的漫画小连载${string}
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_ec2937a336114142b7bbc8fb187332b0.jpg
+    ${summary}    set variable    漫画连载简介描述，欢天喜地${string}
+    ${tags}    set variable    campus,supernatural,
+    ${response}=    创建漫画连载    ${name}    ${title_image}    ${summary}    ${tags}
+    校验接口返回状态正常    ${response}
+
+校验所有的返回值
+    [Tags]    smoke
+    ${time}=    获取当前时间戳
+    sleep    1
+    ${string}=    生成随机字符串    4
+    ${name}    set variable    我的漫画小连载${string}
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_ec2937a336114142b7bbc8fb187332b0.jpg
+    ${summary}    set variable    漫画连载简介描述，欢天喜地${string}
+    ${tags}    set variable    campus,supernatural,
+    ${response}=    创建漫画连载    ${name}    ${title_image}    ${summary}    ${tags}
+    校验接口返回状态正常    ${response}
+    ${id}    set variable    ${response.json()['data']['group_id']}
+    ${name}    set variable    漫画小连载来了
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_70cd248749554d70954c7a2f481a7edc.jpg
+    ${summary}    set variable    漫画连载描述更新啦
+    ${tags}    set variable    thru,supernatural,bl,
+    ${response}=    编辑漫画连载    ${id}    ${name}    ${title_image}    ${summary}    ${tags}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings     ${response.json()['data']['id']}    ${id}
+    Should Be Equal As Strings     ${response.json()['data']['name']}    ${name}
+    Should Be Equal As Strings     ${response.json()['data']['title_image']}    ${title_image}
+    Should Be Equal As Strings     ${response.json()['data']['tags']}    ${tags}
+    Should Be Equal As Strings     ${response.json()['data']['user_id']}    &{user_id}[user2]
+    Should Be Equal As Strings     ${response.json()['data']['id']}    ${id}
+    Should Be Equal As Strings     ${response.json()['data']['author_summary']}    ${summary}
+    ${created_tiem}=    转换成时间戳    ${response.json()['data']['created']}
+    log    ${created_tiem}
+    log    ${time}
+    Should Be True    ${created_tiem} >= ${time}

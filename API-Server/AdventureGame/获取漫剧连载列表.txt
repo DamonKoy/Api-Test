@@ -1,0 +1,18 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${page}    set variable    1
+    ${pagesize}    set variable     30
+    ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}

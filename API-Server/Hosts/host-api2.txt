@@ -5,3 +5,9 @@
 &{user_id}    user1=38707284     user2=39160354
 &{user}    user1=13710400001    user2=13710400002
 &{password}    password1=123456
+
+
+
+&{title_image}    漫剧连载=app/cover/template/images/cover_template_38707284_857d71e39b054d6bb611c0a046c23cf2.jpg
+&{cover_motion_json}   漫剧连载=app/avg/cover/json/json_avg_cover_38707284_dff548c2aff546e4a5bd1e1db46a073f.json
+&{music_url}.    漫剧连载=app/sound/1533112985000728.mp3

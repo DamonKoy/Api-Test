@@ -6,6 +6,11 @@
 &{user}    user1=13710400001    user2=13710400002
 &{password}    password1=123456
 
+# 标签管理
+
+
+
+
 
 
 ${human_db_ip}      drds2219q71k0f46.drds.aliyun.boc

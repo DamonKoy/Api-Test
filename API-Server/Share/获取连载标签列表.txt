@@ -1,0 +1,33 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    获取连载标签列表
+    校验接口返回状态正常    ${response}
+
+校验返回值id、tag_id、tag_name、tag_img不能为空
+    [Tags]    smoke
+    ${response}=    获取连载标签列表
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['tag_list']}
+    Should Be True    ${length} > 0
+    @{dataList}    Set Variable    ${response.json()['data']['tag_list']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    ${id}    Get From Dictionary    ${data}    id
+    \    ${tag_id}    Get From Dictionary    ${data}    tag_id
+    \    ${tag_name}    Get From Dictionary    ${data}    tag_name
+    \    ${tag_img}    Get From Dictionary    ${data}    tag_img
+    \    ${flag}    Run Keyword If    '${id}'!='' and '${tag_id}'!='' and '${tag_name}'!='' and '${tag_img}'!=''    Set Variable    true
+    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+    Should Be Equal As Strings    ${flag}    true

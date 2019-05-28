@@ -14,22 +14,24 @@ smoke
     [Tags]    smoke
     ${page}    set variable    1
     ${pagesize}    set variable     30
-    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+    ${response}=    获取漫画连载列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
 
-校验返回的comic_id、title、data_json不能为空
+校验返回的group_id、title、is_purchase、count不能为空
     ${page}    set variable    1
     ${pagesize}    set variable     30
-    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+    ${response}=    获取漫画连载列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
     @{dataList}    Set Variable    ${response.json()['data']['list']}
     : FOR    ${data}    IN    @{dataList}
     \    Log    ${data}
-    \    ${comic_id}    Get From Dictionary    ${data}    comic_id
+    \    ${group_id}    Get From Dictionary    ${data}    group_id
+    \    Should Contain     ${data}    title_image
     \    ${title}    Get From Dictionary    ${data}    title
-    \    ${data_json}    Get From Dictionary    ${data}    data_json
-    \    ${flag}    Run Keyword If    '${comic_id}'!='' and '${title}'!='' and '${data_json}'!=''    Set Variable    true
-    \    Run Keyword If    '${flag}'!='${None}'    Exit for loop
+    \    ${is_purchase}    Get From Dictionary    ${data}    is_purchase
+    \    ${count}    Get From Dictionary    ${data}    count
+    \    ${flag}    Run Keyword If    '${group_id}'!='' and '${title}'!='' and '${is_purchase}'!='' and '${count}'!=''   Set Variable    true
+    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
     Should Be Equal As Strings    ${flag}    true
 
 #校验page的翻页功能
@@ -42,7 +44,7 @@ smoke
 校验pagesize的作用
     ${page}    set variable    1
     ${pagesize}    set variable     1
-    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+    ${response}=    获取漫画连载列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
     ${length} =    Get Length    ${response.json()['data']['list']}
     Should Be Equal As Integers    ${length}    1
@@ -50,7 +52,7 @@ smoke
 校验pagesize>1的返回效果
     ${page}    set variable    1
     ${pagesize}    set variable     10
-    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+    ${response}=    获取漫画连载列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
     ${length} =    Get Length    ${response.json()['data']['list']}
-    Should Be true    ${length} >= 1
+    Should Be true    ${length} >= 0

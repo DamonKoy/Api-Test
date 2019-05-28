@@ -3,7 +3,8 @@ Default Tags
 Resource          ../Config/config.txt
 
 *** variable ***
-
+${page}    1
+${pagesize}    30
 
 *** Test Cases ***
 测试服获取install_token
@@ -12,25 +13,41 @@ Resource          ../Config/config.txt
 
 smoke
     [Tags]    smoke
+    ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${group_id}    set variable    ${response.json()['data']['list'][0]['group_id']}
     ${response}=    获取上一篇角色列表    ${group_id}
     校验接口返回状态正常    ${response}
 
 校验返回值role_id
+    ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${group_id}    set variable    ${response.json()['data']['list'][0]['group_id']}
     ${response}=    获取上一篇角色列表    ${group_id}
     校验接口返回状态正常    ${response}
     Should Be Equal As Numbers    ${response.json()['data']['role_ids'][0]['role_id']}    0
 
 校验返回值avatar
+    ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${group_id}    set variable    ${response.json()['data']['list'][0]['group_id']}
     ${response}=    获取上一篇角色列表    ${group_id}
     校验接口返回状态正常    ${response}
     Should Be Equal As Numbers    ${response.json()['data']['role_ids'][0]['avatar']}    0
 
-校验返回值avatar
+校验返回值name
+    ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${group_id}    set variable    ${response.json()['data']['list'][0]['group_id']}
     ${response}=    获取上一篇角色列表    ${group_id}
     校验接口返回状态正常    ${response}
     Should Be Equal As Numbers    ${response.json()['data']['role_ids'][0]['name']}    0
 
-校验返回值avatar
+校验返回值sex
+    ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${group_id}    set variable    ${response.json()['data']['list'][0]['group_id']}
     ${response}=    获取上一篇角色列表    ${group_id}
     校验接口返回状态正常    ${response}
-    Should Be Equal As Numbers    ${response.json()['data']['role_ids'][0]['sex']}    0    # 角色性别，1为男，2为女
+    ${flag}=    Run Keyword If    '${response.json()['data']['role_ids'][0]['sex']}' == '0' or '${response.json()['data']['role_ids'][0]['sex']}' == '1'    Set Variable    true    # 角色性别，1为男，2为女
+    Should Be Equal As Strings    ${flag}    true

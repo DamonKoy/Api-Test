@@ -36,6 +36,10 @@ ${ChumanDrama_get_last_role_list_api}    ?m=Api&c=ChumanDrama&a=get_last_role_li
 ${comic_edit_api}    ?m=Api&c=Comic&a=comic_edit    # 创建/编辑漫画单篇
 ${comic_create_comic_list_api}    ?m=Api&c=Comic&a=comic_create_comic_list    # 4.5.2-获取创作页单篇列表
 ${comic_del_api}    ?m=Api&c=Comic&a=comic_del    # 删除漫画单篇
+${Comic_group_add_api}    ?m=Api&c=Comic&a=group_add    # 创建漫画连载
+${Comic_group_edit_api}    ?m=Api&c=Comic&a=group_edit    # 编辑漫画连载
+${comic_create_group_list_api}    ?m=Api&c=Comic&a=comic_create_group_list    # 获取漫画连载列表
+${Comic_group_del_api}    ?m=Api&c=Comic&a=group_del    # 删除漫画连载
 
 # WebUserRes
 ${WebUserRes_get_idcard_info_api}    m=Api&c=WebUserRes&a=get_idcard_info    # 4.8.7-获取身份详情
@@ -58,8 +62,16 @@ ${UserRes_get_charge_scales_api}    ?m=Api&c=UserRes&a=get_charge_scales    # 4.
 ${UserRes_get_coins_info_api}    ?m=Api&c=UserRes&a=get_coins_info    # 4.8.7-兑换金币界面信息
 ${UserRes_get_my_gems_api}    ?m=Api&c=UserRes&a=get_my_gems    # 4.8.7-我的钻石
 
+# AdventureGame
+${AdventureGame_get_my_game_group_list_api}    ?m=Api&c=AdventureGame&a=get_my_game_group_list    # 获取漫剧连载列表
+${AdventureGame_edit_game_group_api}    ?m=Api&c=AdventureGame&a=edit_game_group    # 创建漫剧连载
 
+# Share
+${Share_get_tag_list_api}    ?m=Api&c=Share&a=get_tag_list    # 获取连载标签列表
 
+# ChumanDramaGroup
+${ChumanDramaGroup_edit_drama_group_api}    ?m=Api&c=ChumanDramaGroup&a=edit_drama_group    # 创建对话剧连载
+${ChumanDramaGroup_del_drama_group_api}    ?m=Api&c=ChumanDramaGroup&a=del_drama_group    # 删除对话剧连载
 
 
 *** Keywords ***
@@ -191,6 +203,38 @@ ${UserRes_get_my_gems_api}    ?m=Api&c=UserRes&a=get_my_gems    # 4.8.7-我的�
     ${response}    Post Request    new_request    ${comic_del_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
+创建漫画连载
+    [Arguments]    ${name}    ${title_image}    ${summary}    ${tags}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    name=${name}    title_image=${title_image}    summary=${summary}    tags=${tags}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${Comic_group_add_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+编辑漫画连载
+    [Arguments]    ${id}    ${name}    ${title_image}    ${summary}    ${tags}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    id=${id}    name=${name}    title_image=${title_image}    summary=${summary}    tags=${tags}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${Comic_group_edit_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+获取漫画连载列表
+    [Arguments]    ${pize}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    pize=${pize}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    GET Request    new_request    ${comic_create_group_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+删除漫画连载
+    [Arguments]    ${id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    id=${id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${Comic_group_del_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
 
 # WebUserRes
 获取身份详情
@@ -299,11 +343,62 @@ ${UserRes_get_my_gems_api}    ?m=Api&c=UserRes&a=get_my_gems    # 4.8.7-我的�
     [Return]    ${response}
 
 
+# AdventureGame
+获取漫剧连载列表
+    [Arguments]    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${AdventureGame_get_my_game_group_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+创建漫剧连载
+    [Arguments]    ${title}    ${title_image}    ${music_url}    ${cover_data_json}    ${cover_motion_json}    ${tags}    ${desc}    ${style_id}    ${video_title}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    title=${title}    title_image=${title_image}    music_url=${music_url}    cover_data_json=${cover_data_json}    cover_motion_json=${cover_motion_json}    tags=${tags}    desc=${desc}    style_id=${style_id}    video_title=${video_title}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${AdventureGame_edit_game_group_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+# Share
+获取连载标签列表
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Share_get_tag_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+# ChumanDramaGroup
+创建对话剧连载
+    [Arguments]    ${group_id}    ${title_image}    ${title}    ${category}    ${desc}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    group_id=${group_id}    title_image=${title_image}    title=${title}    category=${category}    desc=${desc}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${ChumanDramaGroup_edit_drama_group_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+删除对话剧连载
+    [Arguments]    ${group_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    group_id=${group_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${ChumanDramaGroup_del_drama_group_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+
 # ------
 获取当前时间戳
     ${date}    get current Date
     ${date}    convert Date    ${date}    epoch
     [Return]    ${date}
+
+转换成时间戳
+    [Arguments]    ${time}
+    ${time}    convert Date    ${time}    epoch
+    [Return]    ${time}
 
 手机号码登录
     [Arguments]    ${user}    ${password}

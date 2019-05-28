@@ -1,0 +1,43 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${string}    生成随机字符串    4
+    ${title}    set variable    今天的漫剧连载${string}
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_3ee1aeba7645430cb128a028d10b6681.jpg
+    ${music_url}    set variable    app/sound/1545476655000637.mp3
+    ${cover_data_json}    set variable    1
+    ${cover_motion_json}    set variable    app/avg/cover/json/json_avg_cover_36536_984b61f0d19a42b394b8aa6d029866f2.json
+    ${tags}    set variable    cure,
+    ${desc}    set variable    古装风格${string}
+    ${style_id}    set variable     2
+    ${video_title}    set variable    ${empty}
+    ${response}=    创建漫剧连载    ${title}    ${title_image}    ${music_url}    ${cover_data_json}    ${cover_motion_json}    ${tags}    ${desc}    ${style_id}    ${video_title}
+    校验接口返回状态正常    ${response}
+
+校验返回值group_id
+    [Tags]    smoke
+    sleep    2
+    ${string}    生成随机字符串    4
+    ${title}    set variable    我的漫剧连载${string}
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_3ee1aeba7645430cb128a028d10b6681.jpg
+    ${music_url}    set variable    app/sound/1545476655000637.mp3
+    ${cover_data_json}    set variable    1
+    ${cover_motion_json}    set variable    app/avg/cover/json/json_avg_cover_36536_984b61f0d19a42b394b8aa6d029866f2.json
+    ${tags}    set variable    cure,
+    ${desc}    set variable    好好玩耍${string}
+    ${style_id}    set variable     2
+    ${video_title}    set variable    ${empty}
+    ${response}=    创建漫剧连载    ${title}    ${title_image}    ${music_url}    ${cover_data_json}    ${cover_motion_json}    ${tags}    ${desc}    ${style_id}    ${video_title}
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['group_id']} > 0
