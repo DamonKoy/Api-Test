@@ -1,7 +1,4 @@
 *** Variable ***
-&{user_id}    user1=36535     user2=36536
-&{user}    user1=13710400001    user2=13710400002
-&{password}    password1=123456
 # 版本变量
 ${channel}    android
 ${app_version}    4.8.7
