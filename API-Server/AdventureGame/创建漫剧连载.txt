@@ -26,7 +26,6 @@ smoke
     校验接口返回状态正常    ${response}
 
 校验返回值group_id
-    [Tags]    smoke
     sleep    2
     ${string}    生成随机字符串    4
     ${title}    set variable    我的漫剧连载${string}

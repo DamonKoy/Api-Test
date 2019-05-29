@@ -16,3 +16,60 @@ smoke
     ${pagesize}    set variable     30
     ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
+
+校验返回值list数组必要字段
+    ${page}    set variable    1
+    ${pagesize}    set variable     30
+    ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    @{dataList}    Set Variable    ${response.json()['data']['list']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    ${group_id}    Get From Dictionary    ${data}    group_id
+    \    ${title}    Get From Dictionary    ${data}    title
+    \    ${author_id}    Get From Dictionary    ${data}    author_id
+    \    ${latest_index}    Get From Dictionary    ${data}    latest_index
+    \    ${create_time}    Get From Dictionary    ${data}    create_time
+    \    ${update_time}    Get From Dictionary    ${data}    update_time
+    \    ${scores}    Get From Dictionary    ${data}    scores
+    \    ${flag}    Run Keyword If    '${group_id}'!='' and '${title}'!='' and '${author_id}'=='&{user_id}[user2]' and '${latest_index}'!='' and '${create_time}'!='' and '${update_time}'!='' and '${scores}'!=''    Set Variable    true
+    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+    Should Be Equal As Strings    ${flag}    true
+
+校验返回值list数组可为空字段
+    ${page}    set variable    1
+    ${pagesize}    set variable     30
+    ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    : FOR    ${i}    IN Range   ${length}
+    \    Log    ${response.json()['data']['list'][${i}]}
+    \    Should Contain    ${response.json()['data']['list'][${i}]}    title_image
+    \    Should Contain    ${response.json()['data']['list'][${i}]}    music_url
+    \    Should Contain    ${response.json()['data']['list'][${i}]}    cover_data_json
+    \    Should Contain    ${response.json()['data']['list'][${i}]}    cover_motion_json
+    \    Should Contain    ${response.json()['data']['list'][${i}]}    desc
+
+校验返回值tags_arr数组不能少于1和大于3个标签
+    ${page}    set variable    1
+    ${pagesize}    set variable     30
+    ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    : FOR    ${i}    IN Range   ${length}
+    \    Log    ${response.json()['data']['list'][${i}]}
+    \    ${tag_length} =    Get Length    ${response.json()['data']['list'][${i}]['tags_arr']}
+    \    Should Be True    ${tag_length} >= 1 and ${tag_length} <= 3
+
+校验返回值tags_arr数组必要字段
+    ${page}    set variable    1
+    ${pagesize}    set variable     30
+    ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    : FOR    ${i}    IN Range   ${length}
+    \    Log    ${response.json()['data']['list'][${i}]}
+    \    @{tagList}    Set Variable    ${response.json()['data']['list'][${i}]['tags_arr']}
+    \    内嵌tags_trr的FOR判断    @{tagList}
+
+

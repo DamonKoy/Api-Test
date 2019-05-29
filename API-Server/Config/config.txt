@@ -65,6 +65,7 @@ ${UserRes_get_my_gems_api}    ?m=Api&c=UserRes&a=get_my_gems    # 4.8.7-我的�
 # AdventureGame
 ${AdventureGame_get_my_game_group_list_api}    ?m=Api&c=AdventureGame&a=get_my_game_group_list    # 获取漫剧连载列表
 ${AdventureGame_edit_game_group_api}    ?m=Api&c=AdventureGame&a=edit_game_group    # 创建漫剧连载
+${AdventureGame_delele_game_group_api}    ?m=Api&c=AdventureGame&a=delele_game_group    # 删除漫剧连载
 
 # Share
 ${Share_get_tag_list_api}    ?m=Api&c=Share&a=get_tag_list    # 获取连载标签列表
@@ -72,7 +73,7 @@ ${Share_get_tag_list_api}    ?m=Api&c=Share&a=get_tag_list    # 获取连载标�
 # ChumanDramaGroup
 ${ChumanDramaGroup_edit_drama_group_api}    ?m=Api&c=ChumanDramaGroup&a=edit_drama_group    # 创建对话剧连载
 ${ChumanDramaGroup_del_drama_group_api}    ?m=Api&c=ChumanDramaGroup&a=del_drama_group    # 删除对话剧连载
-
+${ChumanDramaGroup_get_manage_drama_group_list_api}    ?m=Api&c=ChumanDramaGroup&a=get_manage_drama_group_list    # 获取对话剧连载
 
 *** Keywords ***
 # 获取token
@@ -360,6 +361,14 @@ ${ChumanDramaGroup_del_drama_group_api}    ?m=Api&c=ChumanDramaGroup&a=del_drama
     ${response}    Post Request    new_request    ${AdventureGame_edit_game_group_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
+删除漫剧连载
+    [Arguments]    ${group_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    group_id=${group_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${AdventureGame_delele_game_group_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
 
 # Share
 获取连载标签列表
@@ -386,6 +395,15 @@ ${ChumanDramaGroup_del_drama_group_api}    ?m=Api&c=ChumanDramaGroup&a=del_drama
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${ChumanDramaGroup_del_drama_group_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
+
+获取对话剧连载
+    [Arguments]    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${ChumanDramaGroup_get_manage_drama_group_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
 
 
 
@@ -421,6 +439,18 @@ ${ChumanDramaGroup_del_drama_group_api}    ?m=Api&c=ChumanDramaGroup&a=del_drama
     Set Global Variable    ${token}    ${response.json()['data']['install_token']}
     ${data}    Create Dictionary    user_id=${response.json()['data']['profile']['user_id']}    nickname=${response.json()['data']['profile']['nickname']}
     [Return]    ${data}
+
+内嵌tags_trr的FOR判断
+    [Arguments]    @{tagList}
+    : FOR    ${tag}    IN    @{tagList}
+    \    Log    ${tag}
+    \    ${id}    Get From Dictionary    ${tag}    id
+    \    ${tag_id}    Get From Dictionary    ${tag}    tag_id
+    \    ${tag_name}    Get From Dictionary    ${tag}    tag_name
+    \    ${tag_img}    Get From Dictionary    ${tag}    tag_img
+    \    ${flag}    Run Keyword If    '${id}'!='' and '${tag_id}'!='' and '${tag_name}'!='' and '${tag_img}'!=''    set Variable    true
+    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+    Should Be Equal As Strings    ${flag}    true
 
 校验接口返回状态正常
     [Arguments]    ${response}    # 接口返回数据

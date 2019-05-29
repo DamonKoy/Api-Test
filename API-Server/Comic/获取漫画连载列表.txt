@@ -17,7 +17,7 @@ smoke
     ${response}=    获取漫画连载列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
 
-校验返回的group_id、title、is_purchase、count不能为空
+校验返回值list数组的必要字段
     ${page}    set variable    1
     ${pagesize}    set variable     30
     ${response}=    获取漫画连载列表    ${page}    ${pagesize}
@@ -26,13 +26,22 @@ smoke
     : FOR    ${data}    IN    @{dataList}
     \    Log    ${data}
     \    ${group_id}    Get From Dictionary    ${data}    group_id
-    \    Should Contain     ${data}    title_image
     \    ${title}    Get From Dictionary    ${data}    title
     \    ${is_purchase}    Get From Dictionary    ${data}    is_purchase
     \    ${count}    Get From Dictionary    ${data}    count
     \    ${flag}    Run Keyword If    '${group_id}'!='' and '${title}'!='' and '${is_purchase}'!='' and '${count}'!=''   Set Variable    true
     \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
     Should Be Equal As Strings    ${flag}    true
+
+校验返回值list数组的可空字段
+    ${page}    set variable    1
+    ${pagesize}    set variable     30
+    ${response}=    获取漫画连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    : FOR    ${i}    IN Range   ${length}
+    \    Log    ${response.json()['data']['list'][${i}]}
+    \    Should Contain    ${response.json()['data']['list'][${i}]}    title_image
 
 #校验page的翻页功能
 #    ${page}    set variable    2

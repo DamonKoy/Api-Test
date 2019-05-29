@@ -24,7 +24,16 @@ smoke
     ${response}=    删除对话剧连载    ${group_id}
     校验接口返回状态正常    ${response}
 
-不传group_iod，提示请选择漫剧连载
+不传group_id，提示请选择漫剧连载
+    ${group_id}    set variable    ${empty}
+    ${response}=    删除对话剧连载    ${group_id}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.status_code}    200
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    error
+    Should Be Equal As Strings    ${response.json()['message']['message']}    请选择漫剧连载
+
+group_id=0，提示请选择漫剧连载
     ${group_id}    set variable    ${empty}
     ${response}=    删除对话剧连载    ${group_id}
     log    ${response.content}

@@ -1,0 +1,47 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${string}    生成随机字符串    4
+    ${title}    set variable    被删除的漫剧连载${string}
+    ${title_image}    set variable    app/cover/template/images/cover_template_36536_3ee1aeba7645430cb128a028d10b6681.jpg
+    ${music_url}    set variable    app/sound/1545476655000637.mp3
+    ${cover_data_json}    set variable    1
+    ${cover_motion_json}    set variable    app/avg/cover/json/json_avg_cover_36536_984b61f0d19a42b394b8aa6d029866f2.json
+    ${tags}    set variable    cure,
+    ${desc}    set variable    被删除的${string}
+    ${style_id}    set variable     2
+    ${video_title}    set variable    ${empty}
+    ${response}=    创建漫剧连载    ${title}    ${title_image}    ${music_url}    ${cover_data_json}    ${cover_motion_json}    ${tags}    ${desc}    ${style_id}    ${video_title}
+    校验接口返回状态正常    ${response}
+    ${group_id}    set variable    ${response.json()['data']['group_id']}
+    ${response}=    删除漫剧连载    ${group_id}
+    校验接口返回状态正常    ${response}
+
+不传group_id，会提示参数错误
+    ${group_id}    set variable    ${empty}
+    ${response}=    删除漫剧连载    ${group_id}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.status_code}    200
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    error
+    Should Be Equal As Strings    ${response.json()['message']['message']}    参数错误
+
+group_id=0，会提示参数错误
+    ${group_id}    set variable    0
+    ${response}=    删除漫剧连载    ${group_id}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.status_code}    200
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    error
+    Should Be Equal As Strings    ${response.json()['message']['message']}    参数错误

@@ -1,0 +1,46 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${page}    set variable    1
+    ${pagesize}    set variable     30
+    ${response}=    获取对话剧连载    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+
+校验返回值group_list数组必要字段
+    ${page}    set variable    1
+    ${pagesize}    set variable     30
+    ${response}=    获取对话剧连载    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    @{dataList}    Set Variable    ${response.json()['data']['group_list']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    ${group_id}    Get From Dictionary    ${data}    group_id
+    \    ${title}    Get From Dictionary    ${data}    title
+    \    ${has_featured}    Get From Dictionary    ${data}    has_featured
+    \    ${state}    Get From Dictionary    ${data}    state
+    \    ${drama_num}    Get From Dictionary    ${data}    drama_num
+    \    ${flag}    Run Keyword If    '${group_id}'!='' and '${title}'!='' and '${has_featured}'!='' and '${state}'!='' and '${drama_num}'!=''    Set Variable    true
+    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+    Should Be Equal As Strings    ${flag}    true
+
+校验返回值group_list数组可空字段
+    ${page}    set variable    1
+    ${pagesize}    set variable     30
+    ${response}=    获取对话剧连载    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['group_list']}
+    : FOR    ${i}    IN Range   ${length}
+    \    Log    ${response.json()['data']['group_list'][${i}]}
+    \    Should Contain    ${response.json()['data']['group_list'][${i}]}    title_image
+
