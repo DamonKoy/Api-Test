@@ -44,3 +44,12 @@ smoke
     \    Log    ${response.json()['data']['group_list'][${i}]}
     \    Should Contain    ${response.json()['data']['group_list'][${i}]}    title_image
 
+校验pagesize的作用
+    ${page}    set variable    1
+    ${pagesize}    set variable     1
+    ${response}=    获取对话剧连载    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['group_list']}
+    Should Be Equal As Integers    ${length}    1
+
+

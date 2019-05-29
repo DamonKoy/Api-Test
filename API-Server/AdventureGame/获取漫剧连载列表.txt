@@ -72,4 +72,10 @@ smoke
     \    @{tagList}    Set Variable    ${response.json()['data']['list'][${i}]['tags_arr']}
     \    内嵌tags_trr的FOR判断    @{tagList}
 
-
+校验pagesize的作用
+    ${page}    set variable    1
+    ${pagesize}    set variable     1
+    ${response}=    获取漫剧连载列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    Should Be Equal As Integers    ${length}    1

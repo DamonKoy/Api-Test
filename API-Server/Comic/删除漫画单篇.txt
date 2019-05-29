@@ -14,7 +14,7 @@ smoke
     [Tags]    smoke
     ${page}    set variable    1
     ${pagesize}    set variable    30
-    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+    ${response}=    获取漫画单篇列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
     ${comic_id}    set variable    ${response.json()['data']['list'][0]['comic_id']}
     ${response}=    删除漫画单篇    ${comic_id}
@@ -41,7 +41,7 @@ comic_id=0，提示漫画不属于您,无法操作
 #循环删除漫画单篇
 #    ${page}    set variable    1
 #    ${pagesize}    set variable    30
-#    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+#    ${response}=    获取漫画单篇列表    ${page}    ${pagesize}
 #    校验接口返回状态正常    ${response}
 #    ${length}=    Get Length    ${response.json()['data']['list']}
 #    : FOR    ${i}    IN RANGE    ${length}

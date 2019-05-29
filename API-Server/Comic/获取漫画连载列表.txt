@@ -46,7 +46,7 @@ smoke
 #校验page的翻页功能
 #    ${page}    set variable    2
 #    ${pagesize}    set variable     30
-#    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+#    ${response}=    获取漫画单篇列表    ${page}    ${pagesize}
 #    校验接口返回状态正常    ${response}
 
 

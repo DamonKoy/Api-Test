@@ -1,0 +1,76 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${page}    1
+${pagesize}    30
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    获取首页banner列表
+    校验接口返回状态正常    ${response}
+
+校验返回值banner_list数组必要字段
+    ${response}=    获取首页banner列表
+    校验接口返回状态正常    ${response}
+    @{dataList}    Set Variable    ${response.json()['data']['banner_list']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    ${obj_jump_type}    Get From Dictionary    ${data}    obj_jump_type
+    \    ${obj_type}    Get From Dictionary    ${data}    obj_type
+    \    ${obj_name}    Get From Dictionary    ${data}    obj_name
+    \    ${flag}    Run Keyword If    '${obj_jump_type}'!='' and '${obj_type}'!='' and '${obj_name}'!=''    Set Variable    true
+    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+    Should Be Equal As Strings    ${flag}    true
+
+校验返回值banner_list数组可空字段
+    ${response}=    获取首页banner列表
+    校验接口返回状态正常    ${response}
+    ${length}=    Get Length    ${response.json()['data']['banner_list']}
+    : FOR    ${i}    IN Range   ${length}
+    \    Log    ${response.json()['data']['banner_list'][${i}]}
+    \    Should Contain    ${response.json()['data']['banner_list'][${i}]}    obj_url
+    \    Should Contain    ${response.json()['data']['banner_list'][${i}]}    obj_id
+    \    Should Contain    ${response.json()['data']['banner_list'][${i}]}    obj_img
+
+校验返回值active_block数组必要字段
+    ${response}=    获取首页banner列表
+    校验接口返回状态正常    ${response}
+    @{dataList}    Set Variable    ${response.json()['data']['active_block']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    ${block_id}    Get From Dictionary    ${data}    block_id
+    \    ${title}    Get From Dictionary    ${data}    title
+    \    ${img_url}    Get From Dictionary    ${data}    img_url
+    \    ${type}    Get From Dictionary    ${data}    type
+    \    ${sp_type}    Get From Dictionary    ${data}    sp_type
+    \    ${redirecting_id}    Get From Dictionary    ${data}    redirecting_id
+    \    ${has_new}    Get From Dictionary    ${data}    has_new
+    \    ${flag}    Run Keyword If    '${block_id}'!='' and '${title}'!='' and '${img_url}'!='' and '${type}'!='' and '${sp_type}'!='' and '${redirecting_id}'!='' and '${has_new}'!=''    Set Variable    true
+    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+    Should Be Equal As Strings    ${flag}    true
+
+校验返回值active_block数组可空字段
+    ${response}=    获取首页banner列表
+    校验接口返回状态正常    ${response}
+    ${length}=    Get Length    ${response.json()['data']['active_block']}
+    : FOR    ${i}    IN Range   ${length}
+    \    Log    ${response.json()['data']['active_block'][${i}]}
+    \    Should Contain    ${response.json()['data']['active_block'][${i}]}    redirecting_url
+    \    Should Contain    ${response.json()['data']['active_block'][${i}]}    desc
+    \    Should Contain    ${response.json()['data']['active_block'][${i}]}    img_url_new
+
+校验返回值active_block数组长度最多4个
+    ${response}=    获取首页banner列表
+    校验接口返回状态正常    ${response}
+    ${length}=    Get Length    ${response.json()['data']['active_block']}
+    Should Be True    ${length} >= 0 and ${length} <= 4
+
+

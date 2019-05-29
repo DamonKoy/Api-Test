@@ -14,13 +14,13 @@ smoke
     [Tags]    smoke
     ${page}    set variable    1
     ${pagesize}    set variable     30
-    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+    ${response}=    获取漫画单篇列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
 
 校验返回的comic_id、title、data_json不能为空
     ${page}    set variable    1
     ${pagesize}    set variable     30
-    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+    ${response}=    获取漫画单篇列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
     @{dataList}    Set Variable    ${response.json()['data']['list']}
     : FOR    ${data}    IN    @{dataList}
@@ -35,14 +35,14 @@ smoke
 #校验page的翻页功能
 #    ${page}    set variable    2
 #    ${pagesize}    set variable     30
-#    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+#    ${response}=    获取漫画单篇列表    ${page}    ${pagesize}
 #    校验接口返回状态正常    ${response}
 
 
 校验pagesize的作用
     ${page}    set variable    1
     ${pagesize}    set variable     1
-    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+    ${response}=    获取漫画单篇列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
     ${length} =    Get Length    ${response.json()['data']['list']}
     Should Be Equal As Integers    ${length}    1
@@ -50,7 +50,7 @@ smoke
 校验pagesize>1的返回效果
     ${page}    set variable    1
     ${pagesize}    set variable     10
-    ${response}=    获取创作页单篇列表    ${page}    ${pagesize}
+    ${response}=    获取漫画单篇列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
     ${length} =    Get Length    ${response.json()['data']['list']}
     Should Be true    ${length} >= 1

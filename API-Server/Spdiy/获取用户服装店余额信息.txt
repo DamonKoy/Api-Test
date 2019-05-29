@@ -1,0 +1,23 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    好友tab小红点
+    校验接口返回状态正常    ${response}
+
+校验返回值has_new
+    [Tags]    smoke
+    ${response}=    好友tab小红点
+    校验接口返回状态正常    ${response}
+    ${flag}=    Run Keyword If    '${response.json()['data']['has_new']}' == '0' or '${response.json()['data']['has_new']}' == '1'    Set Variable    true    # 1为有，0为没有
+    Should Be Equal As Strings    ${flag}    true
