@@ -1,0 +1,22 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${page}    1
+${pagesize}    30
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    关注内容列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+
+校验返回值
+    [Tags]    smoke
+    ${response}=    关注内容列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}

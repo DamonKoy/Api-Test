@@ -78,7 +78,15 @@ ${ChumanDramaGroup_get_manage_drama_group_list_api}    ?m=Api&c=ChumanDramaGroup
 # HomePage
 ${HomePage_homepage_new_list_api}    ?m=Api&c=HomePage&a=homepage_new_list    # 获取首页信息列表
 ${HomePage_get_home_banner_list_api}    ?m=Api&c=HomePage&a=get_home_banner_list    # 获取首页banner列表
-${HomePage_check_follow_unread_api}    ?m=Api&c=HomePage&a=check_follow_unread    # 好友tab小红点
+${HomePage_check_follow_unread_api}    ?m=Api&c=HomePage&a=check_follow_unread    # 0.1.0-好友tab小红点
+${HomePage_get_new_special_info_api}    ?m=Api&c=HomePage&a=get_new_special_info    # 4.6.9-获取专题信息
+${HomePage_get_new_tags_list_api}    ?m=Api&c=HomePage&a=get_new_tags_list    # 4.6.9-获取标签列表
+${HomePage_get_channel_recommend_list_api}    ?m=Api&c=HomePage&a=get_channel_recommend_list    # 4.6.9-换一换首页推荐频道列表
+${HomePage_get_follow_obj_list_api}    ?m=Api&c=HomePage&a=get_follow_obj_list    # 0.1.0-关注内容列表
+${HomePage_get_follow_user_info_api}    ?m=Api&c=HomePage&a=get_follow_user_info    # 0.1.0-关注用户详情
+${HomePage_get_home_content_list_api}    ?m=Api&c=HomePage&a=get_home_content_list    # 4.8.4-首页内容列表
+${HomePage_get_home_page_alert_api}    ?m=Api&c=HomePage&a=get_home_page_alert    # 4.8.6-首页弹窗
+${HomePage_get_home_page_feed_flow_api}    ?m=Api&c=HomePage&a=get_home_page_feed_flow    # 4.8.3-首页feed流
 
 # Spdiy
 ${Spdiy_get_asset_info_api}    ?m=Api&c=Spdiy&a=get_asset_info    # 获取用户服装店余额信息
@@ -443,7 +451,66 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     ${response}    Post Request    new_request    ${HomePage_check_follow_unread_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
+获取专题信息
+    [Arguments]    ${special_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    special_id=${special_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_new_special_info_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
 
+获取标签列表
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_new_tags_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+换一换首页推荐频道列表
+    [Arguments]    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_channel_recommend_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+关注内容列表
+    [Arguments]    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_follow_obj_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+关注用户详情
+    [Arguments]    ${user_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    user_id=${user_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_follow_user_info_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+首页内容列表
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_home_content_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+首页弹窗
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_home_page_alert_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+首页feed流
+    [Arguments]    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_home_page_feed_flow_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
 
 
 
