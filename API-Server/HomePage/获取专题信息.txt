@@ -16,31 +16,26 @@ smoke
     校验接口返回状态正常    ${response}
 
 校验返回值style
-    [Tags]    smoke
     ${response}=    获取专题信息    ${special_id}
     校验接口返回状态正常    ${response}
     Should Be Equal As Strings    ${response.json()['data']['style']}    ${special_id}
 
 校验返回值title
-    [Tags]    smoke
     ${response}=    获取专题信息    ${special_id}
     校验接口返回状态正常    ${response}
     Should Not Be Equal As Strings    ${response.json()['data']['title']}    ${empty}
 
 校验返回值title_image
-    [Tags]    smoke
     ${response}=    获取专题信息    ${special_id}
     校验接口返回状态正常    ${response}
     Should Contain    ${response.json()['data']['title_image']}    recommend_topic
 
 校验返回值background
-    [Tags]    smoke
     ${response}=    获取专题信息    ${special_id}
     校验接口返回状态正常    ${response}
     Should Contain    ${response.json()['data']['background']}    recommend_topic
 
 校验返回值icon
-    [Tags]    smoke
     ${response}=    获取专题信息    ${special_id}
     校验接口返回状态正常    ${response}
     Should Contain    ${response.json()['data']['icon']}    recommend_topic

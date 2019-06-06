@@ -1,44 +1,44 @@
-*** Settings ***
-Default Tags
-Resource          ../Config/config.txt
-
-*** variable ***
-${shop_id}    1
-
-*** Test Cases ***
-测试服获取install_token
-    [Tags]    smoke
-    测试服获取install_token    &{user_id}[user2]
-
-smoke
-    [Tags]    smoke
-    ${response}=    触漫获取绑定信息    ${shop_id}
-    校验接口返回状态正常    ${response}
-
-校验返回值name
-    ${response}=    触漫获取绑定信息    ${shop_id}
-    校验接口返回状态正常    ${response}
-    Should Be Equal As Strings    ${response.json()['data']['card_info']['name']}    待修改
-
-校验返回值card_num
-    ${response}=    触漫获取绑定信息    ${shop_id}
-    校验接口返回状态正常    ${response}
-    Should Be Equal As Strings    ${response.json()['data']['card_info']['card_num']}    待修改
-
-校验返回值card_status，未绑定身份证
-    ${response}=    触漫获取绑定信息    ${shop_id}
-    校验接口返回状态正常    ${response}
-    Should Be Equal As Integers    ${response.json()['data']['card_status']}    3    # 是否绑定身份证，1绑定，2提现已绑定，3未绑定
-    Should Be Equal As Integers    ${response.json()['data']['card_info']}    []
-
-校验返回值card_status，已绑定身份证
-    ${response}=    触漫获取绑定信息    ${shop_id}
-    校验接口返回状态正常    ${response}
-    Should Be Equal As Integers    ${response.json()['data']['card_status']}    1    # 是否绑定身份证，1绑定，2提现已绑定，3未绑定
-    Should Be Equal As Integers    ${response.json()['data']['card_info']}    []
-
-校验返回值card_status，提现已绑定
-    ${response}=    触漫获取绑定信息    ${shop_id}
-    校验接口返回状态正常    ${response}
-    Should Be Equal As Integers    ${response.json()['data']['card_status']}    2    # 是否绑定身份证，1绑定，2提现已绑定，3未绑定
-    Should Be Equal As Integers    ${response.json()['data']['card_info']}    []
+#*** Settings ***
+#Default Tags
+#Resource          ../Config/config.txt
+#
+#*** variable ***
+#${shop_id}    1
+#
+#*** Test Cases ***
+#测试服获取install_token
+#    [Tags]    smoke
+#    测试服获取install_token    &{user_id}[user2]
+#
+#smoke
+#    [Tags]    smoke
+#    ${response}=    触漫获取绑定信息    ${shop_id}
+#    校验接口返回状态正常    ${response}
+#
+#校验返回值name
+#    ${response}=    触漫获取绑定信息    ${shop_id}
+#    校验接口返回状态正常    ${response}
+#    Should Be Equal As Strings    ${response.json()['data']['card_info']['name']}    待修改
+#
+#校验返回值card_num
+#    ${response}=    触漫获取绑定信息    ${shop_id}
+#    校验接口返回状态正常    ${response}
+#    Should Be Equal As Strings    ${response.json()['data']['card_info']['card_num']}    待修改
+#
+#校验返回值card_status，未绑定身份证
+#    ${response}=    触漫获取绑定信息    ${shop_id}
+#    校验接口返回状态正常    ${response}
+#    Should Be Equal As Integers    ${response.json()['data']['card_status']}    3    # 是否绑定身份证，1绑定，2提现已绑定，3未绑定
+#    Should Be Equal As Integers    ${response.json()['data']['card_info']}    []
+#
+#校验返回值card_status，已绑定身份证
+#    ${response}=    触漫获取绑定信息    ${shop_id}
+#    校验接口返回状态正常    ${response}
+#    Should Be Equal As Integers    ${response.json()['data']['card_status']}    1    # 是否绑定身份证，1绑定，2提现已绑定，3未绑定
+#    Should Be Equal As Integers    ${response.json()['data']['card_info']}    []
+#
+#校验返回值card_status，提现已绑定
+#    ${response}=    触漫获取绑定信息    ${shop_id}
+#    校验接口返回状态正常    ${response}
+#    Should Be Equal As Integers    ${response.json()['data']['card_status']}    2    # 是否绑定身份证，1绑定，2提现已绑定，3未绑定
+#    Should Be Equal As Integers    ${response.json()['data']['card_info']}    []

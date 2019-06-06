@@ -1,39 +1,39 @@
-*** Settings ***
-Default Tags
-Resource          ../Config/config.txt
-
-*** variable ***
-
-
-*** Test Cases ***
-测试服获取install_token
-    [Tags]    smoke
-    测试服获取install_token    &{user_id}[user2]
-
-smoke
-    [Tags]    smoke
-    ${name}    set variable    思睿
-    ${card_num}    set variable    440106199003078978
-    ${response}=    触漫修改身份证信息    ${name}    ${card_num}
-    校验接口返回状态正常    ${response}
-
-校验返回值name
-    ${name}    set variable    思睿
-    ${card_num}    set variable    440106199003078978
-    ${response}=    触漫修改身份证信息    ${name}    ${card_num}
-    校验接口返回状态正常    ${response}
-    Should Be Equal As Strings    ${response.json()['data']['card_info']['name']}    ${name}
-
-校验返回值card_num
-    ${name}    set variable    思睿
-    ${card_num}    set variable    440106199003078978
-    ${response}=    触漫修改身份证信息    ${name}    ${card_num}
-    校验接口返回状态正常    ${response}
-    Should Be Equal As Strings    ${response.json()['data']['card_info']['card_num']}    ${card_num}
-
-校验返回值toast
-    ${name}    set variable    思睿
-    ${card_num}    set variable    440106199003078978
-    ${response}=    触漫修改身份证信息    ${name}    ${card_num}
-    校验接口返回状态正常    ${response}
-    Should Be Equal As Strings    ${response.json()['data']['card_info']['toast']}    待修改
+#*** Settings ***
+#Default Tags
+#Resource          ../Config/config.txt
+#
+#*** variable ***
+#
+#
+#*** Test Cases ***
+#测试服获取install_token
+#    [Tags]    smoke
+#    测试服获取install_token    &{user_id}[user2]
+#
+#smoke
+#    [Tags]    smoke
+#    ${name}    set variable    思睿
+#    ${card_num}    set variable    440106199003078978
+#    ${response}=    触漫修改身份证信息    ${name}    ${card_num}
+#    校验接口返回状态正常    ${response}
+#
+#校验返回值name
+#    ${name}    set variable    思睿
+#    ${card_num}    set variable    440106199003078978
+#    ${response}=    触漫修改身份证信息    ${name}    ${card_num}
+#    校验接口返回状态正常    ${response}
+#    Should Be Equal As Strings    ${response.json()['data']['card_info']['name']}    ${name}
+#
+#校验返回值card_num
+#    ${name}    set variable    思睿
+#    ${card_num}    set variable    440106199003078978
+#    ${response}=    触漫修改身份证信息    ${name}    ${card_num}
+#    校验接口返回状态正常    ${response}
+#    Should Be Equal As Strings    ${response.json()['data']['card_info']['card_num']}    ${card_num}
+#
+#校验返回值toast
+#    ${name}    set variable    思睿
+#    ${card_num}    set variable    440106199003078978
+#    ${response}=    触漫修改身份证信息    ${name}    ${card_num}
+#    校验接口返回状态正常    ${response}
+#    Should Be Equal As Strings    ${response.json()['data']['card_info']['toast']}    待修改

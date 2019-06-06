@@ -16,39 +16,33 @@ smoke
     校验接口返回状态正常    ${response}
 
 校验返回值user_id
-    [Tags]    smoke
     ${response}=    关注用户详情    &{user_id}[user1]
     校验接口返回状态正常    ${response}
     Should Be Equal As Strings    ${response.json()['data']['user_info']['user_id']}    &{user_id}[user1]
 
 校验返回值is_vip
-    [Tags]    smoke
     ${response}=    关注用户详情    &{user_id}[user1]
     校验接口返回状态正常    ${response}
     ${flag}=    Run Keyword If    '${response.json()['data']['user_info']['is_vip']}' == '0' or '${response.json()['data']['user_info']['is_vip']}' == '1'    Set Variable    true    # 1为会员，0为非会员
     Should Be Equal As Strings    ${flag}    true
 
 校验返回值has_follow
-    [Tags]    smoke
     ${response}=    关注用户详情    &{user_id}[user1]
     校验接口返回状态正常    ${response}
     Should Be Equal As Strings    ${response.json()['data']['user_info']['has_follow']}    1
 
 校验返回值sex
-    [Tags]    smoke
     ${response}=    关注用户详情    &{user_id}[user1]
     校验接口返回状态正常    ${response}
     ${flag}=    Run Keyword If    '${response.json()['data']['user_info']['sex']}' == '0' or '${response.json()['data']['user_info']['sex']}' == '1'    Set Variable    true
     Should Be Equal As Strings    ${flag}    true
 
 校验返回值total_level
-    [Tags]    smoke
     ${response}=    关注用户详情    &{user_id}[user1]
     校验接口返回状态正常    ${response}
     Should Be True    ${response.json()['data']['user_info']['userLevel']['total_level']} >= 0 and ${response.json()['data']['user_info']['userLevel']['total_level']} <= 99
 
 校验返回值phase
-    [Tags]    smoke
     ${response}=    关注用户详情    &{user_id}[user1]
     校验接口返回状态正常    ${response}
     Should Be True    ${response.json()['data']['user_info']['userLevel']['phase']} >= 0

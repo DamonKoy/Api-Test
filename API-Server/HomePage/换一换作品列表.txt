@@ -3,7 +3,6 @@ Default Tags
 Resource          ../Config/config.txt
 
 *** variable ***
-${page}    1
 ${pagesize}    30
 
 *** Test Cases ***
@@ -13,9 +12,16 @@ ${pagesize}    30
 
 smoke
     [Tags]    smoke
-    ${response}=    首页feed流    ${page}    ${pagesize}
+    ${type}    set variable    1
+    ${response}=    换一换作品列表    ${type}    ${pagesize}
+    校验接口返回状态正常    ${response}
+
+作者列表
+    [Tags]    smoke
+    ${type}    set variable    2
+    ${response}=    换一换作品列表    ${type}    ${pagesize}
     校验接口返回状态正常    ${response}
 
 校验返回值
-    ${response}=    首页feed流    ${page}    ${pagesize}
+    ${response}=    换一换作品列表    ${type}    ${pagesize}
     校验接口返回状态正常    ${response}

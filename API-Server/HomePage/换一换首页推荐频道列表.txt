@@ -16,6 +16,11 @@ smoke
     校验接口返回状态正常    ${response}
 
 校验返回值
-    [Tags]    smoke
     ${response}=    换一换首页推荐频道列表    ${pagesize}
     校验接口返回状态正常    ${response}
+
+校验返回值list数组长度
+    ${response}=    换一换首页推荐频道列表    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    Should Be true    ${length} >= 0 and ${length} <= 6

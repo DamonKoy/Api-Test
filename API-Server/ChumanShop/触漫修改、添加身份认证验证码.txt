@@ -1,16 +1,16 @@
-*** Settings ***
-Default Tags
-Resource          ../Config/config.txt
-
-*** variable ***
-
-*** Test Cases ***
-测试服获取install_token
-    [Tags]    smoke
-    测试服获取install_token    &{user_id}[user2]
-
-smoke
-    [Tags]    smoke
-    ${phone_number}    set variable    13710468400
-    ${response}=    触漫绑定身份证信息    ${phone_number}
-    校验接口返回状态正常    ${response}
+#*** Settings ***
+#Default Tags
+#Resource          ../Config/config.txt
+#
+#*** variable ***
+#
+#*** Test Cases ***
+#测试服获取install_token
+#    [Tags]    smoke
+#    测试服获取install_token    &{user_id}[user2]
+#
+#smoke
+#    [Tags]    smoke
+#    ${phone_number}    set variable    13710468400
+#    ${response}=    触漫绑定身份证信息    ${phone_number}
+#    校验接口返回状态正常    ${response}

@@ -1,20 +1,20 @@
-*** Settings ***
-Default Tags
-Resource          ../Config/config.txt
-
-*** variable ***
-
-
-*** Test Cases ***
-测试服获取install_token
-    [Tags]    smoke
-    测试服获取install_token    &{user_id}[user2]
-
-smoke
-    [Tags]    smoke
-    ${type}    set variable    1    # 1新增绑定，2有其他模块已绑定身份证认证
-    ${name}    set variable    米娅
-    ${card_num}    set variable    1
-    ${response}=    绑定身份证信息    ${type}    ${name}    ${card_num}
-    校验接口返回状态正常    ${response}
+#*** Settings ***
+#Default Tags
+#Resource          ../Config/config.txt
+#
+#*** variable ***
+#
+#
+#*** Test Cases ***
+#测试服获取install_token
+#    [Tags]    smoke
+#    测试服获取install_token    &{user_id}[user2]
+#
+#smoke
+#    [Tags]    smoke
+#    ${type}    set variable    1    # 1新增绑定，2有其他模块已绑定身份证认证
+#    ${name}    set variable    米娅
+#    ${card_num}    set variable    1
+#    ${response}=    绑定身份证信息    ${type}    ${name}    ${card_num}
+#    校验接口返回状态正常    ${response}
 

@@ -1,18 +1,18 @@
-*** Settings ***
-Default Tags
-Resource          ../Config/config.txt
-
-*** variable ***
-
-
-*** Test Cases ***
-测试服获取install_token
-    [Tags]    smoke
-    测试服获取install_token    &{user_id}[user2]
-
-smoke
-    [Tags]    smoke
-    ${name}    set variable    米娅
-    ${card_num}    set variable    110101199003074928
-    ${response}=    修改身份证信息    ${name}    ${card_num}
-    校验接口返回状态正常    ${response}
+#*** Settings ***
+#Default Tags
+#Resource          ../Config/config.txt
+#
+#*** variable ***
+#
+#
+#*** Test Cases ***
+#测试服获取install_token
+#    [Tags]    smoke
+#    测试服获取install_token    &{user_id}[user2]
+#
+#smoke
+#    [Tags]    smoke
+#    ${name}    set variable    米娅
+#    ${card_num}    set variable    110101199003074928
+#    ${response}=    修改身份证信息    ${name}    ${card_num}
+#    校验接口返回状态正常    ${response}

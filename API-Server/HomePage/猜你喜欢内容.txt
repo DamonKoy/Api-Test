@@ -3,7 +3,8 @@ Default Tags
 Resource          ../Config/config.txt
 
 *** variable ***
-
+${page}    1
+${pagesize}    30
 
 *** Test Cases ***
 测试服获取install_token
@@ -12,9 +13,9 @@ Resource          ../Config/config.txt
 
 smoke
     [Tags]    smoke
-    ${response}=    获取标签列表
+    ${response}=    猜你喜欢内容    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
 
 校验返回值
-    ${response}=    获取标签列表
+    ${response}=    猜你喜欢内容    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}

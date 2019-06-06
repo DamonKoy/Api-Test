@@ -87,6 +87,17 @@ ${HomePage_get_follow_user_info_api}    ?m=Api&c=HomePage&a=get_follow_user_info
 ${HomePage_get_home_content_list_api}    ?m=Api&c=HomePage&a=get_home_content_list    # 4.8.4-首页内容列表
 ${HomePage_get_home_page_alert_api}    ?m=Api&c=HomePage&a=get_home_page_alert    # 4.8.6-首页弹窗
 ${HomePage_get_home_page_feed_flow_api}    ?m=Api&c=HomePage&a=get_home_page_feed_flow    # 4.8.3-首页feed流
+${HomePage_get_rec_subscribe_obj_list_api}    ?m=Api&c=HomePage&a=get_rec_subscribe_obj_list    # 4.2.1-推荐订阅对象列表
+${HomePage_get_recommend_group_list_api}    ?m=Api&c=HomePage&a=get_recommend_group_list    # 4.6.9--换一换作品列表
+${HomePage_get_recommend_like_content_list_api}    ?m=Api&c=HomePage&a=get_recommend_like_content_list    # 4.8.3-猜你喜欢
+${HomePage_get_recommend_obj_list_api}    ?m=Api&c=HomePage&a=get_recommend_obj_list    # 0.1.0-推荐内容列表
+${HomePage_get_reduce_recommend_work_reason_api}    ?m=Api&c=HomePage&a=get_reduce_recommend_work_reason    # 4.6.9-屏蔽推荐作品原因列表
+${HomePage_get_subscribed_content_list_api}    ?m=Api&c=HomePage&a=get_subscribed_content_list    # 4.8.2-猜你喜欢内容
+${HomePage_get_subscribed_obj_action_list_api}    ?m=Api&c=HomePage&a=get_subscribed_obj_action_list    # 4.8.4-获取订阅对象动态列表
+${HomePage_homepage_new_list_api}    ?m=Api&c=HomePage&a=homepage_new_list    # 4.8.3--首页推荐列表
+${HomePage_reduce_recommend_work_api}    ?m=Api&c=HomePage&a=reduce_recommend_work    # 4.6.9-屏蔽推荐作品
+${HomePage_square_scenarized_api}    ?m=Api&c=HomePage&a=square_scenarized    # 4.3.1-广场场景化
+${HomePage_set_dislike_api}    ?m=Api&c=HomePage&a=set_dislike    # 4.8.3-feed流不喜欢
 
 # Spdiy
 ${Spdiy_get_asset_info_api}    ?m=Api&c=Spdiy&a=get_asset_info    # 获取用户服装店余额信息
@@ -510,6 +521,91 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Get Request    new_request    ${HomePage_get_home_page_feed_flow_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+推荐订阅对象列表
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_rec_subscribe_obj_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+换一换作品列表
+    [Arguments]    ${type}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    type=${type}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_recommend_group_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+猜你喜欢
+    [Arguments]    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_recommend_like_content_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+推荐内容列表
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_recommend_obj_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+屏蔽推荐作品原因列表
+    [Arguments]    ${box_id}    ${box_type}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    box_id=${box_id}    box_type=${box_type}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_reduce_recommend_work_reason_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+猜你喜欢内容
+    [Arguments]    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_subscribed_content_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+获取订阅对象动态列表
+    [Arguments]    ${page}    ${pagesize}    ${time}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}    time=${time}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_get_subscribed_obj_action_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+首页推荐列表
+    [Arguments]    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_homepage_new_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+屏蔽推荐作品
+    [Arguments]    ${box_id}    ${box_type}    ${reason_tag}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    box_id=${box_id}    box_type=${box_type}    reason_tag=${reason_tag}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${HomePage_reduce_recommend_work_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+广场场景化
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${HomePage_square_scenarized_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+feed流不喜欢
+    [Arguments]    ${proc_type}    ${obj_type}    ${obj_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    proc_type=${proc_type}    obj_type=${obj_type}    obj_id=${obj_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Post Request    new_request    ${HomePage_set_dislike_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
 
 

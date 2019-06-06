@@ -1,0 +1,23 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${proc_type}    set variable    2    # 不喜欢的类型（1作品，2作者）
+    ${obj_type}    set variable    0    # 对象类型（默认0为作者，其他为作品类型（3漫画连载，21漫影连载））
+    ${obj_id}    set variable    0    # 对象id（作者id或作品id）
+    ${response}=    feed流不喜欢    ${proc_type}    ${obj_type}    ${obj_id}
+    校验接口返回状态正常    ${response}
+
+校验返回值
+    ${response}=    feed流不喜欢    ${proc_type}    ${obj_type}    ${obj_id}
+    校验接口返回状态正常    ${response}

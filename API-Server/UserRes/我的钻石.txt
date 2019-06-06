@@ -59,10 +59,6 @@ smoke
     校验接口返回状态正常    ${response}
     Should Contain    ${response.json()['data']}    notice
 
-校验返回值提现Web入口jump_url
-    ${response}=    我的钻石    ${app_version}
-    校验接口返回状态正常    ${response}
-    Should Not Be Equal As Strings    ${response.json()['data']['jump_url']}    ${empty}
 
 
 

@@ -17,6 +17,13 @@ smoke
     校验接口返回状态正常    ${response}
 
 校验返回值
-    [Tags]    smoke
     ${response}=    关注内容列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
+
+校验pagesize的作用
+    ${pagesize}    set variable    2
+    ${response}=    关注内容列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    Should Be true    ${length} >= 0 and ${length} <= 2
+

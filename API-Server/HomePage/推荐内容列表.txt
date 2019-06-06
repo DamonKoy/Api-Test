@@ -12,9 +12,9 @@ Resource          ../Config/config.txt
 
 smoke
     [Tags]    smoke
-    ${response}=    获取标签列表
+    ${response}=    推荐内容列表
     校验接口返回状态正常    ${response}
 
 校验返回值
-    ${response}=    获取标签列表
+    ${response}=    推荐内容列表
     校验接口返回状态正常    ${response}
