@@ -7,7 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           DateTime
 Library           NewLibrary
-Resource          ../Hosts/host-demo.txt
+Resource          ../Hosts/host-api2.txt
 Resource          ../Common/constant.txt
 Resource          ../Common/sql.txt
 
