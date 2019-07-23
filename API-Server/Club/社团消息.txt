@@ -1,0 +1,17 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${page}    1
+${version}    1
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    社团消息    ${page}    ${version}
+    校验接口返回状态正常    ${response}

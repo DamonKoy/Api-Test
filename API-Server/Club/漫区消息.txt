@@ -1,0 +1,18 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${club_id}
+${last_id}    0
+${pagesize}    30
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    漫区消息    ${club_id}    ${last_id}    ${pagesize}
+    校验接口返回状态正常    ${response}

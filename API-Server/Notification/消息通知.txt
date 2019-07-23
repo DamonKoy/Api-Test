@@ -1,0 +1,57 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${version}    2    # 固定
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    好友-消息通知列表    ${version}
+    校验接口返回状态正常    ${response}
+
+校验返回值count
+    ${response}=    好友-消息通知列表    ${version}
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['count']} >= 0
+
+校验返回值吐槽类型
+    ${response}=    好友-消息通知列表    ${version}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['notification_status'][0]['type']}    1    # 消息类型 1、吐槽;2、点赞;3、关注;5、打赏;6、通知
+    Should Be True    ${response.json()['data']['notification_status'][0]['count']} >= 0
+
+校验返回值点赞类型
+    ${response}=    好友-消息通知列表    ${version}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['notification_status'][1]['type']}    2    # 消息类型 1、吐槽;2、点赞;3、关注;5、打赏;6、通知
+    Should Be True    ${response.json()['data']['notification_status'][1]['count']} >= 0
+
+校验返回值关注类型
+    ${response}=    好友-消息通知列表    ${version}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['notification_status'][2]['type']}    3    # 消息类型 1、吐槽;2、点赞;3、关注;5、打赏;6、通知
+    Should Be True    ${response.json()['data']['notification_status'][2]['count']} >= 0
+
+校验返回值打赏类型
+    ${response}=    好友-消息通知列表    ${version}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['notification_status'][3]['type']}    5    # 消息类型 1、吐槽;2、点赞;3、关注;5、打赏;6、通知
+    Should Be True    ${response.json()['data']['notification_status'][3]['count']} >= 0
+
+校验返回值通知类型
+    ${response}=    好友-消息通知列表    ${version}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['notification_status'][4]['type']}    6    # 消息类型 1、吐槽;2、点赞;3、关注;5、打赏;6、通知
+    Should Be True    ${response.json()['data']['notification_status'][4]['count']} >= 0
+
+校验返回值类型9
+    ${response}=    好友-消息通知列表    ${version}
+    校验接口返回状态正常    ${response}
+    Should Be Equal As Strings    ${response.json()['data']['notification_status'][5]['type']}    9    # 消息类型 1、吐槽;2、点赞;3、关注;5、打赏;6、通知
+    Should Be True    ${response.json()['data']['notification_status'][5]['count']} >= 0

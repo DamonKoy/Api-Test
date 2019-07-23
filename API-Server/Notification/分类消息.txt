@@ -1,0 +1,103 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${version}   3    # 固定
+${type}    3    # 3、关注消息；7、触漫娘消息；11、触漫学院消息；
+${page}    1
+${pagesize}    30
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke-关注消息
+    [Tags]    smoke
+    ${response}=    分类消息    ${version}   ${type}    ${page}    ${pagesize}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.status_code}    200
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    显示信息
+
+关注消息返回list
+    ${response}=    分类消息    ${version}   ${type}    ${page}    ${pagesize}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.status_code}    200
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    显示信息
+    ${length} =    Get Length    ${response.json()['data']['notification_list']}
+    ${flag}=    Run Keyword If    ${length} >= 1    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
+    @{dataList}    Set Variable    ${response.json()['data']['notification_list']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    Should Contain    ${data}    avatar
+    \    ${id}    Get From Dictionary    ${data}    id
+    \    ${user_id}    Get From Dictionary    ${data}    user_id
+    \    ${sender_id}    Get From Dictionary    ${data}    sender_id
+    \    ${title}   Get From Dictionary    ${data}    title
+    \    ${content}    Get From Dictionary    ${data}    content
+    \    ${created}    Get From Dictionary    ${data}    created
+    \    ${r_type}    Get From Dictionary    ${data}    type
+    \    ${r_data}   Get From Dictionary    ${data}    data
+    \    ${status}    Get From Dictionary    ${data}    status
+    \    ${sp_type}    Get From Dictionary    ${data}    sp_type
+    \    ${nickname}    Get From Dictionary    ${data}    nickname
+    \    ${identity_level}    Get From Dictionary    ${data}    identity_level
+    \    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${content}'!='' and '${created}'!='' and '${r_type}'=='${type}' and '${r_data}'!='' and '${status}'!='' and '${sp_type}'!='' and '${nickname}'!='' and '${identity_level}'!=''    Set Variable    true
+    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+    Should Be Equal As Strings    ${flag}    true
+
+
+smoke-触漫娘消息
+    [Tags]    smoke
+    ${type}    Set Variable    7
+    ${response}=    分类消息    ${version}   ${type}    ${page}    ${pagesize}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.status_code}    200
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    显示信息
+
+触漫娘消息返回list
+    ${type}    Set Variable    7
+    ${response}=    分类消息    ${version}   ${type}    ${page}    ${pagesize}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.status_code}    200
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    显示信息
+    ${length} =    Get Length    ${response.json()['data']['notification_list']}
+    ${flag}=    Run Keyword If    ${length} >= 1    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
+    @{dataList}    Set Variable    ${response.json()['data']['notification_list']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    Should Contain    ${data}    data
+    \    ${id}    Get From Dictionary    ${data}    id
+    #\    ${news_id}    Get From Dictionary    ${data}    news_id
+    \    ${title}   Get From Dictionary    ${data}    title
+    \    ${content}    Get From Dictionary    ${data}    content
+    \    ${created}    Get From Dictionary    ${data}    created
+    \    ${r_type}    Get From Dictionary    ${data}    type
+    \    ${status}    Get From Dictionary    ${data}    status
+    \    ${sp_type}    Get From Dictionary    ${data}    sp_type
+    \    ${version}    Get From Dictionary    ${data}    version
+    \    ${flag}    Run Keyword If    '${id}'!='' and '${title}'!='' and '${content}'!='' and '${created}'!='' and '${r_type}'=='${type}' and '${status}'!='' and '${sp_type}'!='' and '${version}'!=''    Set Variable    true
+    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+    Should Be Equal As Strings    ${flag}    true
+
+
+smoke-触漫学院消息
+    [Tags]    smoke
+    ${type}    Set Variable    11
+    ${response}=    分类消息    ${version}   ${type}    ${page}    ${pagesize}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.status_code}    200
+    log    ${response.json()['message']['message']}
+    Should Be Equal As Strings    ${response.json()['status']}    ok
+    Should Be Equal As Strings    ${response.json()['message']['message']}    显示信息

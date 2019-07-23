@@ -1,0 +1,92 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${type}    1    # 类型，1：吐槽；2：点赞；5，打赏;6,作品
+${last_id}    0    # 最后日志id
+${pagesize}    50
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke-吐槽消息
+    [Tags]    smoke
+    ${response}=    新分类消息    ${last_id}    ${type}    ${pagesize}
+    校验接口返回状态正常    ${response}
+
+吐槽消息返回list
+    ${response}=    新分类消息    ${last_id}    ${type}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    ${flag}=    Run Keyword If    ${length} >= 1    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
+    @{dataList}    Set Variable    ${response.json()['data']['list']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    ${log_type}    Get From Dictionary    ${data}    log_type
+    \    Run Keyword If    '${log_type}' == '1'    判断消息log_type=1的返回格式    ${data}
+    \    ...    ELSE IF    '${log_type}' == '2'    判断消息log_type=2的返回格式    ${data}
+    \    ...    ELSE IF    '${log_type}' == '3'    判断消息log_type=3的返回格式    ${data}
+    \    ...    ELSE IF    '${log_type}' == '4'    判断消息log_type=4的返回格式    ${data}
+    \    ...    ELSE    log    还没加入判断类型格式
+    Should Be Equal As Strings    ${flag}    true
+
+
+smoke-点赞消息
+    [Tags]    smoke
+    ${type}    Set Variable    2
+    ${response}=    新分类消息    ${last_id}    ${type}    ${pagesize}
+    校验接口返回状态正常    ${response}
+
+点赞消息返回list
+    ${type}    Set Variable    2
+    ${response}=    新分类消息    ${last_id}    ${type}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    ${flag}=    Run Keyword If    ${length} >= 1    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
+    @{dataList}    Set Variable    ${response.json()['data']['list']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    ${log_type}    Get From Dictionary    ${data}    log_type
+    \    Run Keyword If    '${log_type}' == '1'    判断消息log_type=1的返回格式    ${data}
+    \    ...    ELSE IF    '${log_type}' == '2'    判断消息log_type=2的返回格式    ${data}
+    \    ...    ELSE IF    '${log_type}' == '3'    判断消息log_type=3的返回格式    ${data}
+    \    ...    ELSE IF    '${log_type}' == '4'    判断消息log_type=4的返回格式    ${data}
+    \    ...    ELSE    log    还没加入判断类型格式
+    Should Be Equal As Strings    ${flag}    true
+
+
+smoke-打赏消息
+    [Tags]    smoke
+    ${type}    Set Variable    5
+    ${response}=    新分类消息    ${last_id}    ${type}    ${pagesize}
+    校验接口返回状态正常    ${response}
+
+
+smoke-作品消息
+    [Tags]    smoke
+    ${type}    Set Variable    6
+    ${response}=    新分类消息    ${last_id}    ${type}    ${pagesize}
+    校验接口返回状态正常    ${response}
+
+作品消息返回list
+    ${type}    Set Variable    6
+    ${response}=    新分类消息    ${last_id}    ${type}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    ${flag}=    Run Keyword If    ${length} >= 1    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
+    @{dataList}    Set Variable    ${response.json()['data']['list']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    ${log_type}    Get From Dictionary    ${data}    log_type
+    \    Run Keyword If    '${log_type}' == '1'    判断消息log_type=1的返回格式    ${data}
+    \    ...    ELSE IF    '${log_type}' == '2'    判断作品消息log_type=2的返回格式   ${data}
+    \    ...    ELSE IF    '${log_type}' == '3'    判断消息log_type=3的返回格式    ${data}
+    \    ...    ELSE IF    '${log_type}' == '4'    判断消息log_type=4的返回格式    ${data}
+    \    ...    ELSE    log    还没加入判断类型格式
+    Should Be Equal As Strings    ${flag}    true

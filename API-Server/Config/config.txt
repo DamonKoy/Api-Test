@@ -13,25 +13,20 @@ Resource          ../Common/sql.txt
 
 *** Variables ***
 # 获取token
-${install_token_api}    ?m=Api&c=User&a=token     # 测试服获取install_token
+${install_token_api}    ?m=Api&c=User&a=token    # 测试服获取install_token
 ${install_api}    ?m=Api&c=App&a=install    # 通过设备获取token
-
 # AdmUserIdentity
 ${AdmUserIdentity_get_identity_info_api}    index.php?m=Api&c=AdmUserIdentity&a=get_identity_info    # 新增用户身份
-${AdmUserIdentity_get_all_identity_admin_name_api}     index.php?m=Api&c=AdmUserIdentity&a=get_all_identity_admin_name     # 获取所有身份认证名称
-
+${AdmUserIdentity_get_all_identity_admin_name_api}    index.php?m=Api&c=AdmUserIdentity&a=get_all_identity_admin_name    # 获取所有身份认证名称
 # SpdiySearch
 ${SpdiySearch_get_automated_keyword_api}    ?m=Api&c=SpdiySearch&a=get_automated_keyword    # 获取搜索联想词
-
 # NewyearActivity
 ${NewyearActivity_get_newyear_activity_list_api}    ?m=Api&c=NewyearActivity&a=get_newyear_activity_list    # 获取寒假福利活动列表
 ${NewyearActivity_get_recharge_active_reward_api}    ?m=Api&c=NewyearActivity&a=get_recharge_active_reward    # 获取充值满赠
-
 # ChumanDrama
 ${ChumanDrama_muti_edit_role_api}    ?m=Api&c=ChumanDrama&a=muti_edit_role    # 新建（修改）漫剧角色
 ${ChumanDrama_muti_copy_role_api}    ?m=Api&c=ChumanDrama&a=muti_copy_role    # 复制漫剧角色(导入角色时使用)
 ${ChumanDrama_get_last_role_list_api}    ?m=Api&c=ChumanDrama&a=get_last_role_list    # 4.8.7-获取上一篇角色列表
-
 # Comic
 ${comic_edit_api}    ?m=Api&c=Comic&a=comic_edit    # 创建/编辑漫画单篇
 ${comic_create_comic_list_api}    ?m=Api&c=Comic&a=comic_create_comic_list    # 4.5.2-获取漫画单篇列表
@@ -40,41 +35,33 @@ ${Comic_group_add_api}    ?m=Api&c=Comic&a=group_add    # 创建漫画连载
 ${Comic_group_edit_api}    ?m=Api&c=Comic&a=group_edit    # 编辑漫画连载
 ${comic_create_group_list_api}    ?m=Api&c=Comic&a=comic_create_group_list    # 获取漫画连载列表
 ${Comic_group_del_api}    ?m=Api&c=Comic&a=group_del    # 删除漫画连载
-
 # WebUserRes
 ${WebUserRes_get_idcard_info_api}    m=Api&c=WebUserRes&a=get_idcard_info    # 4.8.7-获取身份详情
 ${WebUserRes_get_idcard_binding_status_api}    ?m=Api&c=WebUserRes&a=get_idcard_binding_status    # 4.8.7-获取绑定信息
 ${WebUserRes_binding_card_info_api}    ?m=Api&c=WebUserRes&a=binding_card_info    # 4.8.7-绑定身份证信息
 ${WebUserRes_edit_card_info_api}    ?m=Api&c=WebUserRes&a=edit_card_info    # 4.8.7-修改身份证信息
-
 # ChumanShop
 ${ChumanShop_edit_card_info_api}    ?m=Api&c=ChumanShop&a=edit_card_info    # 4.8.7-触漫修改身份证信息
 ${ChumanShop_binding_card_info_api}    ?m=Api&c=ChumanShop&a=binding_card_info    # 4.8.7-触漫绑定身份证信息
 ${ChumanShop_get_verification_code_new_api}    ?m=Api&c=ChumanShop&a=get_verification_code_new    # 4.8.7-触漫修改、添加身份认证验证码
 ${ChumanShop_get_calculate_withdrawals_info_api}    ?m=Api&c=ChumanShop&a=get_calculate_withdrawals_info    # 4.8.7-触漫获取提现税前/后及扣税信息
-${ChumanShop_get_shop_idcard_binding_info_api}    ?m=Api&c=ChumanShop&a=get_shop_idcard_binding_info   # 4.8.7-触漫获取绑定信息
-
+${ChumanShop_get_shop_idcard_binding_info_api}    ?m=Api&c=ChumanShop&a=get_shop_idcard_binding_info    # 4.8.7-触漫获取绑定信息
 # UserExtend
 ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的等级
-
 # UserRes
 ${UserRes_get_charge_scales_api}    ?m=Api&c=UserRes&a=get_charge_scales    # 4.8.7-充值比例列表
 ${UserRes_get_coins_info_api}    ?m=Api&c=UserRes&a=get_coins_info    # 4.8.7-兑换金币界面信息
 ${UserRes_get_my_gems_api}    ?m=Api&c=UserRes&a=get_my_gems    # 4.8.7-我的钻石
-
 # AdventureGame
 ${AdventureGame_get_my_game_group_list_api}    ?m=Api&c=AdventureGame&a=get_my_game_group_list    # 获取漫剧连载列表
 ${AdventureGame_edit_game_group_api}    ?m=Api&c=AdventureGame&a=edit_game_group    # 创建漫剧连载
 ${AdventureGame_delele_game_group_api}    ?m=Api&c=AdventureGame&a=delele_game_group    # 删除漫剧连载
-
 # Share
 ${Share_get_tag_list_api}    ?m=Api&c=Share&a=get_tag_list    # 获取连载标签列表
-
 # ChumanDramaGroup
 ${ChumanDramaGroup_edit_drama_group_api}    ?m=Api&c=ChumanDramaGroup&a=edit_drama_group    # 创建对话剧连载
 ${ChumanDramaGroup_del_drama_group_api}    ?m=Api&c=ChumanDramaGroup&a=del_drama_group    # 删除对话剧连载
 ${ChumanDramaGroup_get_manage_drama_group_list_api}    ?m=Api&c=ChumanDramaGroup&a=get_manage_drama_group_list    # 获取对话剧连载
-
 # HomePage
 ${HomePage_homepage_new_list_api}    ?m=Api&c=HomePage&a=homepage_new_list    # 获取首页信息列表
 ${HomePage_get_home_banner_list_api}    ?m=Api&c=HomePage&a=get_home_banner_list    # 获取首页banner列表
@@ -98,21 +85,36 @@ ${HomePage_homepage_new_list_api}    ?m=Api&c=HomePage&a=homepage_new_list    # 
 ${HomePage_reduce_recommend_work_api}    ?m=Api&c=HomePage&a=reduce_recommend_work    # 4.6.9-屏蔽推荐作品
 ${HomePage_square_scenarized_api}    ?m=Api&c=HomePage&a=square_scenarized    # 4.3.1-广场场景化
 ${HomePage_set_dislike_api}    ?m=Api&c=HomePage&a=set_dislike    # 4.8.3-feed流不喜欢
-
 # Spdiy
 ${Spdiy_get_asset_info_api}    ?m=Api&c=Spdiy&a=get_asset_info    # 获取用户服装店余额信息
 ${Spdiy_get_first_class_name_api}    ?m=Api&c=Spdiy&a=get_first_class_name    # 获取服装店获取第一类目
 ${Spdiy_get_resource_list_api}    ?m=Api&c=Spdiy&a=get_resource_list    # 获取服装店列表
 ${Spdiy_get_set_info_shop_api}    ?m=Api&c=Spdiy&a=get_set_info_shop    # 获取服装详情信息
 ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包详情
-
-
-
+# Notification
+${notification_page_api}    ?m=Api&c=Notification&a=notification_page    # 好友-消息通知列表
+${notification_category_page_api}    ?m=Api&c=Notification&a=notification_category_page    # 关注/触漫娘消息
+${notification_category_page_new_api}    ?m=Api&c=Notification&a=notification_category_page_new    # 分类消息
+# Cooperation
+${Cooperation_check_user_is_cooperate_api}    ?m=Api&c=Cooperation&a=check_user_is_cooperate    # 4.1.8-检查合作弹窗提示
+${Cooperation_get_cooperation_message_list_api}    ?m=Api&c=Cooperation&a=get_cooperation_message_list    # 4.8.4-获取作品合作消息列表
+${Cooperation_get_cooperater_unread_api}    ?m=Api&c=Cooperation&a=get_cooperater_unread    # 4.1.8找朋友未读消息数
+# Club
+${Club_get_user_join_list_api}    ?m=Api&c=Club&a=get_user_join_list    # 4.1.8-社团招募个人消息
+${Club_club_message_honor_list_api}    ?m=Api&c=Club&a=club_message_honor_list    # 社团消息
+${Club_getClubNoticeUnreadNum_api}    ?m=Api&c=Club&a=getClubNoticeUnreadNum    # 社团未读数量信息
+${Club_club_notice_list_api}    ?m=Api&c=club&a=club_notice_list    # 漫画社消息
+${Club_get_region_message_list_api}    ?m=Api&c=Club&a=get_region_message_list    # 漫区消息
+${Club_get_club_join_list_api}    ?m=Api&c=Club&a=get_club_join_list    # 招募处理
+# Channel
+${Channel_get_user_apply_list_api}    ?m=Api&c=Channel&a=get_user_apply_list    # 4.1.8-申请加入频道消息列表
+# Work
+${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8.4-获取企划消息列表
 
 *** Keywords ***
-# 获取token
 测试服获取install_token
     [Arguments]    ${user_id}
+    # 获取token
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    id=${user_id}
     ${headers}    Create Dictionary    Content-Type=application/json    versioncode=${versioncode}
@@ -129,7 +131,8 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
 
 获取install_token
     Create Session    new_request    &{host}[API]    debug=3
-    ${loginData}    Create Dictionary    device_model=LYA-AL00    device_brand=HUAWEI    device_token=7c169643-0d5b-471d-935e-82fd4cf896de    device_type=0    language=zh-hans    marketing_channel=chuman
+    ${loginData}    Create Dictionary    device_model=LYA-AL00    device_brand=HUAWEI    device_token=7c169643-0d5b-471d-935e-82fd4cf896de    device_type=0    language=zh-hans
+    ...    marketing_channel=chuman
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${install_api}    data=${loginData}    headers=${headers}
     log    ${response.content}
@@ -140,10 +143,9 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     Should Be Equal As Strings    ${response.json()['message']['message']}    操作成功
     ${data}    Create Dictionary    install_token=${response.json()['data']['install_token']}
     Set Suite Variable    ${install_token}    ${response.json()['data']['install_token']}
+    # AdmUserIdentity
     [Return]    ${data}
 
-
-# AdmUserIdentity
 新增用户身份
     [Arguments]    ${user_id}
     Create Session    new_request    &{host}[API]    debug=3
@@ -157,20 +159,18 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     ${loginData}    Create Dictionary    id=${user_id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    GET Request    new_request    ${AdmUserIdentity_get_all_identity_admin_name_api}    params=${loginData}    headers=${headers}
+    # SpdiySearch
     [Return]    ${response}
 
-
-# SpdiySearch
 获取搜索联想词
     [Arguments]    ${keyword}
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary    keyword=${keyword}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    GET Request    new_request    ${SpdiySearch_get_automated_keyword_api}    params=${loginData}    headers=${headers}
+    # NewyearActivity
     [Return]    ${response}
 
-
-# NewyearActivity
 获取寒假福利活动列表
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
@@ -184,22 +184,25 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     ${loginData}    Create Dictionary    reward_id=${reward_id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${NewyearActivity_get_recharge_active_reward_api}    data=${loginData}    headers=${headers}
+    # ChumanDrama
     [Return]    ${response}
 
-
-# ChumanDrama
 新建（修改）漫剧角色
-    [Arguments]    ${role_id}    ${drama_id}    ${avatar}    ${name}    ${sex}    ${image}    ${desc}    ${is_copy}
+    [Arguments]    ${role_id}    ${drama_id}    ${avatar}    ${name}    ${sex}    ${image}
+    ...    ${desc}    ${is_copy}
     Create Session    new_request    &{host}[API]    debug=3
-    ${loginData}    Create Dictionary    role_id=${role_id}    drama_id=${drama_id}    avatar=${avatar}    name=${name}    sex=${sex}    image=${image}    desc=${desc}    is_copy=${is_copy}
+    ${loginData}    Create Dictionary    role_id=${role_id}    drama_id=${drama_id}    avatar=${avatar}    name=${name}    sex=${sex}
+    ...    image=${image}    desc=${desc}    is_copy=${is_copy}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${ChumanDrama_muti_edit_role_api}    data=${loginData}    headers=${headers}
     [Return]    ${response}
 
 复制漫剧角色(导入角色时使用)
-    [Arguments]    ${role_id}    ${drama_id}    ${avatar}    ${name}    ${sex}    ${image}    ${desc}    ${is_copy}
+    [Arguments]    ${role_id}    ${drama_id}    ${avatar}    ${name}    ${sex}    ${image}
+    ...    ${desc}    ${is_copy}
     Create Session    new_request    &{host}[API]    debug=3
-    ${loginData}    Create Dictionary    role_id=${role_id}    drama_id=${drama_id}    avatar=${avatar}    name=${name}    sex=${sex}    image=${image}    desc=${desc}    is_copy=${is_copy}
+    ${loginData}    Create Dictionary    role_id=${role_id}    drama_id=${drama_id}    avatar=${avatar}    name=${name}    sex=${sex}
+    ...    image=${image}    desc=${desc}    is_copy=${is_copy}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${ChumanDrama_muti_copy_role_api}    data=${loginData}    headers=${headers}
     [Return]    ${response}
@@ -210,14 +213,15 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     ${loginData}    Create Dictionary    group_id=${group_id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    get Request    new_request    ${ChumanDrama_get_last_role_list_api}    params=${loginData}    headers=${headers}
+    # Comic
     [Return]    ${response}
 
-
-# Comic
 创建/编辑漫画单篇
-    [Arguments]    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
+    [Arguments]    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}
+    ...    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
     Create Session    new_request    &{host}[API]    debug=3
-    ${loginData}    Create Dictionary    id=${id}    title=${title}    data_json=${data_json}    font_face=${font_face}    title_image=${title_image}    version=${version}    state=${state}    block_count=${block_count}    intro=${intro}    comic_type=${comic_type}    group_id=${group_id}
+    ${loginData}    Create Dictionary    id=${id}    title=${title}    data_json=${data_json}    font_face=${font_face}    title_image=${title_image}
+    ...    version=${version}    state=${state}    block_count=${block_count}    intro=${intro}    comic_type=${comic_type}    group_id=${group_id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${comic_edit_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
@@ -268,10 +272,9 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     ${loginData}    Create Dictionary    id=${id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${Comic_group_del_api}    params=${loginData}    headers=${headers}
+    # WebUserRes
     [Return]    ${response}
 
-
-# WebUserRes
 获取身份详情
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
@@ -300,10 +303,9 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     ${loginData}    Create Dictionary    name=${name}    number=${number}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${WebUserRes_edit_card_info_api}    params=${loginData}    headers=${headers}
+    # ChumanShop
     [Return]    ${response}
 
-
-# ChumanShop
 触漫绑定身份证信息
     [Arguments]    ${type}    ${name}    ${card_num}
     Create Session    new_request    &{host}[API]    debug=3
@@ -342,19 +344,17 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     ${loginData}    Create Dictionary    shop_id=${shop_id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Get Request    new_request    ${ChumanShop_get_shop_idcard_binding_info_api}    params=${loginData}    headers=${headers}
+    # UserExtend
     [Return]    ${response}
 
-
-# UserExtend
 获取我的等级
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Get Request    new_request    ${UserExtend_my_grade}    params=${loginData}    headers=${headers}
+    # UserRes
     [Return]    ${response}
 
-
-# UserRes
 充值比例列表
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
@@ -375,10 +375,9 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     ${loginData}    Create Dictionary    version=${version}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Get Request    new_request    ${UserRes_get_my_gems_api}    params=${loginData}    headers=${headers}
+    # AdventureGame
     [Return]    ${response}
 
-
-# AdventureGame
 获取漫剧连载列表
     [Arguments]    ${page}    ${pagesize}
     Create Session    new_request    &{host}[API]    debug=3
@@ -388,9 +387,11 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     [Return]    ${response}
 
 创建漫剧连载
-    [Arguments]    ${title}    ${title_image}    ${music_url}    ${cover_data_json}    ${cover_motion_json}    ${tags}    ${desc}    ${style_id}    ${video_title}
+    [Arguments]    ${title}    ${title_image}    ${music_url}    ${cover_data_json}    ${cover_motion_json}    ${tags}
+    ...    ${desc}    ${style_id}    ${video_title}
     Create Session    new_request    &{host}[API]    debug=3
-    ${loginData}    Create Dictionary    title=${title}    title_image=${title_image}    music_url=${music_url}    cover_data_json=${cover_data_json}    cover_motion_json=${cover_motion_json}    tags=${tags}    desc=${desc}    style_id=${style_id}    video_title=${video_title}
+    ${loginData}    Create Dictionary    title=${title}    title_image=${title_image}    music_url=${music_url}    cover_data_json=${cover_data_json}    cover_motion_json=${cover_motion_json}
+    ...    tags=${tags}    desc=${desc}    style_id=${style_id}    video_title=${video_title}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${AdventureGame_edit_game_group_api}    params=${loginData}    headers=${headers}
     [Return]    ${response}
@@ -401,19 +402,17 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     ${loginData}    Create Dictionary    group_id=${group_id}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Post Request    new_request    ${AdventureGame_delele_game_group_api}    params=${loginData}    headers=${headers}
+    # Share
     [Return]    ${response}
 
-
-# Share
 获取连载标签列表
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Get Request    new_request    ${Share_get_tag_list_api}    params=${loginData}    headers=${headers}
+    # ChumanDramaGroup
     [Return]    ${response}
 
-
-# ChumanDramaGroup
 创建对话剧连载
     [Arguments]    ${group_id}    ${title_image}    ${title}    ${category}    ${desc}
     Create Session    new_request    &{host}[API]    debug=3
@@ -436,6 +435,7 @@ ${Spdiy_package_info_api}    ?m=Api&c=Spdiy&a=package_info    # 获取素材包�
     ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
     ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
     ${response}    Get Request    new_request    ${ChumanDramaGroup_get_manage_drama_group_list_api}    params=${loginData}    headers=${headers}
+    # HomePage
     [Return]    ${response}
 
 
@@ -609,8 +609,125 @@ feed流不喜欢
     [Return]    ${response}
 
 
+# Notification
+好友-消息通知列表
+    [Arguments]    ${version}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    version=${version}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${notification_page_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
 
-# ------
+分类消息
+    [Arguments]    ${version}   ${type}    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    version=${version}    type=${type}    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${notification_category_page_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+新分类消息
+    [Arguments]    ${last_id}    ${type}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    last_id=${last_id}    type=${type}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${notification_category_page_new_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+# Cooperation
+检查合作弹窗提示
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Cooperation_check_user_is_cooperate_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+获取作品合作消息列表
+    [Arguments]    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary        page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Cooperation_get_cooperation_message_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+找朋友未读消息数
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Cooperation_get_cooperater_unread_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+# Club
+社团招募个人消息
+    [Arguments]    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Club_get_user_join_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+社团消息
+    [Arguments]    ${page}    ${version}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    version=${version}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Club_club_message_honor_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+社团未读数量信息
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Club_getClubNoticeUnreadNum_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+漫画社消息
+    [Arguments]    ${page}    ${type}    ${version}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    type=${type}    version=${version}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Club_club_notice_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+漫区消息
+    [Arguments]    ${club_id}    ${last_id}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    club_id=${club_id}    last_id=${last_id}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Club_get_region_message_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+招募处理
+    [Arguments]    ${page}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Club_get_club_join_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+# Channel
+申请加入频道消息列表
+    [Arguments]    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Channel_get_user_apply_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+# Work
+获取企划消息列表
+    [Arguments]    ${last_id}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    last_id=${last_id}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Work_get_club_join_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+
 获取当前时间戳
     ${date}    get current Date
     ${date}    convert Date    ${date}    epoch
@@ -654,6 +771,91 @@ feed流不喜欢
     \    ${flag}    Run Keyword If    '${id}'!='' and '${tag_id}'!='' and '${tag_name}'!='' and '${tag_img}'!=''    set Variable    true
     \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
     Should Be Equal As Strings    ${flag}    true
+
+判断消息log_type=1的返回格式
+    [Arguments]    ${data}
+    Should Contain    ${data}    avatar
+    Should Contain    ${data}    nickname
+    ${id}    Get From Dictionary    ${data}    id
+    ${user_id}    Get From Dictionary    ${data}    user_id
+    ${sender_id}    Get From Dictionary    ${data}    sender_id
+    ${title}   Get From Dictionary    ${data}    title
+    ${content}    Get From Dictionary    ${data}    content
+    ${jump_type}    Get From Dictionary    ${data}    jump_type
+    ${jump_id}    Get From Dictionary    ${data}    jump_id
+    ${r_status}    Get From Dictionary    ${data}    status
+    ${created}    Get From Dictionary    ${data}    created
+    ${identity_level}    Get From Dictionary    ${data}    identity_level
+    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${content}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${r_status}'!='' and '${created}'!='' and '${identity_level}'!=''    Set Variable    true
+    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+
+判断消息log_type=2的返回格式
+    [Arguments]    ${data}
+    Should Contain    ${data}    avatar
+    Should Contain    ${data}    relation_id
+    ${id}    Get From Dictionary    ${data}    id
+    ${user_id}    Get From Dictionary    ${data}    user_id
+    ${sender_id}    Get From Dictionary    ${data}    sender_id
+    ${title}   Get From Dictionary    ${data}    title
+    ${content}    Get From Dictionary    ${data}    content
+    ${jump_type}    Get From Dictionary    ${data}    jump_type
+    ${jump_id}    Get From Dictionary    ${data}    jump_id
+    ${nickname}   Get From Dictionary    ${data}    nickname
+    ${r_status}    Get From Dictionary    ${data}    status
+    ${created}    Get From Dictionary    ${data}    created
+    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${content}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${nickname}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
+    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+
+判断作品消息log_type=2的返回格式
+    [Arguments]    ${data}
+    Should Contain    ${data}    avatar
+    ${id}    Get From Dictionary    ${data}    id
+    ${user_id}    Get From Dictionary    ${data}    user_id
+    ${sender_id}    Get From Dictionary    ${data}    sender_id
+    ${title}   Get From Dictionary    ${data}    title
+    ${content}    Get From Dictionary    ${data}    content
+    ${jump_type}    Get From Dictionary    ${data}    jump_type
+    ${jump_id}    Get From Dictionary    ${data}    jump_id
+    ${nickname}   Get From Dictionary    ${data}    nickname
+    ${r_status}    Get From Dictionary    ${data}    status
+    ${created}    Get From Dictionary    ${data}    created
+    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${content}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${nickname}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
+    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+
+判断消息log_type=3的返回格式
+    [Arguments]    ${data}
+    Should Contain    ${data}    reply_to
+    Should Contain    ${data}    avatar
+    Should Contain    ${data}    relation_id
+    ${id}    Get From Dictionary    ${data}    id
+    ${user_id}    Get From Dictionary    ${data}    user_id
+    ${sender_id}    Get From Dictionary    ${data}    sender_id
+    ${title}   Get From Dictionary    ${data}    title
+    ${content}    Get From Dictionary    ${data}    content
+    ${jump_type}    Get From Dictionary    ${data}    jump_type
+    ${jump_id}    Get From Dictionary    ${data}    jump_id
+    ${nickname}   Get From Dictionary    ${data}    nickname
+    ${r_status}    Get From Dictionary    ${data}    status
+    ${created}    Get From Dictionary    ${data}    created
+    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${content}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${nickname}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
+    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+
+判断消息log_type=4的返回格式
+    [Arguments]    ${data}
+    Should Contain    ${data}    avatar
+    Should Contain    ${data}    content
+    Should Contain    ${data}    jump_url
+    Should Contain    ${data}    title
+    ${id}    Get From Dictionary    ${data}    id
+    ${user_id}    Get From Dictionary    ${data}    user_id
+    ${sender_id}    Get From Dictionary    ${data}    sender_id
+    ${jump_type}    Get From Dictionary    ${data}    jump_type
+    ${jump_id}    Get From Dictionary    ${data}    jump_id
+    ${nickname}   Get From Dictionary    ${data}    nickname
+    ${r_status}    Get From Dictionary    ${data}    status
+    ${created}    Get From Dictionary    ${data}    created
+    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${nickname}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
+    Run Keyword If    '${flag}'=='${None}'    Exit for loop
 
 校验接口返回状态正常
     [Arguments]    ${response}    # 接口返回数据
