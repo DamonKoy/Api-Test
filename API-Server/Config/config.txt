@@ -7,7 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           DateTime
 Library           NewLibrary
-Resource          ../Hosts/host-api2.txt
+Resource          ../Hosts/host.txt
 Resource          ../Common/constant.txt
 Resource          ../Common/sql.txt
 
@@ -1005,8 +1005,6 @@ feed流不喜欢
     Should Be True    ${response.json()['data']['list'][${i}]['club']['day_num']} >= 0
     Should Be True    ${response.json()['data']['list'][${i}]['status']['join_status_id']} >= 0
     Should Contain    ${response.json()['data']['list'][${i}]['status']}    name
-    Should Be True    ${response.json()['data']['list'][${i}]['deal_by']['user_id']} >= 0
-    Should Contain    ${response.json()['data']['list'][${i}]['deal_by']}    nickname
 
 判断社团招募个人信息type=2的返回格式
     [Arguments]    ${response}    ${i}

@@ -32,6 +32,6 @@ smoke
     ${flag}=    Run Keyword If    ${length} >= 1    Set Variable    true
     Pass Execution If    '${flag}' != 'true'    log    跳过校验
     : FOR    ${i}    INRANGE    ${length}
-    \    Run Keyword If    ${response.json()['data']['list'][${i}]['type']} == 1    判断社团招募个人信息type=1的返回格式
-    \    ELSE IF    ${response.json()['data']['list'][${i}]['type']} == 2    判断社团招募个人信息type=2的返回格式
-    \    ESLE    log    暂时没有加入该类型的判断
+    \    Run Keyword If    ${response.json()['data']['list'][${i}]['type']} == 1    判断社团招募个人信息type=1的返回格式    ${response}    ${i}
+    \    ...    ELSE IF    ${response.json()['data']['list'][${i}]['type']} == 2    判断社团招募个人信息type=2的返回格式    ${response}    ${i}
+    \    ...    ELSE    log    还没加入判断类型格式
