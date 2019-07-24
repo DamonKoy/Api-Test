@@ -15,3 +15,12 @@ smoke
     [Tags]    smoke
     ${response}=    社团消息    ${page}    ${version}
     校验接口返回状态正常    ${response}
+
+
+校验没有返回值的格式
+    [Tags]    smoke
+    ${response}=    社团消息    ${page}    ${version}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['honor_list']}
+    ${flag}=    Run Keyword If    ${length} == 0    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验

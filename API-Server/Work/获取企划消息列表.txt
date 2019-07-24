@@ -1,0 +1,53 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${last_id}    0
+${pagesize}    10
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    获取企划消息列表    ${last_id}    ${pagesize}
+    校验接口返回状态正常    ${response}
+
+校验返回值list
+    [Tags]    smoke
+    ${response}=    获取企划消息列表    ${last_id}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    ${flag}=    Run Keyword If    ${length} >= 1    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
+    @{dataList}    Set Variable    ${response.json()['data']['list']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    ${create_time}    Get From Dictionary    ${data}    create_time
+    \    ${content}    Get From Dictionary    ${data}    content
+    \    ${notice_id}    Get From Dictionary    ${data}    notice_id
+    \    ${title}    Get From Dictionary    ${data}    title
+    \    ${target_id}   Get From Dictionary    ${data}    target_id
+    \    ${target_type}    Get From Dictionary    ${data}    target_type
+    \    ${flag}    Run Keyword If    '${create_time}'!='' and '${content}'!='' and '${notice_id}'!='' and '${title}'!='' and '${target_id}'!='' and '${target_type}'!=''    Set Variable    true
+    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+    Should Be Equal As Strings    ${flag}    true
+
+校验返回值user_info
+    [Tags]    smoke
+    ${response}=    获取企划消息列表    ${last_id}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['list']}
+    ${flag}=    Run Keyword If    ${length} >= 1    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
+    : FOR    ${i}    IN RANGE    ${length}
+    \    Log    ${response.json()['data']['list'][${i}]['user_info']}
+    \    Should Be True    ${response.json()['data']['list'][${i}]['user_info']['user_id']} > 0
+    \    Should Contain    ${response.json()['data']['list'][${i}]['user_info']}    nickname
+    \    Should Contain    ${response.json()['data']['list'][${i}]['user_info']}    avatar
+    \    Should Be True    ${response.json()['data']['list'][${i}]['user_info']['level']} >= 0
+    \    Should Be True    ${response.json()['data']['list'][${i}]['user_info']['identity_level']} >= 0
+    Should Be Equal As Strings    ${flag}    true

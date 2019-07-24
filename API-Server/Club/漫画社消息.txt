@@ -16,3 +16,36 @@ smoke
     [Tags]    smoke
     ${response}=    漫画社消息    ${page}    ${type}    ${version}
     校验接口返回状态正常    ${response}
+
+校验没有返回值的格式
+    [Tags]    smoke
+    ${response}=    漫画社消息    ${page}    ${type}    ${version}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['notice_list']}
+    ${flag}=    Run Keyword If    ${length} == 0    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
+
+校验返回值list
+    ${response}=    漫画社消息    ${page}    ${type}    ${version}
+    校验接口返回状态正常    ${response}
+    ${length} =    Get Length    ${response.json()['data']['notice_list']}
+    ${flag}=    Run Keyword If    ${length} >= 1    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
+    @{dataList}    Set Variable    ${response.json()['data']['notice_list']}
+    : FOR    ${data}    IN    @{dataList}
+    \    Log    ${data}
+    \    Should Contain    ${data}    avatar
+    \    Should Contain    ${data}    dispose
+    \    Should Contain    ${data}    target_type
+    \    Should Contain    ${data}    target_status
+    \    Should Contain    ${data}    identity_level
+    \    ${r_type}    Get From Dictionary    ${data}    type
+    \    ${user_id}    Get From Dictionary    ${data}    user_id
+    \    ${nickname}    Get From Dictionary    ${data}    nickname
+    \    ${user_type}    Get From Dictionary    ${data}    user_type
+    \    ${target_id}   Get From Dictionary    ${data}    target_id
+    \    ${content}    Get From Dictionary    ${data}    content
+    \    ${mtime}   Get From Dictionary    ${data}    mtime
+    \    ${flag}    Run Keyword If    '${r_type}'!='' and '${user_id}'!='' and '${nickname}'!='' and '${user_type}'!='' and '${target_id}'!='' and '${content}'!='' and '${mtime}'!=''    Set Variable    true
+    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+    Should Be Equal As Strings    ${flag}    true

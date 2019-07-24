@@ -772,6 +772,63 @@ feed流不喜欢
     \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
     Should Be Equal As Strings    ${flag}    true
 
+# 分类消息
+判断消息sp_type=1的返回格式
+    [Arguments]    ${data}
+    ${id}    Get From Dictionary    ${data}    id
+    ${news_id}    Get From Dictionary    ${data}    news_id
+    ${title}   Get From Dictionary    ${data}    title
+    ${content}    Get From Dictionary    ${data}    content
+    ${created}    Get From Dictionary    ${data}    created
+    ${r_type}    Get From Dictionary    ${data}    type
+    ${status}    Get From Dictionary    ${data}    status
+    ${version}    Get From Dictionary    ${data}    version
+    ${r_data}    Get From Dictionary    ${data}    data
+    ${flag}    Run Keyword If    '${id}'!='' and '${news_id}'!='' and '${title}'!='' and '${content}'!='' and '${created}'!='' and '${r_type}'=='${type}' and '${version}'!='' and '${r_data}'=='0'    Set Variable    true
+    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+
+判断消息sp_type=6的返回格式
+    [Arguments]    ${data}
+    ${id}    Get From Dictionary    ${data}    id
+    ${user_id}    Get From Dictionary    ${data}    user_id
+    ${sender_id}    Get From Dictionary    ${data}    sender_id
+    ${title}   Get From Dictionary    ${data}    title
+    ${content}    Get From Dictionary    ${data}    content
+    ${created}    Get From Dictionary    ${data}    created
+    ${r_type}    Get From Dictionary    ${data}    type
+    ${status}    Get From Dictionary    ${data}    status
+    ${r_data}    Get From Dictionary    ${data}    data
+    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${content}'!='' and '${created}'!='' and '${r_type}'=='${type}' and '${r_data}'!=''    Set Variable    true
+    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+
+判断消息sp_type=46的返回格式
+    [Arguments]    ${data}
+    ${id}    Get From Dictionary    ${data}    id
+    ${news_id}    Get From Dictionary    ${data}    news_id
+    ${title}   Get From Dictionary    ${data}    title
+    ${content}    Get From Dictionary    ${data}    content
+    ${created}    Get From Dictionary    ${data}    created
+    ${r_type}    Get From Dictionary    ${data}    type
+    ${status}    Get From Dictionary    ${data}    status
+    ${version}    Get From Dictionary    ${data}    version
+    ${r_data}    Get From Dictionary    ${data}    data
+    ${flag}    Run Keyword If    '${id}'!='' and '${news_id}'!='' and '${title}'!='' and '${content}'!='' and '${created}'!='' and '${r_type}'=='${type}' and '${version}'!='' and '${r_data}'!='' and '${r_data}'!='0'    Set Variable    true
+    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+
+判断消息sp_type=47的返回格式
+    [Arguments]    ${data}
+    ${id}    Get From Dictionary    ${data}    id
+    ${news_id}    Get From Dictionary    ${data}    news_id
+    ${title}   Get From Dictionary    ${data}    title
+    ${content}    Get From Dictionary    ${data}    content
+    ${created}    Get From Dictionary    ${data}    created
+    ${r_type}    Get From Dictionary    ${data}    type
+    ${status}    Get From Dictionary    ${data}    status
+    ${version}    Get From Dictionary    ${data}    version
+    ${flag}    Run Keyword If    '${id}'!='' and '${news_id}'!='' and '${title}'!='' and '${content}'!='' and '${created}'!='' and '${r_type}'=='${type}' and '${version}'!=''    Set Variable    true
+    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+
+# 新分类消息
 判断消息log_type=1的返回格式
     [Arguments]    ${data}
     Should Contain    ${data}    avatar

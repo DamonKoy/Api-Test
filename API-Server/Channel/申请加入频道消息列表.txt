@@ -3,9 +3,8 @@ Default Tags
 Resource          ../Config/config.txt
 
 *** variable ***
-${club_id}
-${last_id}    0
-${pagesize}    30
+${page}    1
+${pagesize}    20
 
 *** Test Cases ***
 测试服获取install_token
@@ -14,12 +13,12 @@ ${pagesize}    30
 
 smoke
     [Tags]    smoke
-    ${response}=    漫区消息    ${club_id}    ${last_id}    ${pagesize}
+    ${response}=    申请加入频道消息列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
 
-校验没有返回值的格式
+校验没有值返回格式
     [Tags]    smoke
-    ${response}=    漫区消息    ${club_id}    ${last_id}    ${pagesize}
+    ${response}=    申请加入频道消息列表    ${page}    ${pagesize}
     校验接口返回状态正常    ${response}
     ${length} =    Get Length    ${response.json()['data']['list']}
     ${flag}=    Run Keyword If    ${length} == 0    Set Variable    true

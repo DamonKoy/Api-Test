@@ -78,17 +78,11 @@ smoke-触漫娘消息
     : FOR    ${data}    IN    @{dataList}
     \    Log    ${data}
     \    Should Contain    ${data}    data
-    \    ${id}    Get From Dictionary    ${data}    id
-    #\    ${news_id}    Get From Dictionary    ${data}    news_id
-    \    ${title}   Get From Dictionary    ${data}    title
-    \    ${content}    Get From Dictionary    ${data}    content
-    \    ${created}    Get From Dictionary    ${data}    created
-    \    ${r_type}    Get From Dictionary    ${data}    type
-    \    ${status}    Get From Dictionary    ${data}    status
     \    ${sp_type}    Get From Dictionary    ${data}    sp_type
-    \    ${version}    Get From Dictionary    ${data}    version
-    \    ${flag}    Run Keyword If    '${id}'!='' and '${title}'!='' and '${content}'!='' and '${created}'!='' and '${r_type}'=='${type}' and '${status}'!='' and '${sp_type}'!='' and '${version}'!=''    Set Variable    true
-    \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+    \    Run Keyword If    '${sp_type}' == '1'    判断消息sp_type=1的返回格式    ${data}
+    \    ...    ELSE IF    '${sp_type}' == '6'    判断消息sp_type=6的返回格式    ${data}
+    \    ...    ELSE IF    '${sp_type}' == '46'    判断消息sp_type=46的返回格式    ${data}
+    \    ...    ELSE IF    '${log_type}' == '47'    判断消息sp_type=47的返回格式    ${data}
     Should Be Equal As Strings    ${flag}    true
 
 

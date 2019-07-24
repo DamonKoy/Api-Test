@@ -15,3 +15,28 @@ smoke
     [Tags]    smoke
     ${response}=    社团未读数量信息
     校验接口返回状态正常    ${response}
+
+校验返回值club_unread_num
+    ${response}=    社团未读数量信息
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['club_unread_num']} >= 0
+
+校验返回值weibo_unread_num
+    ${response}=    社团未读数量信息
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['weibo_unread_num']} >= 0
+
+校验返回值work_unread_num
+    ${response}=    社团未读数量信息
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['work_unread_num']} >= 0
+
+校验返回值recruitment_unread_num
+    ${response}=    社团未读数量信息
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['recruitment_unread_num']} >= 0
+
+校验返回值post_unread_num
+    ${response}=    社团未读数量信息
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['post_unread_num']} >= 0
