@@ -15,18 +15,31 @@ ${version}    1
 smoke
     [Tags]    smoke
     ${response}=    漫画社消息    ${page}    ${type}    ${version}
+    ${flag}=    Run Keyword If    '${response.json()['status']}' == 'ok'    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
     校验接口返回状态正常    ${response}
 
 校验没有返回值的格式
     [Tags]    smoke
     ${response}=    漫画社消息    ${page}    ${type}    ${version}
+    ${flag}=    Run Keyword If    '${response.json()['status']}' == 'ok'    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
     校验接口返回状态正常    ${response}
     ${length} =    Get Length    ${response.json()['data']['notice_list']}
     ${flag}=    Run Keyword If    ${length} == 0    Set Variable    true
     Pass Execution If    '${flag}' != 'true'    log    跳过校验
 
+校验没有加入漫画社的情况
+    [Tags]    smoke
+    ${response}=    漫画社消息    ${page}    ${type}    ${version}
+    ${flag}=    Run Keyword If    '${response.json()['status']}' == 'error'    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
+    Should Be Equal As Strings    ${response.json()['message']['message']}    你还没有加入漫画社
+
 校验返回值list
     ${response}=    漫画社消息    ${page}    ${type}    ${version}
+    ${flag}=    Run Keyword If    '${response.json()['status']}' == 'ok'    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
     校验接口返回状态正常    ${response}
     ${length} =    Get Length    ${response.json()['data']['notice_list']}
     ${flag}=    Run Keyword If    ${length} >= 1    Set Variable    true

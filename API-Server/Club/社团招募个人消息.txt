@@ -31,23 +31,7 @@ smoke
     ${length} =    Get Length    ${response.json()['data']['list']}
     ${flag}=    Run Keyword If    ${length} >= 1    Set Variable    true
     Pass Execution If    '${flag}' != 'true'    log    跳过校验
-    Should Be True    ${response.json()['data']['list'][0]['join_id']} > 0
-    Should Be True    ${response.json()['data']['list'][0]['type']} > 0
-    Should Contain    ${response.json()['data']['list'][0]}    create_time
-    Should Contain    ${response.json()['data']['list'][0]}    content
-    Should Be True    ${response.json()['data']['list'][0]['club']['club_id']} > 0
-    Should Be True    ${response.json()['data']['list'][0]['club']['level']} > 0
-    Should Contain    ${response.json()['data']['list'][0]['club']}    name
-    Should Contain    ${response.json()['data']['list'][0]['club']}    logo_url
-    Should Contain    ${response.json()['data']['list'][0]['club']}    descp
-    Should Be True    ${response.json()['data']['list'][0]['club']['member_num']} >= 0
-    Should Be True    ${response.json()['data']['list'][0]['club']['allow_member_num']} >= 0
-    Should Be True    ${response.json()['data']['list'][0]['club']['status']['status_id']} >= 0
-    Should Contain    ${response.json()['data']['list'][0]['club']['status']}    name
-    Should Be True    ${response.json()['data']['list'][0]['club']['allow_apply']}>= 0
-    Should Be True    ${response.json()['data']['list'][0]['club']['no_audit']} >= 0
-    Should Be True    ${response.json()['data']['list'][0]['club']['day_num']} >= 0
-    Should Be True    ${response.json()['data']['list'][0]['status']['join_status_id']} >= 0
-    Should Contain    ${response.json()['data']['list'][0]['status']}    name
-    Should Be True    ${response.json()['data']['list'][0]['deal_by']['user_id']} >= 0
-    Should Contain    ${response.json()['data']['list'][0]['deal_by']}    nickname
+    : FOR    ${i}    INRANGE    ${length}
+    \    Run Keyword If    ${response.json()['data']['list'][${i}]['type']} == 1    判断社团招募个人信息type=1的返回格式
+    \    ELSE IF    ${response.json()['data']['list'][${i}]['type']} == 2    判断社团招募个人信息type=2的返回格式
+    \    ESLE    log    暂时没有加入该类型的判断

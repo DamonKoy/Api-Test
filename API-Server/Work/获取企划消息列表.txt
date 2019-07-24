@@ -45,7 +45,7 @@ smoke
     Pass Execution If    '${flag}' != 'true'    log    跳过校验
     : FOR    ${i}    IN RANGE    ${length}
     \    Log    ${response.json()['data']['list'][${i}]['user_info']}
-    \    Should Be True    ${response.json()['data']['list'][${i}]['user_info']['user_id']} > 0
+    \    Should Be True    ${response.json()['data']['list'][${i}]['user_info']['user_id']} >= 0
     \    Should Contain    ${response.json()['data']['list'][${i}]['user_info']}    nickname
     \    Should Contain    ${response.json()['data']['list'][${i}]['user_info']}    avatar
     \    Should Be True    ${response.json()['data']['list'][${i}]['user_info']['level']} >= 0

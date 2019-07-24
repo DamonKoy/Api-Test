@@ -1,0 +1,29 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${page}    1
+${pagesize}    20
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    获取好友列表未读数
+    校验接口返回状态正常    ${response}
+
+校验值返值action_unread_num
+    [Tags]    smoke
+    ${response}=    获取好友列表未读数
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['action_unread_num']} >= 0
+
+校验值返值friend_unread_num
+    [Tags]    smoke
+    ${response}=    获取好友列表未读数
+    校验接口返回状态正常    ${response}
+    Should Be True    ${response.json()['data']['friend_unread_num']} >= 0

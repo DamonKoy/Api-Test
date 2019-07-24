@@ -1,0 +1,33 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    ${island_id}    生成随机6位数字
+    测试服获取install_token    &{user_id}[user2]
+    Set Suite Variable    ${island_id}
+
+smoke
+    [Tags]    smoke
+    ${response}=    鼓励梦映岛内容    ${island_id}
+    校验接口返回状态正常    ${response}
+    Should Not Be Equal As Strings    ${response.json()['data']['result']}    true
+
+校验重复鼓励
+    [Tags]    smoke
+    ${response}=    鼓励梦映岛内容    ${island_id}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.json()['status']}    error
+    Should Be Equal As Strings    ${response.json()['message']['message']}    你已经鼓励过了
+
+校验不存在的island_id
+    ${island_id}    Set Variable    999999999
+    ${response}=    鼓励梦映岛内容    ${island_id}
+    log    ${response.content}
+    Should Be Equal As Strings    ${response.json()['status']}    error
+    Should Be Equal As Strings    ${response.json()['message']['message']}    梦映岛不存在

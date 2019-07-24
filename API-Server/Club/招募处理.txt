@@ -13,12 +13,23 @@ ${page}    1
 smoke
     [Tags]    smoke
     ${response}=    招募处理    ${page}
+    ${flag}=    Run Keyword If    '${response.json()['status']}' == 'ok'    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
     校验接口返回状态正常    ${response}
 
 校验没有值返回格式
     [Tags]    smoke
     ${response}=    招募处理    ${page}
-    校验接口返回状态正常    ${response}
+    ${flag}=    Run Keyword If    '${response.json()['status']}' == 'ok'    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
     ${length} =    Get Length    ${response.json()['data']['list']}
     ${flag}=    Run Keyword If    ${length} == 0    Set Variable    true
     Pass Execution If    '${flag}' != 'true'    log    跳过校验
+
+校验没有权限的情况
+    [Tags]    smoke
+    ${response}=    招募处理    ${page}
+    log    ${response.content}
+    ${flag}=    Run Keyword If    '${response.json()['status']}' == 'error'    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验
+    Should Be Equal As Strings    ${response.json()['message']['message']}    你的权限不足

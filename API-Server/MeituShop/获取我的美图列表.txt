@@ -1,0 +1,24 @@
+*** Settings ***
+Default Tags
+Resource          ../Config/config.txt
+
+*** variable ***
+${page}    1
+${pagesize}    30
+
+*** Test Cases ***
+测试服获取install_token
+    [Tags]    smoke
+    测试服获取install_token    &{user_id}[user2]
+
+smoke
+    [Tags]    smoke
+    ${response}=    获取我的美图列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+
+校验没有值返回格式
+    [Tags]    smoke
+    ${response}=    获取我的美图列表    ${page}    ${pagesize}
+    校验接口返回状态正常    ${response}
+    ${flag}=    Run Keyword If    ${response.json()['data']['list']} == ''    Set Variable    true
+    Pass Execution If    '${flag}' != 'true'    log    跳过校验

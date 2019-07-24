@@ -2,7 +2,7 @@
 &{host}    API=https://api2.chumanapp.com/secure/
 &{MAuthorization1}    通用=8cc4a3ffb5eef4b5f569ca110d390ee7
 
-&{user_id}    user1=38707284     user2=39160354
+&{user_id}    user1=38707284    user2=34914318     user3=39160354
 &{user}    user1=13710400001    user2=13710400002
 &{password}    password1=123456
 

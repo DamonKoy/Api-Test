@@ -46,6 +46,7 @@ ${ChumanShop_binding_card_info_api}    ?m=Api&c=ChumanShop&a=binding_card_info  
 ${ChumanShop_get_verification_code_new_api}    ?m=Api&c=ChumanShop&a=get_verification_code_new    # 4.8.7-触漫修改、添加身份认证验证码
 ${ChumanShop_get_calculate_withdrawals_info_api}    ?m=Api&c=ChumanShop&a=get_calculate_withdrawals_info    # 4.8.7-触漫获取提现税前/后及扣税信息
 ${ChumanShop_get_shop_idcard_binding_info_api}    ?m=Api&c=ChumanShop&a=get_shop_idcard_binding_info    # 4.8.7-触漫获取绑定信息
+${ChumanShop_chuman_shop_noti_api}    ?m=Api&c=ChumanShop&a=chuman_shop_noti    # 店铺消息
 # UserExtend
 ${UserExtend_my_grade}    ?m=Api&c=UserExtend&a=my_grade    # 4.8.7-获取我的等级
 # UserRes
@@ -110,6 +111,14 @@ ${Club_get_club_join_list_api}    ?m=Api&c=Club&a=get_club_join_list    # 招募
 ${Channel_get_user_apply_list_api}    ?m=Api&c=Channel&a=get_user_apply_list    # 4.1.8-申请加入频道消息列表
 # Work
 ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8.4-获取企划消息列表
+# Chat
+${Chat_get_common_chat_unread_num_api}    ?m=Api&c=Chat&a=get_common_chat_unread_num    # 4.6.8-获取好友列表未读数
+# MeituShop
+${MeituShop_get_my_meitu_list_api}    ?m=Api&c=MeituShop&a=get_my_meitu_list    # 4.2.0-获取我的美图列表
+# Island
+${Island_like_island_api}    ?m=Api&c=Island&a=like_island    # 鼓励梦映岛内容
+
+
 
 *** Keywords ***
 测试服获取install_token
@@ -146,6 +155,8 @@ ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8
     # AdmUserIdentity
     [Return]    ${data}
 
+
+# AdmUserIdentity
 新增用户身份
     [Arguments]    ${user_id}
     Create Session    new_request    &{host}[API]    debug=3
@@ -162,6 +173,8 @@ ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8
     # SpdiySearch
     [Return]    ${response}
 
+
+# SpdiySearch
 获取搜索联想词
     [Arguments]    ${keyword}
     Create Session    new_request    &{host}[API]    debug=3
@@ -171,6 +184,8 @@ ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8
     # NewyearActivity
     [Return]    ${response}
 
+
+# NewyearActivity
 获取寒假福利活动列表
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
@@ -187,6 +202,8 @@ ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8
     # ChumanDrama
     [Return]    ${response}
 
+
+# ChumanDrama
 新建（修改）漫剧角色
     [Arguments]    ${role_id}    ${drama_id}    ${avatar}    ${name}    ${sex}    ${image}
     ...    ${desc}    ${is_copy}
@@ -216,6 +233,8 @@ ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8
     # Comic
     [Return]    ${response}
 
+
+# Comic
 创建/编辑漫画单篇
     [Arguments]    ${id}    ${title}    ${data_json}    ${font_face}    ${title_image}    ${version}
     ...    ${state}    ${block_count}    ${intro}    ${comic_type}    ${group_id}
@@ -275,6 +294,8 @@ ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8
     # WebUserRes
     [Return]    ${response}
 
+
+# WebUserRes
 获取身份详情
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
@@ -347,6 +368,16 @@ ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8
     # UserExtend
     [Return]    ${response}
 
+店铺消息
+    [Arguments]    ${type}    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    type=${type}    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${ChumanShop_chuman_shop_noti_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+# UserExtend
 获取我的等级
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
@@ -355,6 +386,8 @@ ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8
     # UserRes
     [Return]    ${response}
 
+
+# UserRes
 充值比例列表
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
@@ -378,6 +411,8 @@ ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8
     # AdventureGame
     [Return]    ${response}
 
+
+# AdventureGame
 获取漫剧连载列表
     [Arguments]    ${page}    ${pagesize}
     Create Session    new_request    &{host}[API]    debug=3
@@ -405,6 +440,8 @@ ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8
     # Share
     [Return]    ${response}
 
+
+# Share
 获取连载标签列表
     Create Session    new_request    &{host}[API]    debug=3
     ${loginData}    Create Dictionary
@@ -413,6 +450,8 @@ ${Work_get_club_join_list_api}    ?m=Api&c=Work&a=get_work_message_list    # 4.8
     # ChumanDramaGroup
     [Return]    ${response}
 
+
+# ChumanDramaGroup
 创建对话剧连载
     [Arguments]    ${group_id}    ${title_image}    ${title}    ${category}    ${desc}
     Create Session    new_request    &{host}[API]    debug=3
@@ -727,7 +766,40 @@ feed流不喜欢
     [Return]    ${response}
 
 
+# Chat
+获取好友列表未读数
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Chat_get_common_chat_unread_num_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
 
+
+# MeituShop
+获取我的美图列表
+    [Arguments]    ${page}    ${pagesize}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    page=${page}    pagesize=${pagesize}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${MeituShop_get_my_meitu_list_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+# Island
+鼓励梦映岛内容
+    [Arguments]    ${island_id}
+    Create Session    new_request    &{host}[API]    debug=3
+    ${loginData}    Create Dictionary    island_id=${island_id}
+    ${headers}    Create Dictionary    Content-Type=application/json    MAuthorization=&{MAuthorization1}[通用]:${install_token}    versioncode=${versioncode}
+    ${response}    Get Request    new_request    ${Island_like_island_api}    params=${loginData}    headers=${headers}
+    [Return]    ${response}
+
+
+
+
+
+
+# 方法
 获取当前时间戳
     ${date}    get current Date
     ${date}    convert Date    ${date}    epoch
@@ -772,7 +844,7 @@ feed流不喜欢
     \    Run Keyword If    '${flag}'=='${None}'    Exit for loop
     Should Be Equal As Strings    ${flag}    true
 
-# 分类消息
+# 分类消息判断
 判断消息sp_type=1的返回格式
     [Arguments]    ${data}
     ${id}    Get From Dictionary    ${data}    id
@@ -828,55 +900,38 @@ feed流不喜欢
     ${flag}    Run Keyword If    '${id}'!='' and '${news_id}'!='' and '${title}'!='' and '${content}'!='' and '${created}'!='' and '${r_type}'=='${type}' and '${version}'!=''    Set Variable    true
     Run Keyword If    '${flag}'=='${None}'    Exit for loop
 
-# 新分类消息
+# 新分类消息判断
 判断消息log_type=1的返回格式
     [Arguments]    ${data}
     Should Contain    ${data}    avatar
     Should Contain    ${data}    nickname
+    Should Contain    ${data}    content
     ${id}    Get From Dictionary    ${data}    id
     ${user_id}    Get From Dictionary    ${data}    user_id
     ${sender_id}    Get From Dictionary    ${data}    sender_id
     ${title}   Get From Dictionary    ${data}    title
-    ${content}    Get From Dictionary    ${data}    content
     ${jump_type}    Get From Dictionary    ${data}    jump_type
     ${jump_id}    Get From Dictionary    ${data}    jump_id
     ${r_status}    Get From Dictionary    ${data}    status
     ${created}    Get From Dictionary    ${data}    created
-    ${identity_level}    Get From Dictionary    ${data}    identity_level
-    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${content}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${r_status}'!='' and '${created}'!='' and '${identity_level}'!=''    Set Variable    true
+    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
     Run Keyword If    '${flag}'=='${None}'    Exit for loop
 
 判断消息log_type=2的返回格式
     [Arguments]    ${data}
     Should Contain    ${data}    avatar
     Should Contain    ${data}    relation_id
+    Should Contain    ${data}    content
     ${id}    Get From Dictionary    ${data}    id
     ${user_id}    Get From Dictionary    ${data}    user_id
     ${sender_id}    Get From Dictionary    ${data}    sender_id
     ${title}   Get From Dictionary    ${data}    title
-    ${content}    Get From Dictionary    ${data}    content
     ${jump_type}    Get From Dictionary    ${data}    jump_type
     ${jump_id}    Get From Dictionary    ${data}    jump_id
     ${nickname}   Get From Dictionary    ${data}    nickname
     ${r_status}    Get From Dictionary    ${data}    status
     ${created}    Get From Dictionary    ${data}    created
-    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${content}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${nickname}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
-    Run Keyword If    '${flag}'=='${None}'    Exit for loop
-
-判断作品消息log_type=2的返回格式
-    [Arguments]    ${data}
-    Should Contain    ${data}    avatar
-    ${id}    Get From Dictionary    ${data}    id
-    ${user_id}    Get From Dictionary    ${data}    user_id
-    ${sender_id}    Get From Dictionary    ${data}    sender_id
-    ${title}   Get From Dictionary    ${data}    title
-    ${content}    Get From Dictionary    ${data}    content
-    ${jump_type}    Get From Dictionary    ${data}    jump_type
-    ${jump_id}    Get From Dictionary    ${data}    jump_id
-    ${nickname}   Get From Dictionary    ${data}    nickname
-    ${r_status}    Get From Dictionary    ${data}    status
-    ${created}    Get From Dictionary    ${data}    created
-    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${content}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${nickname}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
+    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${nickname}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
     Run Keyword If    '${flag}'=='${None}'    Exit for loop
 
 判断消息log_type=3的返回格式
@@ -884,17 +939,17 @@ feed流不喜欢
     Should Contain    ${data}    reply_to
     Should Contain    ${data}    avatar
     Should Contain    ${data}    relation_id
+    Should Contain    ${data}    content
     ${id}    Get From Dictionary    ${data}    id
     ${user_id}    Get From Dictionary    ${data}    user_id
     ${sender_id}    Get From Dictionary    ${data}    sender_id
     ${title}   Get From Dictionary    ${data}    title
-    ${content}    Get From Dictionary    ${data}    content
     ${jump_type}    Get From Dictionary    ${data}    jump_type
     ${jump_id}    Get From Dictionary    ${data}    jump_id
     ${nickname}   Get From Dictionary    ${data}    nickname
     ${r_status}    Get From Dictionary    ${data}    status
     ${created}    Get From Dictionary    ${data}    created
-    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${content}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${nickname}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
+    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${nickname}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
     Run Keyword If    '${flag}'=='${None}'    Exit for loop
 
 判断消息log_type=4的返回格式
@@ -914,6 +969,68 @@ feed流不喜欢
     ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${nickname}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
     Run Keyword If    '${flag}'=='${None}'    Exit for loop
 
+判断作品消息log_type=2的返回格式
+    [Arguments]    ${data}
+    Should Contain    ${data}    avatar
+    Should Contain    ${data}    content
+    ${id}    Get From Dictionary    ${data}    id
+    ${user_id}    Get From Dictionary    ${data}    user_id
+    ${sender_id}    Get From Dictionary    ${data}    sender_id
+    ${title}   Get From Dictionary    ${data}    title
+    ${jump_type}    Get From Dictionary    ${data}    jump_type
+    ${jump_id}    Get From Dictionary    ${data}    jump_id
+    ${nickname}   Get From Dictionary    ${data}    nickname
+    ${r_status}    Get From Dictionary    ${data}    status
+    ${created}    Get From Dictionary    ${data}    created
+    ${flag}    Run Keyword If    '${id}'!='' and '${user_id}'!='' and '${sender_id}'!='' and '${title}'!='' and '${jump_type}'!='' and '${jump_id}'!='' and '${nickname}'!='' and '${r_status}'!='' and '${created}'!=''    Set Variable    true
+    Run Keyword If    '${flag}'=='${None}'    Exit for loop
+
+
+判断社团招募个人信息type=1的返回格式
+    [Arguments]    ${response}    ${i}
+    Should Be True    ${response.json()['data']['list'][${i}]['join_id']} > 0
+    Should Contain    ${response.json()['data']['list'][${i}]}    create_time
+    Should Contain    ${response.json()['data']['list'][${i}]}    content
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['club_id']} > 0
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['level']} > 0
+    Should Contain    ${response.json()['data']['list'][${i}]['club']}    name
+    Should Contain    ${response.json()['data']['list'][${i}]['club']}    logo_url
+    Should Contain    ${response.json()['data']['list'][${i}]['club']}    descp
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['member_num']} >= 0
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['allow_member_num']} >= 0
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['status']['status_id']} >= 0
+    Should Contain    ${response.json()['data']['list'][${i}]['club']['status']}    name
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['allow_apply']}>= 0
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['no_audit']} >= 0
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['day_num']} >= 0
+    Should Be True    ${response.json()['data']['list'][${i}]['status']['join_status_id']} >= 0
+    Should Contain    ${response.json()['data']['list'][${i}]['status']}    name
+    Should Be True    ${response.json()['data']['list'][${i}]['deal_by']['user_id']} >= 0
+    Should Contain    ${response.json()['data']['list'][${i}]['deal_by']}    nickname
+
+判断社团招募个人信息type=2的返回格式
+    [Arguments]    ${response}    ${i}
+    Should Be True    ${response.json()['data']['list'][${i}]['join_id']} > 0
+    Should Contain    ${response.json()['data']['list'][${i}]}    create_time
+    Should Contain    ${response.json()['data']['list'][${i}]}    content
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['club_id']} > 0
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['level']} > 0
+    Should Contain    ${response.json()['data']['list'][${i}]['club']}    name
+    Should Contain    ${response.json()['data']['list'][${i}]['club']}    logo_url
+    Should Contain    ${response.json()['data']['list'][${i}]['club']}    descp
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['member_num']} >= 0
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['allow_member_num']} >= 0
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['status']['status_id']} >= 0
+    Should Contain    ${response.json()['data']['list'][${i}]['club']['status']}    name
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['allow_apply']}>= 0
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['no_audit']} >= 0
+    Should Be True    ${response.json()['data']['list'][${i}]['club']['day_num']} >= 0
+    Should Be True    ${response.json()['data']['list'][${i}]['status']['join_status_id']} >= 0
+    Should Contain    ${response.json()['data']['list'][${i}]['status']}    name
+    Should Be True    ${response.json()['data']['list'][${i}]['deal_by']['user_id']} >= 0
+    Should Contain    ${response.json()['data']['list'][${i}]['deal_by']}    nickname
+
+
 校验接口返回状态正常
     [Arguments]    ${response}    # 接口返回数据
     log    ${response.content}
@@ -931,6 +1048,10 @@ feed流不喜欢
 生成随机字符串
     [Arguments]    ${num}
     ${result}    Evaluate    "".join(random.sample(string.letters+string.lowercase,int(${num})))    random,string
+    [Return]    ${result}
+
+生成随机6位数字
+    ${result}    Evaluate    random.randint(00000001,99999)    random
     [Return]    ${result}
 
 生成随机8位数字
