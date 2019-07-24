@@ -1049,7 +1049,7 @@ feed流不喜欢
     [Return]    ${result}
 
 生成随机6位数字
-    ${result}    Evaluate    random.randint(00000001,99999)    random
+    ${result}    Evaluate    random.randint(000001,999999)    random
     [Return]    ${result}
 
 生成随机8位数字

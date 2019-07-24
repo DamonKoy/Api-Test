@@ -82,7 +82,7 @@ smoke-触漫娘消息
     \    Run Keyword If    '${sp_type}' == '1'    判断消息sp_type=1的返回格式    ${data}
     \    ...    ELSE IF    '${sp_type}' == '6'    判断消息sp_type=6的返回格式    ${data}
     \    ...    ELSE IF    '${sp_type}' == '46'    判断消息sp_type=46的返回格式    ${data}
-    \    ...    ELSE IF    '${log_type}' == '47'    判断消息sp_type=47的返回格式    ${data}
+    \    ...    ELSE IF    '${sp_type}' == '47'    判断消息sp_type=47的返回格式    ${data}
     Should Be Equal As Strings    ${flag}    true
 
 
