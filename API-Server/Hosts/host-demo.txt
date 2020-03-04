@@ -1,5 +1,5 @@
 *** Variables ***
-&{host}    API=https://demo.chumanapp.com/secure/
+&{host}    API=https://api-demo.chumanapp.com/secure/
 &{MAuthorization1}    通用=8cc4a3ffb5eef4b5f569ca110d390ee7
 
 &{user_id}    user1=38707284     user2=39160354
