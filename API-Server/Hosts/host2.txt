@@ -1,0 +1,41 @@
+*** Variables ***
+&{host}    API=http://staging2.chumanapp.com/secure/
+&{MAuthorization1}    通用=946c573c9e2ad8f49ee4608e6da0b359    android_4.8.6=0b379ed3f4f361a68859dece9ee632fe
+
+&{user_id}    user1=36535     user2=36536
+&{user}    user1=13710400001    user2=13710400002
+&{password}    password1=123456
+
+# 标签管理
+
+
+
+${human_db_ip}      drds2219q71k0f46.drds.aliyun.boc
+${human_db_port}    3306
+${human_db_database}    yz_dev_human
+${human_db_user}    yz_dev_human
+${human_db_password}    y0N3rCoGZCHy7vBH
+
+${humanac_db_ip}    drds2219q71k0f46.drds.aliyun.boc
+${humanac_db_port}    3306
+${humanac_db_database}    yz_dev_humanac
+${humanac_db_user}    yz_dev_humanac
+${humanac_db_password}    XccM01Dhqv6KK3bf
+
+${humantag_db_ip}    drds2219q71k0f46.drds.aliyun.boc
+${humantag_db_port}    3306
+${humantag_db_database}    yz_dev_humantag
+${humantag_db_user}    yz_dev_humantag
+${humantag_db_password}    ukDObm1vibSKouPo
+
+${humanres_db_ip}    drds2219q71k0f46.drds.aliyun.boc
+${humanres_db_port}    3306
+${humanres_db_database}    yz_dev_humanres
+${humanres_db_user}    yz_dev_humanres
+${humanres_db_password}    LfRJo48hbeR1btOn
+
+${humanauz_db_ip}    drds2219q71k0f46.drds.aliyun.boc
+${humanauz_db_port}    3306
+${humanauz_db_database}    yz_dev_humanauz
+${humanauz_db_user}    yz_dev_humanauz
+${humanauz_db_password}    LfRJo48hbeR1btOn
